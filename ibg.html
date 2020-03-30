@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>
+    DATA VIZ.
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <!-- CSS Files -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="assets/demo/demo.css" rel="stylesheet" />
+</head>
+
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="orange">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+      <div class="logo">
+        <a href="" class="simple-text logo-mini">
+          +
+        </a>
+        <a href="" class="simple-text logo-normal">
+          CATEGORY
+        </a>
+      </div>
+      <div class="sidebar-wrapper" id="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="./index.html">
+              <i class="now-ui-icons design_app"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="./pbg.html">
+              <i class="now-ui-icons business_chart-bar-32"></i>
+              <p>Payment by Gender</p>
+            </a>
+          </li>
+          <li class="active ">
+            <a href="./ibg.html">
+              <i class="now-ui-icons business_chart-bar-32"></i>
+              <p>Item by Gender</p>
+            </a>
+          </li>
+          <li>
+            <a href="./ibb.html">
+              <i class="now-ui-icons business_chart-bar-32"></i>
+              <p>Item by Batch</p>
+            </a>
+          </li>
+          <li>
+            <a href="./fbb.html">
+              <i class="now-ui-icons business_chart-bar-32"></i>
+              <p>Frequency by Batch</p>
+            </a>
+          </li>
+          <li>
+            <a href="./pt.html">
+              <i class="now-ui-icons business_chart-pie-36"></i>
+              <p>Payment Type</p>
+            </a>
+          </li>
+          <li>
+            <a href="./fcbr.html">
+              <i class="now-ui-icons business_chart-bar-32"></i>
+              <p>Food Category by Relationship</p>
+            </a>
+          </li>
+          <li class="active-pro">
+      
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel" id="main-panel">
+      <!-- Navbar -->
+
+      <!-- End Navbar -->
+      <div class="">
+      </div>
+ 
+              <div class="card-body ">
+           
+
+  <head>
+    
+    <!-- amCharts javascript sources -->
+    <script type="text/javascript" src="amcharts/amcharts.js"></script>
+    <script type="text/javascript" src="amcharts/serial.js"></script>
+    <script type="text/javascript" src="amcharts/themes/black.js"></script>
+    
+
+    <!-- amCharts javascript code -->
+    <script type="text/javascript">
+      AmCharts.makeChart("chartdiv",
+        {
+          "type": "serial",
+          "categoryField": "category",
+          "columnSpacing": 3,
+          "autoMarginOffset": 7,
+          "depth3D": 6,
+          "marginBottom": 5,
+          "plotAreaBorderAlpha": 0.16,
+          "startDuration": 1,
+          "theme": "black",
+          "categoryAxis": {
+            "autoRotateAngle": 41.4,
+            "autoRotateCount": 7,
+            "gridPosition": "start",
+            "position": "left"
+          },
+          "chartCursor": {
+            "enabled": true
+          },
+          "chartScrollbar": {
+            "enabled": true
+          },
+          "trendLines": [],
+          "graphs": [
+            {
+              "balloonText": "[[title]] [[category]] [[value]]",
+              "fillAlphas": 1,
+              "fillColors": "#32F032",
+              "id": "AmGraph-1",
+              "title": "Female",
+              "type": "column",
+              "valueField": "Female"
+            },
+            {
+              "balloonText": "[[title]] [[category]] [[value]]",
+              "fillAlphas": 1,
+              "fillColors": "#FFFF00",
+              "id": "AmGraph-2",
+              "title": "Male",
+              "type": "column",
+              "valueField": "Male"
+            },
+            {
+              "balloonText": "[[title]] [[category]] [[value]]",
+              "fillAlphas": 1,
+              "fillColors": "#FF0000",
+              "id": "AmGraph-3",
+              "title": "Non-Binary",
+              "type": "column",
+              "valueField": "Non-Binary"
+            }
+          ],
+          "guides": [],
+          "valueAxes": [
+            {
+              "id": "ValueAxis-1",
+              "title": "Number of Students"
+            }
+
+          ],
+          "allLabels": [],
+          "balloon": {
+            "fillAlpha": 1
+          },
+          "legend": {
+            "enabled": true,
+            "useGraphSettings": true },
+          "titles": [
+            {
+              "id": "Title-1",
+              "size": 15,
+              "text": "Item Category By Gender"
+            }
+          ],
+          "dataProvider": [
+            {
+              "category": "Food",
+              "Female": "47",
+              "Male": "46",
+              "Non-Binary": "1"
+            },
+            {
+              "category": "Toiletries",
+              "Female": "18",
+              "Male": "24",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Dairy products",
+              "Female": "19",
+              "Male": "11",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Fruits/Vegs.",
+              "Female": "14",
+              "Male": "11",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Feminine Hyg.",
+              "Female": "19",
+              "Male": "",
+              "Non-Binary": "1"
+            },
+            {
+              "category": "Contraception",
+              "Female": "8",
+              "Male": "11",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Cooking items",
+              "Female": "4",
+              "Male": "3",
+              "Non-Binary": ""
+            }
+          ]
+        }
+      );
+    </script>
+  </head>
+  <body>
+    <div id="chartdiv" style="width: 100%; height: 400px; background-color: #222222;" ></div>
+  </body>
+         
+              <div class="card-body">
+                <div class="typography-line">
+                
+                  <blockquote>
+                    <p class="blockquote blockquote-primary">
+                      "I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at."
+                      <br>
+                      <br>
+                      <small>
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class=" container-fluid ">
+         <div class="copyright" id="copyright">
+            &copy; <script>
+              document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
+            </script>, Designed by <a target="_blank">ASP BOIZ</a>. Coded by <a href="https://www.instagram.com/selah_ri/" target="_blank">SELAH</a>.
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="assets/js/core/jquery.min.js"></script>
+  <script src="assets/js/core/popper.min.js"></script>
+  <script src="assets/js/core/bootstrap.min.js"></script>
+  <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initGoogleMaps();
+    });
+  </script>
+</body>
+
+</html>
