@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Unicode normalization and case js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>Unicode normalization and case</h2>
+  </header>
+  
+  <nav>
+    <span><a href="about-result.html">Search results</a></span>
+    <span><a href="./index.html">. Reference</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>Unicode normalization and alphabet case</h3>
+    <details>
+      <summary>
+Unicode normalization
+      </summary>
+      <p>
+Unicode itself is a set of historical characters in many countries.  
+So it has duplicate entries for identical letters.  
+For example, the alphabet "a" <code>U+0061</code> also has 
+<code>U+FF41</code> as "Fullwidth Latin Small Letter A" 
+that is used in Japanese computers.  
+Japanese Katakana letters are also troublesome.  
+The letter "ア" has <code>U+30A2</code> and <code>U+FF71</code>.  
+These duplicates should be unified before indexing 
+to perform a good search.  
+      </p>
+      <p>
+The 
+<code><a href="text2/index.html">
+jsngram.text2 module 
+</a></code> 
+gives a function to perform unicode normalization.  
+      </p>
+    </details>
+    <details>
+      <summary>
+Alphabet case
+      </summary>
+      <p>
+Alphabet characters are always indexed as lower case.  
+      </p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="about-result.html">Search results</a></span>
+  <span><a href="./index.html">. Reference</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>

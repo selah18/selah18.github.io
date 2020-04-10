@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Json builder js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>Json builder</h2>
+  </header>
+  
+  <nav>
+    <span><a href="about-tree.html">Text tree or list</a></span>
+    <span><a href="./index.html">. Reference</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>N-gram json builder</h3>
+    <details>
+      <summary>
+Python built-in json builder
+      </summary>
+      <p>
+Writing to a text file by <code>json.dump</code> is simple and fast.  
+A problem is an object size (comparing to the physical memory of machine).  
+For smaller amount of texts, it works nicely.  
+But if you want to deal with a large (huge) number of documents, 
+such as the entire documents saved in a terabit drive, 
+the whole index size will excess the physical memory 
+and this way will become terrible.  
+      </p>
+      <p>
+The 
+<code><a href="jsngram/jsngram/to_json.html">
+to_json() method 
+</a></code> 
+uses this.  
+      </p>
+    </details>
+    <details>
+      <summary>
+Recordable json builder
+      </summary>
+      <p>
+The 
+<code><a href="json2/index.html">
+jsngram.json2 module 
+</a></code> 
+gives an additive way of building a json file.  
+Now, huge number documents are nothing but the time of processing.  
+You can control the number of files to put in a single object, 
+and flush the result after appending to json files.  
+This will prevent the object size from growing too large.  
+      </p>
+      <p>
+The 
+<code><a href="jsngram/jsngram/add_files_to_json.html">
+add_files_to_json() method 
+</a></code> 
+uses this.  
+      </p>
+    </details>
+    <details>
+      <summary>
+Differential builder
+      </summary>
+      <p>
+Rebuilding the index requires a large amount of time, a several hours, maybe.  
+It would be nice if we had a way of dirrerential updates, 
+when changes of documents were limited.  
+But this way is not implemented yet.  
+      </p>
+      <p>
+Because we already have recordable way as above, 
+the differential way will not be so hard.  
+Just remove old indexes and append new indexes.  
+Or compare them to get minimum changes and modify the json file.  
+Anyway, to remove old indexes, 
+we want to keep previous documents that was used to build old indexes.  
+      </p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="about-tree.html">Text tree or list</a></span>
+  <span><a href="./index.html">. Reference</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>

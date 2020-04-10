@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>JsNgram.sortFoundByDocumentPosition js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>JsNgram.sortFoundByDocumentPosition</h2>
+  </header>
+  
+  <nav>
+    <span><a href="../index.html">.. Reference</a></span>
+    <span><a href="./index.html">. JsNgram static class</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>method of static class JsNgram</h3>
+    <details>
+      <summary>Description</summary>
+      <p>
+Rebuild and sort the result of partial matches by document and position for reporting. 
+      </p>
+    </details>
+    <details>
+      <summary>Example</summary>
+      <pre>
+JsNgram.sortFoundByDocumentPosition(found);
+      </pre>
+    </details>
+    <details>
+      <summary>Usage</summary>
+      <p>
+sortFoundByDocumentPosition(<i>found</i>);
+      </p>
+      <p>
+Argument <i>found</i> is a result data used for N-gram matching. 
+The data should be the output of the method <code><a href="sortresultsbylocation.html">sortResultsByLocation</a></code>. 
+The output is compatible format with the method <code><a href="findperfection.html">findPerfection</a></code>. 
+      </p>
+      <p>
+The input <i>found</i> format is: 
+      </p>
+      <pre>
+{
+  document id: {
+    N-gram key number: [position, position, position, ... ],
+    N-gram key number: [position, position, position, ... ],
+    N-gram key number: [position, position, position, ... ]
+  }, 
+  document id: {
+    N-gram key number: [position, position, position, ... ],
+    N-gram key number: [position, position, position, ... ]
+  }
+}
+      </pre>
+      <p>
+In above notation, N-gram key number is a sequence number of each N-gram key. 
+For example, for searching "alice", 
+following four N-gram keys are generated: 
+"al", "li", "ic" and "ce" with the N-gram key number is 
+0, 1, 2 and 3, respectively. 
+      </p>
+      <p>
+The output format is: 
+      </p>
+      <pre>
+{
+  document id: [ # list is sorted
+    [position, matched N-gram key text],
+    [position, matched N-gram key text],
+    [position, matched N-gram key text]
+  ], 
+  document id: [ # list is sorted
+    [position, matched N-gram key text],
+    [position, matched N-gram key text]
+  ]
+}
+      </pre>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="../index.html">.. Reference</a></span>
+  <span><a href="./index.html">. JsNgram static class</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>

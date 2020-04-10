@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Index structure js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>Index structure</h2>
+  </header>
+  
+  <nav>
+    <span><a href="about-json.html">Json builder</a></span>
+    <span><a href="./index.html">. Reference</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>N-gram json index structure</h3>
+    <details>
+      <summary>
+N-gram
+      </summary>
+      <p>
+To work without any word delimiters is a remarkable advantage of the N-gram method.  
+Because Japanese language does not put delimiters between words, 
+it is hard to extract "words" by machine as a minimum unit of index key.  
+      </p>
+      <p>
+This library is optimized to the Bigram (size 2), though the size can be changed.  
+By default, indexes of size 2 and 1 are generated, 
+so a text "cat" will be indexed by "ca", "at", "c", "a" and "t".  
+      </p>
+      <p>
+This library uses json files to store indexes.  
+Everything is text and easy to handle by any script languages, including JavaScript.  
+      </p>
+    </details>
+    <details>
+      <summary>
+Index file name
+      </summary>
+      <p>
+To perfome fast reading, the library uses the hierarchy file system to place indexes.  
+Each index is encoded as an ascii string of unicode numbers.  
+For example, a key "ca" will be "00630061".  
+Here, "c" is <code>U+0063</code> and "a" is <code>U+0061</code>.  
+This makes all unicode characters, even the control characters, safe to be indexed.  
+      </p>
+      <p>
+Though files can also be placed in a single directory flatly, 
+they are placed in a tree of directories by default.  
+Too many files in a single directory will slow down the system.  
+The above index file will be "./00/63/00/61.json".  
+      </p>
+    </details>
+    <details>
+      <summary>
+Index file format
+      </summary>
+      <p>
+Array of array as json.  
+The inner array has two elements, namely, an identification and a position.  
+The identification is a unique id for a single file, and it may be a file path.  
+The position is a location of the key string within a file.  
+All pairs that found to have the key string is listed as the outer array.  
+      </p>
+      <pre>
+[
+  ["a/b.txt", 129],
+  ["c/d/e.txt", 148]
+]
+      </pre>
+      <p>
+For example, when the json file for the key "ca" is as above, it means:  
+In "a/b.txt" at position 129, "ca" is found.  
+In "c/d/e.txt" at position 148, "ca" is found.  
+And the position means the occurrence position from the beginning of text 
+with 0 for the first character .  
+      </p>
+    </details>
+    <details>
+      <summary>
+Example
+      </summary>
+      <p>
+The 
+<a href="
+../demo/index.html
+">
+online demo
+</a>
+page shows all index files generated for short example contents.  
+      </p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="about-json.html">Json builder</a></span>
+  <span><a href="./index.html">. Reference</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>

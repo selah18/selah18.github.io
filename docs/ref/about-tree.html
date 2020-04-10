@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Text tree or list js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>Text tree or list</h2>
+  </header>
+  
+  <nav>
+    <span><a href="about-space.html">White spaces</a></span>
+    <span><a href="./index.html">. Reference</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>Prepare text as tree or list</h3>
+    <details>
+      <summary>
+Tree
+      </summary>
+      <p>
+The 
+<code><a href="dir2/index.html">
+jsngram.dir2 module 
+</a></code> 
+gives an easy list of files in a directory tree.  
+      </p>
+      <pre>
+ix = jsngram.jsngram.JsNgram()
+# adding from directory "src"
+for file in jsngram.dir2.list_files(src):
+    ix.add_file(file)
+      </pre>
+    </details>
+    <details>
+      <summary>
+List
+      </summary>
+      <p>
+Explicit list of files can also be used instead of a file tree.  
+List of id-content-pairs can be used instead of files.  
+      </p>
+      <pre>
+ix = jsngram.jsngram.JsNgram()
+# adding from file list "files"
+for file in files:
+    ix.add_file(file)
+# adding (id, content) pairs "contents"
+for id, content in contents:
+    ix.add_document(id, content)
+      </pre>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="about-space.html">White spaces</a></span>
+  <span><a href="./index.html">. Reference</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>

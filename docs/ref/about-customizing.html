@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Customizing js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>Customizing</h2>
+  </header>
+  
+  <nav>
+    <span><a href="./index.html">. Reference</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>Custom report</h3>
+    <details>
+      <summary>
+Page control
+      </summary>
+      <p>
+The 
+<code><a href="js/outputlimiter.html">
+outputLimiter property 
+</a></code> 
+and 
+<code><a href="js/outputlimiter1st.html">
+outputLimiter1st property 
+</a></code> 
+of 
+<code><a href="js/index.html">
+JavaScript JsNgram static class 
+</a></code> 
+controls this behavior.  
+Default values are 100 and 1, respectively. 
+Setting 40 to <code>outputLimiter</code> causes less documents shown at once. 
+Setting 5 to <code>outputLimiter1st</code> causes more hits in a document shown at first. 
+      </p>
+    </details>
+    <details>
+      <summary>
+Preview text
+      </summary>
+      <p>
+The 
+<code><a href="js/previewsize.html">
+previewSize property 
+</a></code> 
+of 
+<code><a href="js/index.html">
+JavaScript JsNgram static class 
+</a></code> 
+controls the length of text shown as preview content.  
+Default value is 240 by character. 
+      </p>
+    </details>
+    <details>
+      <summary>
+Hyperlink attributes
+      </summary>
+      <p>
+The 
+<code><a href="js/linkattributes.html">
+linkAttributes property 
+</a></code> 
+of 
+<code><a href="js/index.html">
+JavaScript JsNgram static class 
+</a></code> 
+controls the behavior of hyperlinks of hits. 
+By default, it will open another window and the content is marked as utf-8 plain text. 
+      </p>
+      <pre>
+target="_blank" type="text/plain; charset=utf-8"
+      </pre>
+    </details>
+    <details>
+      <summary>
+Document header
+      </summary>
+      <p>
+The 
+<code><a href="js/titleinfo.html">
+titleInfo property 
+</a></code> 
+of 
+<code><a href="js/index.html">
+JavaScript JsNgram static class 
+</a></code> 
+controls the document header section shown as the result. 
+Default value is a blank dictionary <code>{}</code>. 
+It means no additional informations are added to the result, 
+and only the path of document with hyperlink is shown. 
+When something are set to this property, 
+the 
+<code><a href="js/loadtitleinfo.html">
+loadTitleInfo method 
+</a></code> 
+of 
+<code><a href="js/index.html">
+JavaScript JsNgram static class 
+</a></code> 
+uses the data. 
+For example, the following will replace the title of the specified document. 
+      </p>
+      <pre>
+{
+  'a/path/to/the/document/a.txt': {
+    'title': 'Alternate Title of A'
+  }
+}
+      </pre>
+    </details>
+    <details>
+      <summary>
+Whole html
+      </summary>
+      <p>
+The 
+<code><a href="js/makeresulthtml.html">
+makeResultHtml method 
+</a></code> 
+of 
+<code><a href="js/index.html">
+JavaScript JsNgram static class 
+</a></code> 
+controls the html generated as the result. 
+You can override this method to get full customization for the reporting. 
+      </p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="./index.html">. Reference</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>

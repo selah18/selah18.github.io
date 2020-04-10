@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>JsNgram.sortResultsByLocation js-py-ngram-full-text-search</title>
+  <link rel="stylesheet" href="../../thema.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+<div id="head">
+  <header>
+    <h1>js-py-ngram-full-text-search</h1>
+    <h2>JsNgram.sortResultsByLocation</h2>
+  </header>
+  
+  <nav>
+    <span><a href="../index.html">.. Reference</a></span>
+    <span><a href="./index.html">. JsNgram static class</a></span>
+  </nav>
+</div>
+
+<main>
+  <section>
+    <h3>method of static class JsNgram</h3>
+    <details>
+      <summary>Description</summary>
+      <p>
+Rebuild an array of raw results of json indexes loaded. 
+Sort by document and N-gram key preparing for matching. 
+Count the number of hits and put it in the property <code><a href="work.html">work</a></code> as an array of <code>[hits, documents]</code>. 
+      </p>
+    </details>
+    <details>
+      <summary>Example</summary>
+      <pre>
+JsNgram.sortResultsByLocation(results);
+      </pre>
+    </details>
+    <details>
+      <summary>Usage</summary>
+      <p>
+sortResultsByLocation(<i>results</i>);
+      </p>
+      <p>
+Argument <i>results</i> is an array of json indexes. 
+The sequence must be by the N-gram key number. 
+The output format is for the method <code><a href="findperfection.html">findPerfection</a></code> and <code><a href="sortfoundbydocumentposition.html">sortFoundByDocumentPosition</a></code>. 
+      </p>
+      <p>
+The output format is: 
+      </p>
+      <pre>
+{
+  document id: {
+    N-gram key number: [position, position, position, ... ],
+    N-gram key number: [position, position, position, ... ],
+    N-gram key number: [position, position, position, ... ]
+  }, 
+  document id: {
+    N-gram key number: [position, position, position, ... ],
+    N-gram key number: [position, position, position, ... ]
+  }
+}
+      </pre>
+      <p>
+In above notation, N-gram key number is a sequence number of each N-gram key. 
+For example, for searching "alice", 
+following four N-gram keys are generated: 
+"al", "li", "ic" and "ce" with the N-gram key number is 
+0, 1, 2 and 3, respectively. 
+      </p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <span><a href="../index.html">.. Reference</a></span>
+  <span><a href="./index.html">. JsNgram static class</a></span>
+  <span><a href="https://github.com/sukuba/js-py-ngram-full-text-search" target="_blank">sources are available at github. </a></span>
+</footer>
+</body>
+</html>
