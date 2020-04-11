@@ -25,16 +25,7 @@ body {
 }
 
 /* condensed header */
-#console {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  padding: 0.6rem 0 0.6rem 0;
-  background-color: #ecf2d9;
-}
-#console div, #console header, #console form {
-  margin-left: 0.6rem;
-}
+
 
 /* readability */
 h1, h2, h3, option {
