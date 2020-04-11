@@ -75,7 +75,7 @@ var JsNgram = new function(){
     "msgOnSearch": { value: 'Searching ... please, wait.', writable: true, configurable: true }, 
     "ignoreBlank": { value: 'Blank query text is ignored.', writable: true, configurable: true }, 
     "resultNone": { value: 'Nothing found.', writable: true, configurable: true }, 
-    "resultCount": { value: '%% hits in %% documents.', writable: true, configurable: true }, 
+    "resultCount": { value: '%% NodeLoads in %% Nodes.', writable: true, configurable: true }, 
     "askToShowFound": { value: 'Want partial matches?', writable: true, configurable: true }, 
     "askToShowNextDocs": { value: 'More documents after %% ... ', writable: true, configurable: true }, 
     "askToShowNextHits": { value: '+ More hits after %% ... ', writable: true, configurable: true }, 
