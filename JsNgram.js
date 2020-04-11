@@ -78,7 +78,7 @@ var JsNgram = new function(){
     "resultCount": { value: '%% NodeLoads in %% Nodes.', writable: true, configurable: true }, 
     "askToShowFound": { value: 'Want partial matches?', writable: true, configurable: true }, 
     "askToShowNextDocs": { value: 'More documents after %% ... ', writable: true, configurable: true }, 
-    "askToShowNextHits": { value: '+ More hits after %% ... ', writable: true, configurable: true }, 
+    "askToShowNextHits": { value: '+ More Nodeloads after %% ... ', writable: true, configurable: true }, 
     "partialMatches": { value: '(partial matches)', writable: true, configurable: true }, 
     "titleInfo": { value: {}, writable: true, configurable: true }, 
     "work": { value: {}, writable: true, configurable: true }, 
