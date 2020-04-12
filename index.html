@@ -46,8 +46,39 @@
 
 </main>
   <script type="text/javascript">
-    showResultMessage(hits.perfection);
-    console.log('Perfection:', sprintf(resultCount, hits.perfection));
+
+      var _my = this;
+  var _verbose;
+  var _blankText = '';
+  function whenSearchRequestDone(useArgumentsToGetAllAsArray) {
+    var log = _my.log;
+    var work = _my.work;
+    
+    // adjust nesting level when length equals 1.
+    var results = (work.deferred.length > 1) ? arguments : [arguments];
+    log.v1('whole: ', results.length, results);
+    
+    var found = _my.sortResultsByLocation(results);
+    log.v1(JSON.stringify(found));
+    
+    var perfection = _my.findPerfection(found, work.nText);
+    log.v1(JSON.stringify(perfection));
+    
+    work.result['perfection'] = perfection;
+    work.result['found'] = _my.sortFoundByDocumentPosition(found);
+    
+    var hits = work.result.hits;
+    _my.showResultMessage(hits.perfection);
+    console.log.v1('Perfection:', _my.sprintf(_my.resultCount, hits.perfection));
+    log.v1('Found:', _my.sprintf(_my.resultCount, hits.found));
+    
+    
+    $.when(_my.loadHeader()).done(function(){
+      _my.showPage(true, _my.resultSelector, null, 0, _my.outputLimiter);
+    });
+  }
+  _my.whenSearchRequestDone = whenSearchRequestDone;
+  
 </script>
     </div></div>
     <div id="chartContainer" style="height: 300px; width: 100%;"></div>
