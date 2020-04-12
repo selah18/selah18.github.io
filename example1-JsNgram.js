@@ -43,7 +43,7 @@ $(document).ready(function(){
   $q.focus();
 });
 
-$('#search').click(function(){
+$('#result').click(function(){
   
 var chart = new CanvasJS.Chart("chartContainer", {
   animationEnabled: true,
