@@ -71,13 +71,9 @@
     _my.showResultMessage(hits.perfection);
     console.log.v1('Perfection:', _my.sprintf(_my.resultCount, hits.perfection));
     log.v1('Found:', _my.sprintf(_my.resultCount, hits.found));
+    console.log(_my.resultCount,hits.perfection)
     
-    
-    $.when(_my.loadHeader()).done(function(){
-      _my.showPage(true, _my.resultSelector, null, 0, _my.outputLimiter);
-    });
-  }
-  _my.whenSearchRequestDone = whenSearchRequestDone;
+ 
   
 </script>
     </div></div>
