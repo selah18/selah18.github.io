@@ -1,0 +1,522 @@
+Large-scale Distributed Systems
+
+Acknowledgement:  Course slides
+
+have been collected and modified
+from many different sources.
+
+
+Large-scale Distributed Systems
+
+•  Over the past decades, distributed systems have grown tre
+mendously in scale
+
+•  Managing a 10-node cluster in a LAN environment is a com
+pletely different game as compared to managing 1 million H
+adoop clusters in a WAN environment
+
+•  In the Big Data Applications slides, you have seen many rea
+l-world applications
+
+•  Distributed Systems serves as the backbone/enabler of all t
+hese applications
+
+
+As you go through this unit….
+
+•  Think scalability
+
+•  Scalability is among the most critical issues when it comes t
+o designing distributed systems
+
+•  Remember that the distributed systems you are going to de
+sign need to be scalable not just for now, but for a future ti
+me-frame of 5-10 years
+
+•  Hence, in the distributed system design phase itself, you ne
+ed to be clear about removing bottlenecks (e.g., due to cen
+tralization) and ensuring that more nodes can be added to t
+he system depending upon workload and demand
+
+
+Cloud Computing
+
+•  Cloud Computing is an important topic in distribute
+d systems
+
+•  Cloud is essentially a large-scale distributed system
+
+•  In the next set of slides, you will learn about the ess
+ence of Cloud Computing
+
+
+•  Suppose you own a small business and would like to
+have IT capability
+
+– Example: Web-based portal for selling in a small e-comm
+erce business
+
+•  What are your options?
+
+•  What kind of investment would you require to do fo
+r each of these options?
+
+
+•  Option 1
+
+•  Buy a server
+
+– Expensive; will eat significantly into the profits
+
+– Need to hire system administrators and other personnel to mainta
+in and keep the web-based e-commerce portal running
+
+– Will not be able to handle sudden increases in demand in a scalab
+le manner
+
+•  Example: Think peak sales periods such as Christmas, Diwali etc.
+
+•  Cannot buy a new and more powerful server whenever the demand/workl
+oad increases
+
+•  Bottomline: High fixed costs + variable costs + not scalable
+enough to deal with future demand
+
+
+•  Option 2
+
+•  Buy a set of machines and create a cluster of nodes connect
+ed in a high-speed LAN network configuration
+
+– This is shared-nothing architecture; you can add nodes whenever
+the workload increases; hence, this is scalable
+
+– However, the expensive part still remains a problem
+
+– You would still need to hire system administrators and other perso
+nnel to maintain and keep the web-based e-commerce portal run
+ning
+
+•  Bottomline: Scalable enough to deal with future demand, b
+ut high fixed costs + variable costs
+
+
+•  What would be an ideal situation for the small business ow
+ner?
+
+– Keep the focus on the business and pay a fee (relatively low fee) fo
+r “someone else” to deal with the headache, costs and challenges
+associated with dealing with the IT infrastructure
+
+– That “someone else” is going to keep your IT system and infrastruc
+ture running, deal with the scalability issues (e.g., adding new nod
+es when demand/workload increases)
+
+– This is precisely the essence of Cloud Computing
+
+– The “someone else” is the Cloud
+
+– Instead of buying, you are basically renting resources
+
+
+Cloud Computing
+
+•  IT resources provided as a service
+
+– Compute, storage, databases, queues
+
+•  Clouds leverage economies of scale of commo
+dity hardware
+
+– Cheap storage, high bandwidth networks & multic
+ore processors
+
+– Geographically distributed data centers
+
+•  Offerings from Microsoft, Amazon, Google, …
+
+
+wikipedia:Cloud Computing
+
+
+Benefits
+
+•  Cost & management
+
+– Economies of scale, “out-sourced” resource management
+
+•  Reduced Time to deployment
+
+– Ease of assembly, works “out of the box”
+
+•  Scaling
+
+– On demand provisioning, co-locate data and compute
+
+•  Reliability
+
+– Massive, redundant, shared resources
+
+•  Sustainability
+
+– Hardware not owned
+
+
+Types of Cloud Computing
+
+•   Public Cloud: Computing infrastructure is hosted at the vendor’
+s premises.
+
+•   Private Cloud: Computing architecture is dedicated to the custo
+mer and is not shared with other organizations.
+
+•   Hybrid Cloud: Organizations host some critical, secure applicati
+ons in private clouds. The not so critical applications are hosted
+in the public cloud
+
+–  Cloud bursting: the organisation uses its own infrastructure for normal u
+sage, but cloud is used for peak loads.
+
+•   Community Cloud
+
+
+Classification of Cloud Computing based on S
+
+ervice Provided
+
+• Infrastructure as a service (IaaS)
+
+– Offering hardware related services using the principles of cloud computing. 
+These co
+uld include storage services (database or disk storage) or virtual servers.
+
+– Amazon EC2, Amazon S3, Rackspace Cloud Servers and Flexiscale.
+
+• Platform as a Service (PaaS)
+
+– Offering a development platform on the cloud.
+
+– Google’s Application Engine, Microsofts Azure, Salesforce.com’s
+force.com .
+
+• Software as a service (SaaS)
+
+– Including a complete software offering on the cloud. Users can access a s
+oftware application hosted by the cloud vendor on pay-per-use basis. This
+is a well-established sector.
+
+– Salesforce.coms’ offering in the online Customer Relationship Manageme
+nt (CRM) space, Googles gmail and Microsofts hotmail, Google docs.
+
+
+Infrastructure as a Service (IaaS)
+
+
+More Refined Categorization
+
+•  Storage-as-a-service
+
+•  Database-as-a-service
+
+•  Information-as-a-service
+
+•  Process-as-a-service
+
+•  Application-as-a-service
+
+•  Platform-as-a-service
+
+•  Integration-as-a-service
+
+•  Security-as-a-service
+
+•  Management/
+Governance-as-a-service
+
+•  Testing-as-a-service
+
+•  Infrastructure-as-a-service
+
+InfoWorld Cloud Computing Deep Dive
+
+
+Key Ingredients in Cloud Computing
+
+•  Service-Oriented Architecture  (SOA)
+
+•  Utility Computing (on demand)
+
+•  Virtualization (P2P Network)
+
+•  SAAS (Software As A Service)
+
+•  PAAS (Platform AS A Service)
+
+•  IAAS (Infrastructure AS A Servie)
+
+•  Web Services in Cloud
+
+
+Enabling Technology: Virtualization
+
+App            App            App
+
+App            App            App                                  OS           
+   OS              OS
+
+Operating System                                                     Hypervisor
+
+Hardware                                                             Hardware
+
+
+Everything as a Service
+
+•  Utility computing = Infrastructure as a Service (IaaS)
+
+– Why buy machines when you can rent cycles?
+
+– Examples: Amazon’s EC2, Rackspace
+
+•  Platform as a Service (PaaS)
+
+– Give me nice API and take care of the maintenance, upgra
+des, …
+
+– Example: Google App Engine
+
+•  Software as a Service (SaaS)
+
+– Just run it for me!
+
+– Example: Gmail, Salesforce
+
+
+Cloud versus cloud
+
+•  Amazon Elastic Compute Cloud
+
+•  Google App Engine
+
+•  Microsoft Azure
+
+•  GoGrid
+
+•  AppNexus
+
+
+The Obligatory Timeline Slide
+(Mike Culver @ AWS)
+
+
+COBOL,
+
+Edsel
+
+    ARPANET    
+
+Amazon.com
+Internet
+
+
+Darkness
+
+Web
+Awareness
+
+Web as a
+Platform
+
+Web Services,
+Resources Eliminated
+
+Dot-Com Bubble                 Web 2.0                   Web Scale
+
+Computing
+
+
+AWS
+
+•  Elastic Compute Cloud – EC2 (IaaS)
+
+•  Simple Storage Service – S3 (IaaS)
+
+•   Elastic Block Storage – EBS (IaaS)
+
+•   SimpleDB (SDB) (PaaS)
+
+•   Simple Queue Service – SQS (PaaS)
+
+•  CloudFront (S3 based Content Delivery Netwo
+rk – PaaS)
+
+•   Consistent AWS Web Services API
+
+
+What does Azure platform offer to developer
+
+s?
+
+Your Applications
+
+
+Service
+Bus
+
+Access
+Control
+
+Workflow
+
+…
+
+Database
+Reporting
+
+Analytics
+
+…
+
+Identity
+Devices
+
+Contacts          …
+
+…
+
+Compute      Storage      Manage          …
+
+
+Google’s AppEngine vs Amazon’s EC2
+
+Python
+BigTable
+Other             API’s
+
+VMs
+
+Flat File Storage
+
+
+AppEngine:
+
+•    Higher-level functionality
+(e.g., automatic scaling)
+
+•    More restrictive
+
+(e.g., respond to URL only)
+
+EC2/S3:
+
+•    Lower-level functionality
+
+•    More flexible
+
+•    Coarser billing model
+
+
+June 3, 2008
+
+Google AppEngine vs. Amazon EC2/S3
+
+Slide 23
+
+
+•  Cloud computing can involve millions of nodes
+
+•  In your database course, you have studied about maintainin
+g data consistency (Refer to ACID properties etc.)
+
+•  Is it practically feasible to maintain consistency completely
+across a tremendously large number of nodes?
+
+
+•  Remember that these nodes are connected in a network (c
+ould be a combination of LAN and WAN) across a huge geo
+graphically distributed area
+
+– Network links can break down causing network partitioning
+
+•  Moreover, the Cloud services need to be available as much
+as possible i.e., 24 by 7 by 365
+
+– If too much downtime, users may stop using the Cloud-based syst
+em
+
+•  In the next few slides, you will learn about the CAP theorem
+
+– CAP theorem applies not only to Cloud Computing, but to any larg
+e-scale distributed system in general; it is a very important theore
+m for distributed systems
+
+
+Availability
+
+Consistency
+
+Partition
+tolerance
+
+
+
+Availability
+
+Once a writer has written, all
+readers will see that write
+
+Consistency
+
+Partition
+tolerance
+
+
+
+Availability
+
+System is available during so
+ftware and hardware upgrad
+es and node failures.
+
+Consistency
+
+Partition
+tolerance
+
+
+
+Availability
+
+A system can continue to op
+erate in the presence of a n
+etwork partitions.
+
+Consistency
+
+Partition
+tolerance
+
+
+
+Consistency
+
+Availability
+
+Theorem: You can have a
+t most two of these prop
+erties for any shared-dat
+a system
+
+Partition
+tolerance
+
+
+Consistency
+
+•  Two kinds of consistency:
+
+–  strong consistency – ACID (Atomicity Consistency Isolation
+Durability)
+
+–  weak consistency – BASE (Basically Available Soft-state Eve
+ntual consistency )
+

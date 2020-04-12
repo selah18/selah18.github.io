@@ -1,0 +1,519 @@
+DISTRIBUTED SYSTEMS
+
+Principles and Paradigms
+
+Second Edition
+ANDREW S. TANENBAUM
+
+MAARTEN VAN STEEN
+
+Fault Tolerance
+
+These are the textbook slides of Tanenbaum & Van Steen, Distributed Systems:
+Principles and Paradigms, 2e, 2007. Slides have been modified/edited. Slides
+include information and materials from multiple different publicly available 
+web-
+based sources and are being used here for academic purposes only.
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+•    Being fault tolerant is strongly related to
+what are called dependable systems
+
+•    Dependability implies the following:
+
+1.  Availability
+
+2.  Reliability
+
+3.  Safety
+
+4.  Maintainability
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+•     In the context of today’s world, dependability is also
+related to query response times
+
+•     In principle, you would prefer any service, which is
+enabled/powered by distributed systems, to provide
+results or answer queries within a maximum time
+limit
+
+•     Example: For a search engine query, you probably
+wouldn’t want to wait 10 minutes for the query
+results
+
+
+•     Availability of the distributed service or the service
+that it enables is also related to the query response
+times
+
+•     In essence, you want the service to be available to
+you and respond to you within a maximum time limit
+
+•     Now what should be this max time limit?
+
+•      Depends on the application scenario
+
+•      User expectations increase over time, so this max time limit may
+decrease over time as users want faster response from the system
+
+
+In short, a failure is said to occur when the
+system does NOT behave according to
+specifications or expected behavior
+
+
+Can you mask a failure by using
+
+redundancy?
+
+
+•     Consider a large-scale distributed system, where a
+node containing a data item D fails
+
+•     Two cases:
+
+–     Zero redundancy in the system: This means no replicas of D
+exist anywhere in the system
+
+•     In this case, any queries on D will go unanswered
+
+–     Redundancy in the system: This means N replicas of D exist in
+the system
+
+•     Hence, queries on D can be answered by some of these
+replicas
+
+
+•     Now consider 5 replicas of D in the entire system, and 4 of
+the nodes containing the replicas of D fail
+
+•      The 5th  node, which has NOT failed, can still respond to queries
+on D
+
+In essence, what you are doing here is masking the
+failure of some of the nodes storing the data (or its
+replicas) by using redundancy (replication)
+
+
+•      A large-scale distributed system has multiple paths between
+source and destination nodes
+
+•      Observe that these multiple paths constitute redundancy
+inherently
+
+•      If some of the nodes crash/fail, messages can be routed
+through other paths because of the redundancy i.e., multiple
+paths between any two given nodes (source and destination
+nodes)
+
+•      Similarly, redundancy in distributed systems leader
+
+•      If the leader fails, another node can assume the position of leader
+
+
+Concept of Triple-Modular Redundancy
+
+(TMR)
+
+•      Also known as the triple-mode redundancy
+
+•      Core idea of TMR:
+
+•      Think input-process-output.
+
+•      Three systems obtain exactly the same input, execute the
+same exact process and each system outputs a result
+
+•      Process the result by a majority-voting system and that way,
+you get a single output
+
+•      If any one of the three systems fail, the other two would still
+return the correct result, thereby masking the failure of that
+one failed system
+
+
+What if more than one system fails?
+
+
+•      If more than one of the three systems fail, it is obvious that
+TMR will not work
+
+•      In general, TMR can be generalized to N-Modular
+Redundancy
+
+•      Instead of 3 systems, you basically use N systems
+
+
+•      Now what should be the value of N in N-Modular
+Redundancy?
+
+•      If the value of N is set too high, you will get more fault-
+tolerance, but the overhead would increase too
+
+•      On the other hand, if the value of N is set too low, the
+overhead would be relatively low, but you may not get the
+degree of fault-tolerance that you want
+
+
+•      You can set the value of N in N-Modular Redundancy
+depending upon the application scenario under consideration
+
+•      Think of the criticality/urgency of the application scenario
+
+•      Real-time systems: You need higher values of N
+
+•      Emergency systems: You need higher values of N
+
+•      Archival systems: Lower values of N may be ok
+
+•      Systems that enable non-emergency services: Lower values
+of N may be ok
+
+
+•      Other than the urgency aspect of the application scenario
+under consideration, you should look at the quality
+requirement aspect as well
+
+•      If an application scenario requires high accuracy (high quality
+of results), you would want more redundancy, hence set the
+value of N to be relatively high
+
+
+In essence, deciding the level of redundancy in a distributed
+system is a serious design decision. Look carefully at the
+application scenario, consider the requirements of the application
+scenario in-depth, see how much fault-tolerance is required and
+then  set the value of N for N-Modular Redundancy
+
+
+Agreement in Faulty Systems
+
+•      Nodes in a distributed system need to reach agreement on
+various aspects
+
+•     leader/coordinator election
+
+•     assignment of subsets of jobs across different nodes
+
+•     dividing data across different nodes
+
+•     committing of transactions
+
+•     And many other aspects
+
+
+What hinders Agreement in Faulty Systems?
+
+•      The underlying distributed systems environment is inherently
+unreliable/faulty
+
+•      Remember that any node can fail at any point of time
+
+•      Communication links can also fail arbitrarily at any point of
+time
+
+•      Failures of nodes could be unintentional or malicious
+
+•      Not necessarily easy to detect that a failure has occurred
+somewhere, especially in a large-scale distributed system
+comprising hundreds of thousands to millions of nodes with a
+tremendously large number of communication links
+
+
+Goal of Distributed agreement algorithms
+
+•      The non-faulty nodes should be able to reach agreement on a
+given aspect
+
+•      This agreement needs to be reached within a maximum time
+limit or within a maximum pre-specified number of iterations
+
+Hence,  basically,  these  goals  need  to  be  satisfied  when  the
+underlying    distributed    systems    environment    is    inherently
+unreliable/faulty   e.g.,   nodes/communication   links   etc.   can   fail
+arbitrarily at any point of time
+
+
+When a node crashes…
+
+•     Is it fail-silent?
+
+•     Is it Byzantine?
+
+•     Please see the next few slides to understand the
+meaning of these terms
+
+
+•     Faulty unit (e.g., node/communication link) stops
+functioning, and clearly produces output to show that
+it has failed or it produces no output at all
+
+•     In case of fail-silent, no bad output would get
+produced
+
+
+•      Unit (e.g., node, link etc.) may fail, but there exists no perfect
+info to indicate whether or not the unit has indeed failed
+
+•      A node can seem to be working perfectly ok to some
+observers, while other observers may observe that it has
+failed
+
+•      Failure-detection systems cannot easily determine whether or
+not the node has really failed because
+
+•     the node can seem to be failed at times and functioning perfectly
+ok at other times (basically, the input to the failure-detection
+systems is largely inconsistent)
+
+•      Other nodes need to reach an agreement about whether that
+node has indeed failed
+
+
+•      A Byzantine fault-tolerant system can continue to provide
+services accurately (or based on specifications) if there exists
+an adequate number of correctly functioning / non-failed units
+for maintaining the service
+
+
+•      Byzantine failures are among the most challenging to address
+
+•      In case of Byzantine failures, the incorrectly functioning node
+can generate results that are arbitrary
+
+•      and it becomes extremely difficult for failure detection
+systems to detect
+
+•      Remember that Byzantine failures need not necessarily
+happen due to malicious intentions; could also be
+unintentional
+
+
+In the next few slides, you will see how difficult it
+is to reach agreement if communication links are
+faulty and even if the nodes function correctly
+
+
+•      The two-army problem shows how difficult it is to reach
+agreement about a piece of info for two non-failed nodes,
+when communication links are unreliable
+
+•      The red army has 5000 troops, and it is stationed in a valley
+
+•      Consider two blue armies, each of which has 3000 troops
+
+Source: https://www.e-reading.club/chapter.php/143358/156/Tanenbaum_-
+
+_Distributed_operating_systems.html
+
+
+•      To win the war, the two blue armies must attack the red army
+together; if they attack the red army one-by-one or
+separately, they would essentially get slaughtered
+
+•      This means that the two blue armies have to reach
+agreement
+
+•      The communication channel for the blue armies is unreliable:
+the blue armies can use messengers to communicate, but
+these messengers could get captured by the red army
+
+Source: https://www.e-reading.club/chapter.php/143358/156/Tanenbaum_-
+
+_Distributed_operating_systems.html
+
+
+•      Leader (L1) of blue army 1 sends a message to leader (L2) of
+blue army 2: Attack at 8 am tomorrow
+
+•      Messenger gets through without being captured by the red
+army
+
+•      L2 sends message to L1: Sure, 8 am tomorrow sounds good
+
+•      Messenger once again gets through without being captured
+by the red army
+
+Source: https://www.e-reading.club/chapter.php/143358/156/Tanenbaum_-
+
+_Distributed_operating_systems.html
+
+
+•      L1 realizes that L2 has no way of knowing whether his
+messenger managed to deliver the message; hence, L2 may
+be   afraid to attack
+
+•      L1 tells the messenger to tell L2 that L2’s message arrived
+safely and the time of 8 am is now fixed
+
+•      Messenger once again gets through without being captured
+by the red army
+
+•      Now L2 realizes that L1 is not sure whether L1’s message
+had indeed reached L2 (e.g., the messenger could have been
+captured by the red army); hence, now L1 may be afraid to
+attack
+
+Source: https://www.e-reading.club/chapter.php/143358/156/Tanenbaum_-
+
+_Distributed_operating_systems.html
+
+
+•      In short, L1 and L2 would never reach agreement,
+irrespective of how many ack messages they send
+
+•      this is primarily because the sender of the last message has
+no way of knowing whether or not his last message arrived;
+hence, he will not commit his troops
+
+•      On the other hand, the receiver of the last message knows
+that the sender is not sure; hence, he will also not commit his
+troops
+
+•      Bottomline: Agreement is not reached
+
+Source: https://www.e-reading.club/chapter.php/143358/156/Tanenbaum_-
+
+_Distributed_operating_systems.html
+
+
+Even two correctly functional nodes cannot
+reach agreement when the communication
+link is unreliable
+
+
+Checkpointing & Message Logging
+
+•      Can use checkpointing and message logging for fault-
+tolerance in distributed systems
+
+•      Checkpointing: Save a snapshot of the system’s state at
+different points in time
+
+•      If any failure, can restart by using the info from the last
+checkpoint at which the system was working
+
+•      Very important for long-running applications in distributed
+systems because the longer-running an application is, the more
+chances of failure at some point
+
+•      Message logging: Log messages that are transmitted among
+the nodes in the distributed system
+
+
+•      Two-phase commit protocol relates to transaction processing
+
+•      Consider multiple nodes/processes that are engaging in a
+distributed transaction (remember that transactions in
+databases are all atomic)
+
+•      2PC is essentially a distributed algorithm that coordinates all
+these nodes/processes to determine whether to commit or
+abort the transaction
+
+•      Think of it as a consensus protocol i.e., creating consensus or
+agreement among these nodes/processes about whether to
+commit or abort the transaction
+
+•      Widely used and can work despite different kinds of system
+failures, but not across ALL kinds of system failures
+
+•      It is a blocking protocol
+
+
+•      Voting phase (commit-request phase)
+
+•       Coordinator asks nodes engaged in the transaction to vote YES or NO 
+about
+the transaction
+
+•       YES vote: commit the transaction (if the portion of the transaction at 
+a given
+participant completed successfully)
+
+•       NO vote: abort the transaction (if the portion of the transaction at a 
+given
+participant encountered some failure i.e., did NOT complete successfully)
+
+•      Commit phase
+
+•       Coordinator receives the votes from the nodes that participate in the
+distributed transaction
+
+•       If all voted YES, coordinator decides to commit the transaction, 
+otherwise
+abort the transaction
+
+•       Notifies participant nodes about whether the decision is a COMMIT or an
+ABORT
+
+•       Participant nodes locally commit or abort based on coordinator’s 
+decision
+
+
+•      Three-phase commit protocol relates to transaction
+processing
+
+•      Consider multiple nodes/processes that are engaging in a
+distributed transaction (remember that transactions in
+databases are all atomic)
+
+•      3PC is essentially a distributed algorithm that coordinates all
+these nodes/processes to determine whether to commit or
+abort the transaction (consensus protocol)
+
+•      3PC upper-limits the time for a transaction to commit or abort
+
+•      This means that if the transaction is holding locks, it would
+release the locks after that upper-limiting time
+
+•      3PC is a non-blocking protocol (this is in contrast with 2PC,
+which is a blocking protocol)
+
+
+1.  Coordinator asks participant nodes to vote on
+committing/aborting the transaction and then waits for replies
+(now                 the coordinator is in WAITING state)
+
+2.  If the coordinator receives a NO vote (or encounters some
+failure or timeout occurs), coordinator aborts the transaction
+and sends ABORT message to all participant nodes
+
+•      If the coordinator receives YES votes from all participant nodes
+within the pre-specified maximum upper-limit of time,
+coordinator sends preCommit messages to all participant nodes;
+the coordinator moves to PREPARED state)
+
+3.  If the coordinator succeeds in the prepared state, it will move to
+the commit state. If coordinator receives an acknowledgement
+from majority of participant nodes, it will go to commit state
+
+•    In case of timeout, the coordinator will abort the transaction
+
+
+1.  Participant node receives the vote message from the
+coordinator (vote message means COMMIT or ABORT)
+
+If the participant node agrees (commit), it sends YES vote
+message to the coordinator and moves to the prepared state;
+otherwise it sends a NO vote to the coordinator and aborts
+
+2.  If the participant node receives an abort message from the
+coordinator or times out, it aborts. If the participant node
+receives a preCommit message, it sends an acknowledgment
+message to the coordinator and waits for final commit or abort
+decision
+
+3.  After receiving a preCommit message, note that the
+coordinator can fail. The participant node goes ahead and
+commits.
+
+Note the non-blocking nature of the protocol
+

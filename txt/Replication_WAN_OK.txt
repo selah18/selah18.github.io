@@ -1,0 +1,1184 @@
+Data Replication & Load-
+balancing in WANs
+
+Anirban Mondal , Ashoka University
+
+These slides are adapted from the following keynote talk of Anirban Mondal at
+HADIS  2005  (Copenhagen,  Denmark):  Effective  dynamic  replication  in  wide-
+area    network    environments:   A    perspective.    Authors:   Anirban    
+Mondal
+(University of Tokyo) and Masaru Kitsuregawa (University of Tokyo), 2005
+
+
+Importance of Data Replication
+
+■ Availability
+
+■ Reliability
+
+■ Query response times
+
+
+Replication in WANs
+
+■  Extremely challenging in practice
+
+■  The next set of slides will discuss the key issues and
+trade-offs associated with replication in Wide Area
+Network (WAN) environments
+
+■  Remember that large-scale geographically distributed
+systems are of paramount importance in today’s world
+
+– Especially since such distributed systems enable key
+applications such as search engines, e-commerce portals
+etc.
+
+■   The ability to replicate data appropriately in WAN environments
+is critical to the success of such distributed systems
+
+
+PRESENTATION OUTLINE
+
+■ INTRODUCTION
+
+■ BACKGROUND
+
+– EXISTING WORKS
+
+– BRIEF OVERVIEW OF OUR WORKS
+
+■ OPEN RESEARCH ISSUES ON
+REPLICATION IN P2P/GRIDs
+
+■ SUMMARY AND FUTURE SCOPE OF WORK
+
+
+Introduction
+
+
+Introduction
+
+Tremendously large number of computers worldwide
+
+
+Introduction
+
+Tremendously large number of computers worldwide
+Unprecedented amount of geographically distributed data
+
+
+Introduction
+
+Tremendously large number of computers worldwide
+Unprecedented amount of geographically distributed data
+Tremendous improvement in networking capabilities
+
+
+Introduction
+
+Tremendously large number of computers worldwide
+Unprecedented amount of geographically distributed data
+Tremendous improvement in networking capabilities
+
+The need for effective global-scale data sharing
+
+
+Introduction
+
+Computers
+
+
+Introduction
+
+Computers
+
+No. of computers is ever-increasing
+
+
+Introduction
+
+Computers
+
+No. of computers is ever-increasing
+Ever-increasing popularity of
+
+global-scale data sharing
+
+• convenient, cost-effective
+
+
+Introduction
+
+Computers
+
+No. of computers is ever-increasing
+Ever-increasing popularity of
+
+global-scale data sharing
+
+• convenient, cost-effective
+
+Increasing scale of global-scale
+data sharing
+
+• Larger number of users,
+
+nodes and data
+
+
+Introduction
+
+Computers
+
+No. of computers is ever-increasing
+Ever-increasing popularity of
+
+global-scale data sharing
+
+• convenient, cost-effective
+
+Increasing scale of global-scale
+data sharing
+
+• Larger number of users,
+
+nodes and data
+
+Increasing Performance and
+Data Availability demands
+
+
+Introduction
+
+Computers
+
+No. of computers is ever-increasing
+Ever-increasing popularity of
+
+global-scale data sharing
+
+• convenient, cost-effective
+
+Increasing scale of global-scale
+data sharing
+
+• Larger number of users,
+
+nodes and data
+
+Increasing Performance and
+Data Availability demands
+
+We need a performance-dependable P2P/GRID system
+
+- High Data availability
+
+- Low Query response time
+
+- High scalability
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+■   Significant variations in bandwidth
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+■   Significant variations in bandwidth
+
+■   Lack of centralized control
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+■   Significant variations in bandwidth
+
+■   Lack of centralized control
+
+■   Lack of global knowledge
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+■   Significant variations in bandwidth
+
+■   Lack of centralized control
+
+■   Lack of global knowledge
+
+■   Distributive ownership
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+■   Significant variations in bandwidth
+
+■   Lack of centralized control
+
+■   Lack of global knowledge
+
+■   Distributive ownership
+
+■   Scalability
+
+– Over Number of nodes
+
+– Over time (maintenance issues)
+
+
+Fundamental Requirements of replication
+schemes in WANs
+
+■   Node heterogeneity
+
+– processing capacity
+
+– available disk space for storing replicas
+
+■   Significant variations in bandwidth
+
+■   Lack of centralized control
+
+■   Lack of global knowledge
+
+■   Distributive ownership
+
+■   Scalability
+
+– Over Number of nodes
+
+– Over time (maintenance issues)
+
+These fundamental issues arise for replication in all WANs.
+
+We focus on open issues for replication in P2P / GRIDs.
+
+
+PRESENTATION OUTLINE
+
+■ INTRODUCTION
+
+■ BACKGROUND
+
+– EXISTING WORKS
+
+– BRIEF OVERVIEW OF OUR WORKS
+
+■ OPEN RESEARCH ISSUES ON
+REPLICATION IN P2P/GRIDs
+
+■ SUMMARY AND FUTURE SCOPE OF WORK
+
+
+EXISTING WORKS
+
+■   Load-balancing for clusters
+
+– STATIC (BUBBA, tile technique)
+
+– DYNAMIC (Disk cooling)
+
+■   Job (Process) Migration in CONDOR
+
+■   A. Chervenak, I. Foster, C. Kesselman et al
+
+– The data GRID (1999)
+
+■   Ongoing GRID projects
+
+– Earth Systems Grid (ESG)
+
+– NASA Information Power Grid (IPG)
+
+– Grid Physics Network (GriPhyN)
+
+– European DataGrid.
+
+■   Binding of execution and storage sites together into I/O
+communities [Thain et al, 2001]
+
+■   Data-movement system Kangaroo [Thain et al, 2001]
+
+– Background processes handle data movements.
+
+– Aims at improving data availability and reliability by
+sacrificing consistency guarantees
+
+
+EXISTING WORKS (CONT.)
+
+■   Replication for facilitating P2P search
+
+– [E. Cohen and S. Shenker 2002]
+
+– [Q. Lv, P. Cao, et al 2002]
+
+■   [J. Kangasharju, K.W. Ross, and D. A. Turner 2002]
+
+–  An adaptive, fully distributed algorithm which dynamically
+replicates content in a near-optimal manner in P2P systems
+
+■   Load-balancing peers with similar interests
+
+– [P. Triantafillou et al 2003]
+
+– Peers are clustered based on the semantic categories of the
+documents contributed by them
+
+– Intra-cluster and inter-cluster load-balancing
+
+■   The Cooperative File System (CFS)
+
+– [Dabek, Stoica et al 2003]
+
+– A P2P read-only DHT-based storage system
+
+– Aims at efficiency and load-balancing of file storage and
+retrieval via a scalable decentralized architecture
+
+
+EXISTING WORKS (CONT.)
+
+■  Load-balancing via moving virtual servers from heavily
+loaded nodes to lightly loaded nodes
+
+– [ Rao et al 2003]
+
+■  Consistency maintenance of replicated databases
+
+– [L. Irun-Briz, H. Decker, and R. de Juan-Marin et al
+2005]
+
+– Lightweight middleware architecture
+
+– Doesn’t re-invent the wheel ◇ cost-effective
+integration
+
+– Optimal replication protocol is chosen on-the-fly in a
+‘plug-and-play’ manner
+
+
+PRESENTATION OUTLINE
+
+■ INTRODUCTION
+
+■ BACKGROUND
+
+– EXISTING WORKS
+
+– BRIEF OVERVIEW OF OUR WORKS
+
+■ OPEN RESEARCH ISSUES ON
+REPLICATION IN P2P/GRIDs
+
+■ SUMMARY AND FUTURE SCOPE OF WORK
+
+
+Effective Load-Balancing in Spatial GRIDs
+
+Main contributions
+
+• Viewing a spatial GRID as comprising several clusters
+
+• An inter-cluster load-balancing algorithm (using
+migration/replication)
+
+Each cluster has a leader which knows about data stored
+at its own cluster & at its neighbours
+
+
+Effective Load-Balancing in Spatial GRIDs
+
+Main contributions
+
+• Viewing a spatial GRID as comprising several clusters
+
+• An inter-cluster load-balancing algorithm (using
+migration/replication)
+
+Each cluster has a leader which knows about data stored
+at its own cluster & at its neighbours
+
+Which option is better: Migration vs Replication
+
+• Load-balancing
+
+• Data Availability
+
+• Disk space usage
+
+• Cost-benefit issues
+
+• Replica consistency
+
+
+Effective Load-Balancing in Spatial GRIDs
+
+(Cont.)
+
+Moving spatial data entails movement of indexes
+Extract data from index and rebuild at destination
+
+Each node maintains a separate index for
+
+• its own data
+
+•for migrated/replicated data
+
+
+Effective Load-Balancing in Spatial GRIDs
+
+(Cont.)
+
+Moving spatial data entails movement of indexes
+Extract data from index and rebuild at destination
+
+Each node maintains a separate index for
+
+• its own data
+
+•for migrated/replicated data
+
+Dealing with  variations in disk space
+
+• ‘Push’ non-hot data to large capacity peers
+
+- Large-sized data: migration
+
+- Small-sized data: replication
+
+• Replicate small-sized hot data at small capacity peers
+
+• Large-sized hot data: migration to large capacity peers
+if peers are available, otherwise replication
+
+Delete of infrequently accessed replicas
+
+
+On Improving P2P Performance-Dependability
+
+■  We focus on improving the performance-dependability
+of unstructured P2P systems via dynamic replication
+
+■   Load imbalance decreases P2Pdependability
+
+■   Main contributions
+
+– A dynamic data replication strategy
+
+– A dynamic query redirection technique
+
+■  Broadcast-based search
+
+■  Every peer maintains its own access statistics
+
+■  Every peer provides a certain amount Space of its disk
+space for storing replicas
+
+
+Selection Criteria for destination peer
+
+• High online probability
+
+• Adequate available disk space
+
+• Significant load difference with source peer
+
+• Low data transfer time w.r.t. source peer
+
+
+Selection Criteria for destination peer
+
+• High online probability
+
+• Adequate available disk space
+
+• Significant load difference with source peer
+
+• Low data transfer time w.r.t. source peer
+
+Peer Selection Criteria for query redirection
+
+• High online probability
+
+• Significant Load difference with redirecting peer
+
+• Low Transfer time with query issuing peer
+
+
+PRESENTATION OUTLINE
+
+■ INTRODUCTION
+
+■ BACKGROUND
+
+– EXISTING WORKS
+
+– BRIEF OVERVIEW OF OUR WORKS
+
+■ OPEN RESEARCH ISSUES ON
+REPLICATION IN P2P/GRIDs
+
+■ SUMMARY AND FUTURE SCOPE OF WORK
+
+
+What does replication really mean
+in the P2P/GRID context?
+
+Distributively-owned nodes
+
+A decision to replicate is just
+a request or a plan
+
+
+What does replication really mean
+in the P2P/GRID context?
+
+
+Distributively-owned nodes
+
+A decision to replicate is just
+a request or a plan
+
+Autonomous replica deletion
+Peers may suddenly go offline
+anytime
+
+
+What does replication really mean
+in the P2P/GRID context?
+
+
+Distributively-owned nodes
+
+A decision to replicate is just
+a request or a plan
+
+Autonomous replica deletion
+Peers may suddenly go offline
+anytime
+
+No guarantees about how long a replica will actually exist
+
+
+What does replication really mean
+in the P2P/GRID context?
+
+
+Distributively-owned nodes
+
+A decision to replicate is just
+a request or a plan
+
+Autonomous replica deletion
+Peers may suddenly go offline
+anytime
+
+No guarantees about how long a replica will actually exist
+
+Replication in the P2P/GRID context is
+associated with a considerable amount of
+uncertainty!
+
+
+Active vs Passive Replication
+
+Active replication: A peer storing
+a hot data item D replicates D at
+another peer
+
+
+Active vs Passive Replication
+
+
+Active replication: A peer storing
+a hot data item D replicates D at
+another peer
+
+Passive replication: A
+downloader of a data item D
+decides to share D
+
+
+Active vs Passive Replication
+
+
+Active replication: A peer storing
+a hot data item D replicates D at
+another peer
+
+Passive replication: A
+downloader of a data item D
+decides to share D
+
+What percentage of downloaders share the
+data that they downloaded?
+
+
+Active vs Passive Replication
+
+
+Active replication: A peer storing
+a hot data item D replicates D at
+another peer
+
+Passive replication: A
+downloader of a data item D
+decides to share D
+
+What percentage of downloaders share the
+data that they downloaded?
+
+What is the probability of these downloading
+peers being online at a specific point of time?
+
+
+Active vs Passive Replication (Cont.)
+
+No large-scale studies have yet been performed on any
+real P2P system for answering these two open questions
+
+• Sheer scale of P2P networks
+
+• The temporal nature of the problem
+
+• Statistics collection difficult (user privacy)
+
+
+Active vs Passive Replication (Cont.)
+
+No large-scale studies have yet been performed on any
+real P2P system for answering these two open questions
+
+• Sheer scale of P2P networks
+
+• The temporal nature of the problem
+
+• Statistics collection difficult (user privacy)
+
+Active and passive replication are also applicable to GRIDs
+
+• Slightly less challenging
+
+• Nodes in GRIDs are dedicated
+
+• Collection of user statistics is easier
+
+
+Peer availability issue
+
+Estimating peer availability is important for replication
+
+Percentage of peer availability does NOT capture whether a
+peer is likely to be available during a specific point in time
+
+- Will peer X be available at 7 pm GMT?
+
+
+Peer availability issue
+
+Estimating peer availability is important for replication
+
+Percentage of peer availability does NOT capture whether a
+peer is likely to be available during a specific point in time
+
+- Will peer X be available at 7 pm GMT?
+
+How to estimate the probability of a peer X being available?
+
+• Every peer interacting with X keeps a log of its
+interactions with X and estimates X’s probability of being
+
+available/online
+
+• Different peers who interact with peer X may have
+different views about X’s availability.
+
+
+Peer availability issue
+
+Estimating peer availability is important for replication
+
+Percentage of peer availability does NOT capture whether a
+peer is likely to be available during a specific point in time
+
+- Will peer X be available at 7 pm GMT?
+
+How to estimate the probability of a peer X being available?
+
+• Every peer interacting with X keeps a log of its
+interactions with X and estimates X’s probability of being
+
+available/online
+
+• Different peers who interact with peer X may have
+different views about X’s availability.
+
+What should be the level of detail in this log?
+
+• Based on time-interval considerations
+
+• Depends on peer’s geographic location (time-zone)
+
+
+Keeping track of replicas
+
+Lack of centralized control
+Sheer scale of the system
+Inherent dynamic nature
+
+Aggressive replication of hot data
+
+
+Keeping track of replicas
+
+Lack of centralized control
+Sheer scale of the system
+Inherent dynamic nature
+
+Aggressive replication of hot data
+
+Every node has incomplete and inaccurate knowledge about
+replica locations
+
+
+Keeping track of replicas
+
+Lack of centralized control
+Sheer scale of the system
+Inherent dynamic nature
+
+Aggressive replication of hot data
+
+Every node has incomplete and inaccurate knowledge about
+replica locations
+
+Possible Solution
+
+Estimates among neighbouring nodes by
+consensus
+
+
+Determination of number of replicas
+
+Challenging to know the existing no. of D’s replicas D
+
+• D may be replicated by any downloader node
+
+• Nodes do not inform the primary copy owner
+
+• Determining primary copy owner is itself
+challenging
+
+• Nodes can delete replicas autonomously anytime
+
+
+Determination of number of replicas
+
+Challenging to know the existing no. of D’s replicas D
+
+• D may be replicated by any downloader node
+
+• Nodes do not inform the primary copy owner
+
+• Determining primary copy owner is itself
+challenging
+
+• Nodes can delete replicas autonomously anytime
+
+Estimation of no. of replicas among neighbours
+seems to be a possible option
+
+
+Replication of relatively unpopular data
+
+Replication should improve availability of both popular and
+unpopular data
+
+
+Replication of relatively unpopular data
+
+Replication should improve availability of both popular and
+unpopular data
+
+Passive replication ensures several replicas of popular data
+
+
+Replication of relatively unpopular data
+
+Replication should improve availability of both popular and
+unpopular data
+
+Passive replication ensures several replicas of popular data
+What about replication of unpopular data?
+
+• A minority of users would like to have unpopular data
+
+• Where to replicate unpopular data so that it can be
+found within the maximum specified number of hops
+
+
+Replication of relatively unpopular data
+
+Replication should improve availability of both popular and
+unpopular data
+
+Passive replication ensures several replicas of popular data
+What about replication of unpopular data?
+
+• A minority of users would like to have unpopular data
+
+• Where to replicate unpopular data so that it can be
+found within the maximum specified number of hops
+
+Trade-off: Benefit of replicating unpopular data vs the
+disk space required for storing such data
+
+
+Sharing complex data types in P2P systems
+
+Should a powerful computing paradigm such as P2P be
+limited to just file-sharing applications?
+
+
+Sharing complex data types in P2P systems
+
+Should a powerful computing paradigm such as P2P be
+limited to just file-sharing applications?
+
+Currently, P2P systems are primarily used for file-sharing
+More complex data types can also be shared
+
+Replication of complex data types in P2P systems is
+significantly more complicated than just file replication
+
+
+Sharing complex data types in P2P systems
+
+Should a powerful computing paradigm such as P2P be
+limited to just file-sharing applications?
+
+Currently, P2P systems are primarily used for file-sharing
+More complex data types can also be shared
+
+Replication of complex data types in P2P systems is
+significantly more complicated than just file replication
+
+We have investigated spatial data sharing in P2P systems
+
+• Overlaps between spatial objects and inherent
+complexity of spatial queries makes it challenging
+
+
+Sharing complex data types in P2P systems
+
+P2P environments have no notion of accountability
+Inherently untrustworthy environment
+
+
+Sharing complex data types in P2P systems
+
+P2P environments have no notion of accountability
+Inherently untrustworthy environment
+
+Sharing of sensitive user data (e.g., credit card numbers,
+users’ medical data) may not be practically feasible
+
+Sharing of non-sensitive data is ok
+
+
+Sharing complex data types in P2P systems
+
+P2P environments have no notion of accountability
+Inherently untrustworthy environment
+
+Sharing of sensitive user data (e.g., credit card numbers,
+users’ medical data) may not be practically feasible
+
+Sharing of non-sensitive data is ok
+
+What about introducing some measures of accountability?
+
+• It runs counter to the very principles of anonymity,   non-
+accountability and freedom that P2P systems thrive on
+
+
+Security issue
+
+
+Security issue
+
+Is it secure to
+download data from a
+P2P system?
+
+
+Security issue
+
+Is it secure to
+download data from a
+P2P system?
+
+Aggressive passive
+replication may be
+
+an extremely efficient way of
+replicating viruses!
+
+
+Security issue
+
+Is it secure to
+download data from a
+P2P system?
+
+Aggressive passive
+replication may be
+
+an extremely efficient way of
+replicating viruses!
+
+Every P2P user may not
+have appropriate anti-
+virus software
+
+
+Security issue
+
+Is it secure to
+download data from a
+P2P system?
+
+Aggressive passive
+replication may be
+
+an extremely efficient way of
+replicating viruses!
+
+Every P2P user may not
+have appropriate anti-
+virus software
+
+How to ensure that virus-infected data is NOT replicated?
+
+Who ensures it?
+
+How do we trust the one who ensures it? (non-accountability)
+
+
+Result Quality
+
+High data availability for high-quality files
+
+
+Result Quality
+
+High data availability for high-quality files
+
+Can we create more replicas for higher-quality data?
+
+- Users want to locate data of good quality
+
+- Lot of junk files in P2P systems
+
+
+Result Quality
+
+High data availability for high-quality files
+
+Can we create more replicas for higher-quality data?
+
+- Users want to locate data of good quality
+
+- Lot of junk files in P2P systems
+
+How do we quantify `quality’? (highly subjective)
+
+Who assigns the value of `quality’ for each peer?
+
+-Assigned by peer itself
+
+- Assigned by downloaders
+
+- Done by consensus
+
+- Using a third-party
+
+
+Legal issues for replication in P2P systems
+
+
+Legal issues for replication in P2P systems
+
+Is it legal to store a
+replica?
+
+
+Legal issues for replication in P2P systems
+
+Is it legal to store a
+replica?
+
+Depends on whether the
+replica is copyrighted?
+
+
+Legal issues for replication in P2P systems
+
+Is it legal to store a
+replica?
+
+Depends on whether the
+replica is copyrighted?
+
+How do I know whether it is
+copyrighted?
+
+
+Legal issues for replication in P2P systems
+
+Is it legal to store a
+replica?
+
+Depends on whether the
+replica is copyrighted?
+
+How do I know whether it is
+copyrighted?
+
+Recent spate of P2P-related court proceedings have highlighted
+several ‘grey areas’ in current laws
+
+
+Legal issues for replication in P2P systems
+
+Is it legal to store a
+replica?
+
+Depends on whether the
+replica is copyrighted?
+
+How do I know whether it is
+copyrighted?
+
+Recent spate of P2P-related court proceedings have highlighted
+several ‘grey areas’ in current laws
+
+Fast technological growth ◇ laws are broken before they can
+even be made!
+
+
+Key differences concerning Replication
+
+
+Replication in clusters
+
+Replication is definitive
+Replicate at any node
+
+Retrieve data from least loaded
+node containing the data
+
+Replication decision-making
+involves complete knowledge
+
+Usually homogeneous nodes
+Centralized control ok
+
+Replication in WANs
+
+Replication is just a plan
+
+Carefully select destination
+node
+
+Retrieve from nearest node
+containing the data
+
+Replication decision-making
+involves incomplete knowledge
+
+Mostly heterogeneous nodes
+Avoid centralized control
+
+
+PRESENTATION OUTLINE
+
+■ INTRODUCTION
+
+■ BACKGROUND
+
+– EXISTING WORKS
+
+– BRIEF OVERVIEW OF OUR WORKS
+
+■ OPEN RESEARCH ISSUES ON
+REPLICATION IN P2P/GRIDs
+
+■ SUMMARY AND FUTURE SCOPE OF WORK
+
+
+SUMMARY AND THE FUTURE
+
+■ Investigation of effective replication in
+P2P/GRIDs
+
+■ Discussion on Open Research issues
+
+■ The future
+
+– Realizing the full potential of the powerful P2P
+paradigm by sharing more complex data types
+
+– Creation of some standard for global-scale data
+sharing
+
+– Obtaining some answers to the open questions
+

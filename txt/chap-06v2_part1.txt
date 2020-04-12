@@ -1,0 +1,289 @@
+DISTRIBUTED SYSTEMS
+
+Principles and Paradigms
+
+Second Edition
+ANDREW S. TANENBAUM
+
+MAARTEN VAN STEEN
+
+Chapter 6
+Synchronization
+
+These are the textbook slides of Tanenbaum & Van Steen, Distributed Systems:
+Principles and Paradigms, 2e, 2007. Slides have been modified/edited. Slides
+include information and materials from multiple different publicly available 
+web-
+based sources and are being used here for academic purposes only.
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+•   Consider a distributed system, where there is a
+clock at each of the nodes
+
+•   You may initially set the clocks accurately
+
+•   But these clocks count time at different rates
+(although at only slightly different rates)
+
+The challenge here is to synchronize / coordinate the independent
+distributed clocks at the nodes of a distributed system
+
+
+•   In a distributed system, several nodes will have to have the
+same global time
+
+•   Many of the distributed systems algorithms rely on
+
+synchronized times across all the nodes
+
+•   Example: Think of any timestamp-based algorithm in
+distributed systems
+
+•   If different nodes of a distributed system have different
+
+times, these distributed timestamp-based algorithms would
+essentially fail
+
+
+Figure 6-1. When each machine has its own clock, an
+event that occurred after another event may
+
+nevertheless be assigned an earlier time.
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+•   In a centralized server setting, what could be the solution?
+
+•   Simple solution: Let the centralized server determine
+the system time and periodically send the system time to
+all the nodes to maintain clock synchronization
+
+•   What could be the time-period intervals at which such
+
+kind of clock synchronization would need to be done?
+
+
+•   Cristian's algorithm
+
+•   Berkeley algorithm
+
+•   Both of these algorithms solve the problem of clock
+synchronization in a centralized server environment
+
+
+•   Consider a time server S (connected to an accurate time
+source) and a set of N nodes
+
+•   Node requests time from S
+
+•   S receives the request of P
+
+•   S attaches the time T from its own clock
+
+•   P sets its time to T + (round-trip time / 2)
+
+•   Round-trip time here is the time of message to go from
+node to S and from S to node
+
+What are the assumptions here?
+
+
+•   Assumptions in Cristian’s algorithm
+
+•   The time required for the message to go from node to S and
+from S to node are equal
+
+•   This assumption is mostly valid in case of LAN, but not
+
+necessarily valid for large-scale distributed systems in a
+WAN
+
+•   The round-trip time should be much lower than the
+
+required accuracy (in terms of time)
+
+
+•   Assumptions in Cristian’s algorithm
+
+•   The time required for the message to go from node to S and
+from S to node are equal
+
+•   This assumption is mostly valid in case of LAN, but not
+
+necessarily valid for large-scale distributed systems in a
+WAN
+
+•   The round-trip time should be much lower than the
+
+required accuracy (in terms of time)
+
+
+•   Useful for scenarios where none of the nodes in the system
+have an accurate time source
+
+•   The system maintains a global average time and this global
+
+average time is essentially the global time
+
+•   Whenever you take mean or average of a set of values,
+what could be an issue?
+
+•   Outliers
+
+•   Outliers can skew the average significantly
+
+•   Since some of the clocks at the individual nodes may be
+faulty and produce wrong (outlier) values of time, usually
+the outlier values are ignored, while computing the average
+
+
+•    Periodically, server node (Master) obtains the time from all the client
+(slave) nodes by polling the client nodes
+
+•    Master is selected by election process (recall the material from your
+
+Distributed Election slides; Bully algorithm, Ring algorithm etc.)
+
+•    Server averages the times obtained from all the client nodes (ignore
+outliers as discussed in the previous slide)
+
+•    Server takes into account the round-trip time of messages (same way
+
+as in Cristian’s algorithm); that way, it can estimate the time of each
+client
+
+•    Server sends a message to each client telling them about the
+
+adjustments to be made to their clocks (local clocks at each client
+node) to reach the average value of time (as computed by Server)
+
+
+•   As in the case of Cristian’s algorithm, Berkeley’s algorithm
+is also designed primarily for LAN environments
+
+•   Round-trip time (RTT) would have a lot of variance in
+
+WAN environments
+
+•   Lot more uncertainty (e.g., node failures,
+communication link failures etc.) in a WAN
+environment or in case of large-scale distributed
+systems
+
+
+•   What if there needs to be a negative clock adjustment?
+
+•   Example: The local clock time is 5221, but the Server-
+computed global time is 5210
+
+•   One obvious option is for the individual node to rewind its
+
+local clock
+
+•   Why this would be a REALLY bad idea?
+
+
+•   What if there needs to be a negative clock adjustment?
+
+•   Example: The local clock time is 5221, but the Server-
+computed global time is 5210
+
+•   One obvious option is for the individual node to rewind its
+
+local clock
+
+•   Why this would be a REALLY bad idea?
+
+•   Because many algorithms in distributed systems rely on
+monotonically increasing time
+
+•   Rewinding the time could wreak havoc on the execution
+
+of those algorithms or even the logic of those
+algorithms
+
+•   Practical solution: Slow down the clock and synchronize to
+
+the global time over a period of time instead of trying to
+
+
+▪      Consider a large number of nodes/processes in a distributed
+system
+
+▪      Challenging to synchronize clocks/time across all these
+nodes/processes ◇ the use of logical clocks
+
+▪      Within any individual node, can order the events based on the
+local clock of the node
+
+▪      But how to synchronize time across nodes?
+
+▪     If no message passing between nodes, having a common clock is
+not a requirement
+
+▪     If message passing occurs, send happens before receive ◇
+
+logical ordering among the events
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+The "happens-before" relation   →   can be
+observed directly in two situations:
+
+•    If a and b are events in the same process,
+and a occurs before b, then a → b is true.
+
+•    If a is the event of a message being sent by
+one process, and b is the event of the
+message being received by another
+process,    then a → b
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+▪        Partial order in distributed systems: if we can establish a partial 
+ordering
+among the events in the distributed system
+
+▪        Total order in a distributed system: if we can establish a 
+complete/total
+ordering among the events in the distributed system
+
+▪        This requires understanding of causality among the events in the 
+system
+
+▪       Lamport’s clocks do not capture causality as such
+
+▪        Lamport’s clocks provide partial ordering because it can only 
+establish an
+ordering among events that interact e.g., via message passing
+
+▪        Remember that these are logical clocks; nothing to do with real time
+
+▪        Ties among events are settled arbitrarily
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+Figure 6-9. (a) Three processes, each with its own clock.
+
+The clocks run at different rates.
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+
+
+Figure 6-9. (b) Lamport’s algorithm corrects the clocks.
+
+Tanenbaum & Van Steen, Distributed Systems: Principles and Paradigms, 2e, (c) 
+2007 Prentice-Hall, Inc. All rights reserved. 0-13-239227-5
+

@@ -1,0 +1,320 @@
+CS404 – Distributed Systems:
+Course administration & details
+
+Anirban Mondal
+
+Associate Professor, Ashoka University
+
+PhD, National University of Singapore (NUS)
+MBA, University of Massachusetts Amherst (UMass)
+
+BTech CSE IIT Kharagpur
+
+anirban.mondal@ashoka.edu.in
+
+
+Quick Intro to Distributed Systems
+
+Distributed systems enable some of these key
+technologies and functionalities that we use so
+frequently
+
+
+The next few slides will show the use of distributed
+systems across many real-world industries
+
+
+Industries enabled
+
+by Distributed Systems
+
+Retail
+
+And so many
+
+
+Healthcare
+
+Manufacturing
+
+Others…
+
+
+Walmart
+
+•   Walmart is the world’s largest discount retailer selling a wide
+variety of merchandise
+
+•   Large number of stores across 15 countries, more than 8500
+stores
+
+•   World’s largest private employer with 1.4 million employees
+worlwide & 20 million people visit its stores every day [HBS
+9704430]
+
+•   Private satellite-communications IT system communicates
+point-of-sale data among stores, distribution centers &
+suppliers.
+
+•   Distributed Data management is needed here to facilitate
+smooth information flow across the supply chain and also for
+business analytics
+
+
+Inditex
+
+•   One of the world's largest fashion retailers
+
+•  5.221 stores in 78 countries
+
+•   Brands owned by Inditex: Zara, Pull & Bear, Massimo Dutti,
+Bershka, Stradivarius, Oysho, Zara Home, Uterqüe
+
+•   Best-cost provider strategy targeting the value-conscious
+segment
+
+•   Market focus
+
+•  Fashion-conscious young people and teenagers
+
+How does Inditex use distributed systems to achieve
+its mission?
+
+
+Use of distributed systems by Inditex
+
+•  Centralized Distribution of merchandise powered by IT
+communication technologies
+
+– Autonomous store managers send customer feedback (e.g.,
+what products are people buying?) from point-of-sale IT
+systems to headquarters.
+
+– Headquarters uses this information as feedback to
+determine which designs to dispatch to stores at least twice
+a   week.
+
+– Allows for quick response to changing market demands
+
+
+How Amazon uses distributed systems
+
+•  Amazon Price Check mobile app gives incentives to
+users for finding in-store prices of products
+
+– This is technically called mobile crowdsourcing; see the next
+2 slides for a quick overview of mobile crowdsourcing
+
+•  Observe that it enables Amazon to collect intelligence
+about competitors about product pricing
+
+•  Amazon's recommendation system obviously uses
+data analytics
+
+•  Uses about 1 million Hadoop clusters for various
+functionalities e.g., machine learning, recommendation
+system   etc.
+
+Source: https://www.dezyre.com/article/5-big-data-use-cases-how-companies-
+use-big-data/155
+
+
+Real-world Crowd-driven Mobile Data Collection
+
+Some references on this topic:
+
+•https://en.wikipedia.org/wiki/Crowdsourcing
+
+•Anirban Mondal, Tridib Mukherjee, Avinash Sharma, Saraschandra Karanam. 
+Methods and
+systems for processing crowd-sensed data. US Patent granted by USPTO; Grant 
+date: Feb
+23, 2016; Assignee: Xerox Corp.
+
+•Anirban Mondal. The Role of Incentive-Based Crowd-Driven Data Collection in 
+Big Data
+
+Analytics: A Perspective. Proc. Big Data Analytics 2013: 86-96
+
+
+How Macy’s uses distributed systems and
+Big Data Analytics
+
+•   Macy’s is a retailer based in the US
+
+•   Collects Big Data about what customers want based on several
+factors e.g., pricing, demographics, seasons etc.
+
+•   Evaluates sentiments (from social media) about given products
+
+•   Helps them to understand customer preferences about which
+brands are more popular and establish a connect with
+customers at a more fine-grained level
+
+•   Such predictive analytics facilitates effective customer
+segmentation as well
+
+Source: https://www.dezyre.com/article/5-big-data-use-cases-how-companies-
+use-big-data/155
+
+
+How retail companies use Behavioral Analytics
+
+
+•    Target
+
+enabled by distributed systems
+
+–   Tries to predict life changes (e.g., marriage, divorce etc.) of their 
+customers
+
+–   using behavioural analytics to understand the shopping behaviour of 
+customers
+
+–   Based on the predictions, they send targeted promotions to customers for 
+relevant products
+
+•    Nordstrom
+
+–   225 retail outlets
+
+–   Generates Big Data (in petabytes) from 4.5 million Pinterest followers; 
+300,000 Twitter
+followers & 2 million likes on Facebook
+
+–   Tracks customer behaviour as customers walk inside the retail stores e.g., 
+at parts of the
+store, how much time do customers spend?
+
+–   The focus is on personalization based on customer preferences to determine 
+promotions of
+products to relevant customers in a targeted manner
+
+•    Kohl’s
+
+–   Keeps track of customer’s online browsing history
+
+–   Sends offers to customer’s phones when they come to the store
+
+–   gives them in-store discount offers & promotions
+
+Source: https://www.dezyre.com/article/5-big-data-use-cases-how-companies-
+use-big-data/155
+
+
+How Big Data and distributed systems are
+used in Food Industry
+
+•  McDonald’s
+
+– 34000 restaurants;
+
+– 69 million customers in 118 countries
+
+– 62 million daily customer traffic
+
+– Sells 75 burgers every second
+
+– (Pay particular attention to the scale of McDonald’s operations)
+
+•  Uses Big Data to improve operational efficiencies and
+improve customer experience
+
+•  How long are customers waiting for their food? What kind of
+ordering patterns exist?
+
+Source: https://www.dezyre.com/article/5-big-data-use-cases-how-
+companies-use-big-data/155
+
+
+How Big Data and distributed systems are
+used in Airline Industry
+
+•  Delta Airlines
+
+– Tracks social media (tweets) to determine customer sentiment
+about various aspects of their flying experience
+
+• Delays, in-flight entertainment, lost baggage, connecting flights
+
+– Facilitates in brand loyalty by responding proactively to customer
+concerns
+
+Source: https://www.dezyre.com/article/5-big-data-use-cases-how-
+companies-use-big-data/155
+
+
+In all of these above industries and
+application scenarios, observe how
+distributed systems enable the processing
+of     data collected at geographically
+distributed nodes. Also, observe
+transparency       & scalability aspects
+
+
+Course Description
+
+
+Key information about the course
+
+
+Prescribed Textbook for the course
+
+
+Obtaining access to the textbook
+
+
+Grading Scheme
+
+Evaluation Instrument      Weightage
+Midterm Exam                           20%
+Quizzes & assignments           20%
+
+Class Attendance                     10%
+
+Laboratory                                30%
+
+End-term Exam                         20%
+
+
+Assignments & Quizzes
+
+
+Lab Assignments
+
+
+Lab Assignments
+
+
+Forming your lab groups
+
+
+Consultation hours
+
+
+Slides uploads and communication
+
+
+Maximizing your benefits from the course
+
+
+Maximizing your benefits from the course
+(Cont.)
+
+
+Look at the next two slides to understand
+why applying your knowledge in
+assignments/projects/exams etc is
+important for your overall learning
+experience
+
+
+Source: http://www.cals.ncsu.edu/agexed/sae/ppt1/sld012.htm
+
+
+Bottomline: Do the assignments sincerely because it will facilitate
+you in INTERNALIZING the ideas/techniques you learnt in this
+course.
+
+Source: http://www.cals.ncsu.edu/agexed/sae/ppt1/sld012.htm
+

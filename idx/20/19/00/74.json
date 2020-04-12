@@ -1,5 +1,9 @@
 [
- ["Lewis-Carroll.txt", 10]
+ ["Distributed_Election_OK.txt", 1046]
+,["Distributed_Indexing_OK.txt", 4475]
+,["Fault_Tolerance.txt", 1268]
+,["Lewis-Carroll.txt", 10]
 ,["Lewis-Carroll.txt", 72]
 ,["Lewis-Carroll.txt", 228]
+,["Replication_WAN_OK.txt", 7257]
 ]

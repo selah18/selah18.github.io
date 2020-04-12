@@ -1,0 +1,169 @@
+DISTRIBUTED SYSTEMS
+
+Principles and Paradigms
+
+Second Edition
+ANDREW S. TANENBAUM
+
+MAARTEN VAN STEEN
+
+Introduction
+
+These are the textbook slides of Distributed Systems: Principles and Paradigms
+textbook by Tanenbaum and Van Steen. This is the prescribed textbook for
+this  course. Some of the slides have been modified/edited.
+
+
+A distributed system is:
+
+A collection of independent
+computers that appears to its
+
+users as a single coherent
+system.
+
+
+Figure 1-1. A distributed system organized as middleware. The
+middleware layer extends over multiple machines, and offers
+
+each  application the same interface.
+
+
+Figure 1-2. Different forms of transparency in a
+distributed system (ISO, 1995).
+
+
+Figure 1-3. Examples of scalability limitations.
+
+
+Characteristics of decentralized algorithms:
+
+•     No machine has complete information about the
+system state.
+
+•     Machines make decisions based only on local
+information.
+
+•     Failure of one machine does not ruin the
+algorithm.
+
+•     There is no implicit assumption that a global
+clock exists.
+
+
+Figure 1-4. The difference between letting (a) a server
+or (b) a client check forms as they are being filled.
+
+
+Figure 1-5. An example of dividing the DNS
+name space into zones.
+
+
+Pitfalls when Developing
+Distributed Systems
+
+False assumptions made by first time developer:
+
+•     The network is reliable.
+
+•     The network is secure.
+
+•     The network is homogeneous.
+
+•     The topology does not change.
+
+•     Latency is zero.
+
+•     Bandwidth is infinite.
+
+•     Transport cost is zero.
+
+•     There is one administrator.
+
+
+Cluster Computing Systems
+
+Figure 1-6. An example of a cluster computing system.
+
+
+Figure 1-8. Example primitives for transactions.
+
+
+Characteristic properties of transactions:
+
+•     Atomic: To the outside world, the transaction
+happens indivisibly.
+
+•     Consistent: The transaction does not violate
+system invariants.
+
+•     Isolated: Concurrent transactions do not
+interfere with each other.
+
+•     Durable: Once a transaction commits, the
+changes are permanent.
+
+
+Figure 1-10. The role of a TP monitor in distributed systems.
+
+
+Enterprise Application Integration
+
+Figure 1-11. Middleware as a communication facilitator in
+enterprise application integration.
+
+
+Distributed Pervasive Systems
+
+Requirements for pervasive systems
+
+•    Embrace contextual changes.
+
+•    Encourage ad hoc composition.
+
+•    Recognize sharing as the default.
+
+
+Questions to be addressed for health care systems:
+
+•     Where and how should monitored data be
+stored?
+
+•     How can we prevent loss of crucial data?
+
+•     What infrastructure is needed to generate and
+propagate alerts?
+
+•     How can physicians provide online feedback?
+
+•     How can extreme robustness of the monitoring
+system be realized?
+
+•     What are the security issues and how can the
+proper policies be enforced?
+
+
+Figure 1-12. Monitoring a person in a pervasive electronic health care system, 
+using (a) a local hub or
+
+(b) a continuous wireless connection.
+
+
+Questions concerning sensor networks:
+
+•    How do we (dynamically) set up an
+efficient tree in a sensor network?
+
+•    How does aggregation of results take
+place? Can it be controlled?
+
+•    What happens when network links fail?
+
+
+Figure 1-13. Organizing a sensor network database, while storing
+and processing data (a) only at the operator’s site or …
+
+
+Figure 1-13. Organizing a sensor network database, while storing
+and processing data … or (b) only at the sensors.
+

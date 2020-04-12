@@ -1,0 +1,947 @@
+The Map-Reduce Paradigm for Big
+
+Data Processing & Analytics
+
+Acknowledgement:  These slides have been adapted from
+the excellent slides provided in the public domain at http://
+www.mmds.org .
+
+Some of the content in the slides have been modified.
+
+
+○ Challenges:
+
+▪ How to distribute computation?
+
+▪ Distributed/parallel programming is hard
+
+○ Map-reduce addresses all of the above
+
+▪ Google’s computational/data manipulation model
+
+▪ Elegant way to work with big data
+
+
+
+CPU
+
+Memory
+
+Disk
+
+Machine Learning, Statistics
+
+“Classical” Data Mining
+
+
+○ 20+ billion web pages x 20KB = 400+ TB
+
+○ 1 computer reads 30-35 MB/sec from disk
+
+▪ ~4 months to read the web
+
+○ ~1,000 hard drives to store the web
+
+○ Takes even more to do something useful
+with the data!
+
+○ Today, a standard architecture for such
+problems is emerging:
+
+▪ Cluster of commodity Linux nodes
+
+▪ Commodity network (ethernet) to connect them
+
+
+
+1 Gbps between
+any pair of nodes
+in a rack
+
+2-10 Gbps backbone between racks
+Switch
+
+Switch                                                    Switch
+
+
+CPU
+
+Mem          …
+
+CPU
+
+Mem
+
+CPU
+
+Mem          …
+
+CPU
+
+Mem
+
+
+Disk
+
+Disk
+
+Disk
+
+Disk
+
+Each rack contains 16-64 nodes
+
+In 2011 it was guestimated that Google had 1M machines, http://bit.ly/Shh0RO
+
+
+J. Leskovec, A. Rajaraman, J. Ullman: Mining of Massive Datasets, 
+http://www.mmds.org                                                             
+          6
+
+
+○ Large-scale computing for data mining
+
+problems on commodity hardware
+
+○ Challenges:
+
+▪ How do you distribute computation?
+
+▪ How can we make it easy to write distributed
+programs?
+
+▪ Machines fail:
+
+▪ One server may stay up 3 years (1,000 days)
+
+▪ If you have 1,000 servers, expect to loose 1/day
+
+▪ People estimated Google had ~1M machines in 2011
+
+▪ 1,000 machines fail every day!
+
+
+○ Issue: Copying data over a network takes time
+
+○ Idea:
+
+▪ Bring computation close to the data
+
+▪ Store files multiple times for reliability
+
+○ Map-reduce addresses these problems
+
+▪ Google’s computational/data manipulation model
+
+▪ Elegant way to work with big data
+
+▪ Storage Infrastructure – File system
+
+▪ Google: GFS. Hadoop: HDFS
+
+▪ Programming model
+
+▪ Map-Reduce
+
+
+○ Problem:
+
+▪ If nodes fail, how to store data persistently?
+
+○ Answer:
+
+▪ Distributed File System:
+
+▪ Provides global file namespace
+
+▪ Google GFS; Hadoop HDFS;
+
+○ Typical usage pattern
+
+▪ Huge files (100s of GB to TB)
+
+▪ Data is rarely updated in place
+
+▪ Reads and appends are common
+
+
+○ Chunk servers
+
+▪ File is split into contiguous chunks
+
+▪ Typically each chunk is 16-64MB
+
+▪ Each chunk replicated (usually 2x or 3x)
+
+▪ Try to keep replicas in different racks
+
+○ Master node
+
+▪ a.k.a. Name Node in Hadoop’s HDFS
+
+▪ Stores metadata about where files are stored
+
+▪ Might be replicated
+
+○ Client library for file access
+
+▪ Talks to master to find chunk servers
+
+▪ Connects directly to chunk servers to access data
+
+
+○ Reliable distributed file system
+
+○ Data kept in “chunks” spread across machines
+
+○ Each chunk replicated on different machines
+
+▪ Seamless recovery from disk or machine failure
+
+
+C0          C1
+
+C5         C2
+
+D0           C1
+
+C5         C3
+
+C₂      C5
+
+D0          D1
+
+C0          C5
+
+…   D0          C
+
+
+Chunk server 1
+
+Chunk server 2
+
+Chunk server 3
+
+Chunk server N
+
+Bring computation directly to the data!
+Chunk servers also serve as compute
+servers
+
+
+Programming Model: MapReduce
+
+Warm-up task:
+
+○ We have a huge text document
+
+○ Count the number of times each
+distinct word appears in the file
+
+○ Sample application:
+
+▪ Analyze web server logs to find popular URLs
+
+
+Case 1:
+
+▪ File too large for memory, but all <word, count>
+pairs fit in memory
+
+Case 2:
+
+○ Count occurrences of words:
+
+▪ words(doc.txt) | sort | uniq -c
+
+▪ where words takes a file and outputs the words in it,
+one per a line
+
+○ Case 2 captures the essence of MapReduce
+
+▪ Great thing is that it is naturally parallelizable
+
+
+○ Sequentially read a lot of data
+
+○ Map:
+
+▪ Extract something you care about
+
+○ Group by key: Sort and Shuffle
+
+○ Reduce:
+
+▪ Aggregate, summarize, filter or transform
+
+○ Write the result
+
+Outline stays the same, Map and
+
+Reduce change to fit the problem
+
+
+MapReduce: The Map Step
+
+
+Input
+
+key-value pairs
+
+map
+
+Intermediate
+key-value pairs
+
+k             v
+
+k        v                            k             v
+
+map
+
+k        v                            k             v
+
+…                          …
+
+k        v                               k             v
+
+
+    MapReduce: The Reduce           
+
+Step
+
+
+Intermediate
+key-value pairs
+
+Output
+
+Key-value groups                     key-value pairs
+
+reduce
+
+
+k           v                         k           v
+
+Group
+
+v        v                           k          v
+
+reduce
+
+k          v
+
+
+k           v        by key
+
+k          v        v
+
+k             v
+
+…                             …                                        …
+
+k           v                         k          v                              
+                k          v
+
+
+○ Input: a set of key-value pairs
+
+○ Programmer specifies two methods:
+
+▪ Map(k, v)  <k’, v’>*
+
+▪ Takes a key-value pair and outputs a set of key-value pairs
+
+▪ E.g., key is the filename, value is a single line in the file
+
+▪ There is one Map call for every (k,v) pair
+
+▪ Reduce(k’, <v’>*)  <k’, v’’>*
+
+▪ All values v’ with same key k’ are reduced together
+and processed in v’ order
+
+▪ There is one Reduce function call per unique key k’
+
+
+
+Provided by the
+programmer
+
+MAP:
+
+Read input and
+produces a set of
+key-value pairs
+
+Group by
+key:
+
+Collect all pairs
+with same key
+
+Provided by the
+programmer
+
+Reduce:
+
+Collect all values
+belonging to the
+key and output
+
+
+The   crew   of   the   space
+shuttle   Endeavor   recently
+
+     returned     to     Earth     as     
+ambassadors,     harbingers
+
+of   a   new   era   of   space
+exploration.    Scientists    at
+NASA  are  saying  that  the
+recent    assembly    of    the
+Dextre  bot  is  the  first  step
+in a long-term space-based
+man/mache       partnership.
+'"The work we're doing now
+
+--  the  robotics  we're  doing
+
+--  is  what  we're  going  to
+need ……………………..
+
+Big document
+
+(The, 1)
+
+        (crew, 1)       
+
+(of, 1)
+
+(the, 1)
+
+(space, 1)
+
+(shuttle, 1)
+
+(Endeavor, 1)
+
+(recently, 1)
+
+….
+
+(key, value)
+
+(crew, 1)
+
+(crew, 1)
+
+      (space, 1)      
+
+(the, 1)
+
+(the, 1)
+
+(the, 1)
+
+(shuttle, 1)
+
+(recently, 1)
+
+…
+
+(key, value)
+
+(crew, 2)
+
+(space, 1)
+
+(the, 3)
+
+(shuttle, 1)
+
+(recently, 1)
+
+…
+
+(key, value)
+
+
+    Word Count Using                       
+
+MapReduce
+
+map(key, value):
+
+// key: document name; value: text of the document
+for each word w in value:
+
+emit(w, 1)
+
+reduce(key, values):
+
+// key: a word; value: an iterator over counts
+result = 0
+
+for each count v in values:
+result += v
+
+emit(key, result)
+
+
+Map-Reduce environment takes care of:
+
+○ Partitioning the input data
+
+○ Scheduling the program’s execution across a
+set of machines
+
+○ Performing the group by key step
+
+○ Handling machine failures
+
+○ Managing required inter-machine
+communication
+
+
+Big document
+
+MAP:
+
+Read input and
+produces a set of
+key-value pairs
+
+Group by
+key:
+
+Collect all pairs
+with same key
+(Hash merge,
+Shuffle, Sort,
+Partition)
+
+Reduce:
+
+Collect all values
+belonging to the
+key and output
+
+
+All phases are distributed with many tasks doing the
+
+
+work
+
+J. Leskovec, A. Rajaraman, J. Ullman: Mining of Massive Datasets, 
+http://www.mmds.org                                                             
+        22
+
+
+○ Programmer specifies:
+
+▪ Map and Reduce and input files
+
+○ Workflow:
+
+▪ Read inputs as a set of key-value-pairs
+
+▪ Map transforms input kv-pairs into a new set
+of k'v'-pairs
+
+Input 0
+
+Map 0
+
+Input 1
+
+Map 1
+
+Input 2
+
+Map 2
+
+
+▪ Sorts & Shuffles the k'v'-pairs to output nodes
+
+▪ All k’v’-pairs with a given k’ are sent to the
+same reduce
+
+▪ Reduce processes all k'v'-pairs grouped by key
+into new k''v''-pairs
+
+▪ Write the resulting pairs to files
+
+○ All phases are distributed with many tasks
+doing the work
+
+                       Shuffle                    
+
+Reduce 0               Reduce 1
+
+Out 0                             Out 1
+
+
+○ Input and final output are stored on a
+distributed file system (FS):
+
+▪ Scheduler tries to schedule map tasks “close” to
+physical storage location of input data
+
+○ Intermediate results are stored on local FS
+of Map and Reduce workers
+
+○ Output is often input to another
+MapReduce task
+
+
+○ Master node takes care of coordination:
+
+▪ Task status: (idle, in-progress, completed)
+
+▪ Idle tasks get scheduled as workers become
+available
+
+▪ When a map task completes, it sends the master
+the location and sizes of its R intermediate files, one
+
+for each reducer
+
+▪ Master pushes this info to reducers
+
+○ Master pings workers periodically to detect
+failures
+
+
+○ Map worker failure
+
+▪ Map tasks completed or in-progress at
+worker are reset to idle
+
+▪ Reduce workers are notified when task is
+rescheduled on another worker
+
+○ Reduce worker failure
+
+▪ Only in-progress tasks are reset to idle
+
+▪ Reduce task is restarted
+
+○ Master failure
+
+▪ MapReduce task is aborted and client is notified
+
+
+How many Map and Reduce jobs?
+
+○ M map tasks, R reduce tasks
+
+○ Rule of a thumb:
+
+▪ Make M much larger than the number of nodes
+in the cluster
+
+▪ One DFS chunk per map is common
+
+▪ Improves dynamic load balancing and speeds up
+recovery from worker failures
+
+○ Usually R is smaller than M
+
+▪ Because output is spread across R files
+
+
+○ Fine granularity tasks:  map tasks >> machines
+
+▪ Minimizes time for fault recovery
+
+▪ Can do pipeline shuffling with map execution
+
+▪ Better dynamic load balancing
+
+
+○ Problem
+
+▪ Slow workers significantly lengthen the job
+completion time:
+
+▪ Other jobs on the machine
+
+▪ Bad disks
+
+▪ Weird things
+
+○ Solution
+
+▪ Near end of phase, spawn backup copies of tasks
+
+▪ Whichever one finishes first “wins”
+
+○ Effect
+
+▪ Dramatically shortens job completion time
+
+
+○ Often a Map task will produce many pairs of
+the form (k,v₁), (k,v₂), … for the same key k
+
+▪ E.g., popular words in the word count example
+
+○ Can save network time by
+pre-aggregating values in
+the mapper:
+
+▪ combine(k, list(v₁)) ◇ v₂
+
+▪ Combiner is usually same
+as the reduce function
+
+
+○ Back to our word counting example:
+
+▪ Combiner combines the values of all keys of a single
+mapper (single machine):
+
+▪ Much less data needs to be copied and shuffled!
+
+
+    Refinement: Partition                  
+
+Function
+
+○ Want to control how keys get partitioned
+
+▪ Inputs to map tasks are created by contiguous
+splits of input file
+
+▪ Reduce needs to ensure that records with the
+same intermediate key end up at the same worker
+
+○ System uses a default partition function:
+
+▪ hash(key) mod R
+
+○ Sometimes useful to override the hash
+function:
+
+▪ E.g., hash(hostname(URL)) mod R ensures URLs
+from a host end up in the same output file
+
+
+Problems Suited for
+Map-Reduce
+
+
+○ Suppose we have a large web corpus
+
+○ Look at the metadata file
+
+▪ Lines of the form: (URL, size, date, …)
+
+○ For each host, find the total number of bytes
+
+▪ That is, the sum of the page sizes for all URLs from
+that particular host
+
+○ Other examples:
+
+▪ Link analysis and graph processing
+
+▪ Machine Learning algorithms
+
+
+○ Statistical machine translation:
+
+▪ Need to count number of times every 5-word
+sequence occurs in a large corpus of documents
+
+○ Very easy with MapReduce:
+
+▪ Map:
+
+▪ Extract (5-word sequence, count) from document
+
+▪ Reduce:
+
+▪ Combine the counts
+
+
+    Cost Measures for                       
+
+Algorithms
+
+○    In MapReduce we quantify the cost of an
+algorithm using
+
+1.     Communication cost  = total I/O of all
+processes
+
+2.     Elapsed communication cost = max of I/O
+along any path
+
+3.     (Elapsed) computation cost analogous, but
+count only running time of processes
+
+Note that here the big-O notation is not the most useful
+(adding more machines is always an option)
+
+
+○ For a map-reduce algorithm:
+
+▪ Communication cost = input file size + 2  (sum of
+the sizes of all files passed from Map processes to
+Reduce processes) + the sum of the output sizes of
+the Reduce processes.
+
+▪ Elapsed communication cost is the sum of the
+largest input + output for any map process, plus
+the same for any reduce process
+
+
+○ Either the I/O (communication) or processing
+(computation) cost dominates
+
+▪ Ignore one or the other
+
+○ Total cost tells what you pay in rent from
+your friendly neighborhood cloud
+
+○ Elapsed cost is wall-clock time using
+parallelism
+
+
+○ Total communication cost
+
+
+= O(|R|+|S|+|R
+
+⋈ S|)
+
+○ Elapsed communication cost = O(s)
+
+▪ We’re going to pick k and the number of Map processes
+so that the I/O limit s is respected
+
+▪ We put a limit s on the amount of input or output that
+any one process can have. s could be:
+
+▪ What fits in main memory
+
+▪ What fits on local disk
+
+○ With proper indexes, computation cost is linear in
+the input + output size
+
+▪ So computation cost is like comm. cost
+
+
+Pointers and Further
+Reading
+
+
+○ Google
+
+▪ Not available outside Google
+
+○ Hadoop
+
+▪ An open-source implementation in Java
+
+▪ Uses HDFS for stable storage
+
+▪ Download: http://lucene.apache.org/hadoop/
+
+○ Aster Data
+
+▪ Cluster-optimized SQL Database that also
+implements MapReduce
+
+
+○ Ability to rent computing by the hour
+
+▪ Additional services e.g., persistent storage
+
+○ Amazon’s “Elastic Compute Cloud” (EC2)
+
+○ Aster Data and Hadoop can both be run on
+EC2
+
+
+○ Jeffrey Dean and Sanjay Ghemawat:
+MapReduce: Simplified Data Processing   on
+Large Clusters
+
+▪ http://labs.google.com/papers/mapreduce.html
+
+○ Sanjay Ghemawat, Howard Gobioff, and Shun-
+Tak Leung: The Google File System
+
+▪ http://labs.google.com/papers/gfs.html
+
+
+○ Hadoop Wiki
+
+▪  Introduction
+
+▪  http://wiki.apache.org/lucene-hadoop/
+
+▪  Getting Started
+
+▪  http://wiki.apache.org/lucene-hadoop/GettingStartedWithHad
+oop
+
+▪  Map/Reduce Overview
+
+▪  http://wiki.apache.org/lucene-hadoop/HadoopMapReduce
+
+▪  http://wiki.apache.org/lucene-hadoop/HadoopMapRedClasses
+
+▪  Eclipse Environment
+
+▪ http://wiki.apache.org/lucene-hadoop/EclipseEnvironment
+
+○  Javadoc
+
+▪  http://lucene.apache.org/hadoop/docs/api/
+
+
+○  Releases from Apache download mirrors
+
+▪ http://www.apache.org/dyn/closer.cgi/lucene/had
+oop/
+
+○  Nightly builds of source
+
+▪ http://people.apache.org/dist/lucene/hadoop/nig
+htly/
+
+○  Source code from subversion
+
+▪ http://lucene.apache.org/hadoop/version_control.
+html
+
+
+○ Programming model inspired by functional language primitives
+
+○ Partitioning/shuffling similar to many large-scale sorting systems
+
+▪ NOW-Sort ['97]
+
+○ Re-execution for fault tolerance
+
+▪ BAD-FS ['04] and TACC ['97]
+
+○ Locality optimization has parallels with Active Disks/Diamond
+work
+
+▪ Active Disks ['01], Diamond ['04]
+
+○ Backup tasks similar to Eager Scheduling in Charlotte system
+
+▪ Charlotte ['96]
+
+○ Dynamic load balancing solves similar problem as River's
+distributed queues
+
+▪ River ['99]
+

@@ -1,0 +1,1157 @@
+Distributed Spatial Indexing
+for P2P environments
+
+Anirban Mondal, Ashoka University
+
+
+Why is distributed search challenging in P2P
+environments?
+
+•  P2P environments are extremely large-scale ranging from
+hundreds of thousands to millions of nodes
+
+•  Nodes are distributively owned
+
+•  Can you maintain a single centralized index to access all the
+resources (e.g., files, data) in a large-scale P2P environment?
+
+•  Theoretically yes, practically way too challenging
+
+•  How to keep the centralized index updated when any node
+can add/delete resources at itself in an autonomous
+manner?
+
+
+Why is distributed search important for P2P
+environments?
+
+•  Plenty of resources (files, data etc.) in P2P environments
+
+•  Searching for and obtaining access to these resources can
+add value to individuals as well as organizations
+
+
+What are your options?
+
+•  Completely centralized index is not a practical option because
+of scalability (bottleneck) and update issues
+
+•  What if each node maintained an index of what data it stores
+
+•  Every query would have to be a broadcast
+
+•  Think of how much bandwidth would be consumed if
+indeed every query were a broadcast
+
+•  Also, think of how much time it would consume to search
+
+for a given data by essentially probing every node in the
+system
+
+
+What about randomization?
+
+•  Can select a set of nodes randomly and send the query only
+to those nodes
+
+•  Does not guarantee that you will find the data that you are
+
+looking for in your search
+
+•  The data could be in the nodes that are not selected in
+your random selection of nodes
+
+•  Bottomline: Accuracy becomes an issue; even
+
+successfully searching for and obtaining the data becomes
+an issue
+
+
+What about a totally distributed index?
+
+•  What if every node stores a replica of the centralized index
+which has complete info about what data exists at what node?
+
+•  Would solve the scalability issue because queries can proceed
+
+through any node because all the nodes have a copy of the
+index (thus, no centralized bottleneck)
+
+•  Does not solve the update problem
+
+•  If any node autonomously adds/deletes data at itself, this
+update (info) needs to be sent to all the replicas
+
+•  Can use lazy consistency, eventual consistency
+
+•  But this will not guarantee accuracy in search because
+the underlying index is not completely updated
+
+
+What kind of a solution do you want?
+
+•  The search query should go to as few nodes as possible, yet
+quickly find the data that the query wants to retrieve
+
+•  Each node should maintain some meta-data to facilitate search,
+
+but should NOT have to store complete data about the entire
+system
+
+•  Meta-data here means what data is stored at which node
+
+•  Basically, we need a distributed index, where different nodes
+store different parts of the index
+
+
+Possible Solution
+
+•  The next set of slides present an efficient solution to this
+problem
+
+•  As you go through these slides
+
+•  Please observe the trade-offs in the distributed systems
+issues such as scalability, updates & replica consistency
+etc.
+
+•  Also, observe how the index is distributed for maximizing
+
+the search efficiency
+
+
+Anirban Mondal, Yi Lifu, Masaru Kitsuregawa. P2PR-tree: An R-tree-based
+spatial index for peer-to-peer environments. P2PDB 2004 (155 citations)
+
+
+P2PR-tree: An R-tree-based Spatial Index for
+P2P Environments
+
+ANIRBAN MONDAL
+YI LIFU
+
+MASARU KITSUREGAWA
+
+University of Tokyo
+
+
+Spatial Applications on P2P systems
+
+•  Unprecedented growth of spatial data at
+geographically distributed locations
+
+•  Trend of increased globalization
+
+•  Popularity of P2P data sharing
+
+Efficient global sharing of distributively owned spatial
+data in P2P systems
+
+
+Key differentiator from existing works
+
+•  Existing works on P2P indexing focus on file-sharing
+
+•  Issues concerning spatial indexing in P2P systems are
+significantly more complicated due to
+
+– overlaps between spatial objects
+
+– complexity of spatial queries
+
+•  Existing works on global-scale spatial data sharing
+(spatial GRID proposals) assume dedicated nodes,
+not distributively owned peers
+
+
+Thisis
+
+wastthth
+
+effifrirsstt
+
+worrkttoto
+
+a   drrress spattitaiallinin
+
+dexnin
+
+gininPP22
+
+P sysetemmss
+
+
+Application example
+
+Searching for Real
+
+   Estate information
+
+in Tokyo
+
+Query MBR
+
+Results
+
+
+Why can’t we use a distributed spatial
+index (e.g., MC-Rtree)?
+
+R-tree which indexes the
+covering MBRs of the data
+stored at the clients
+
+
+Master
+
+•  Centralization (Not
+scalable)
+
+•  Designed for clusters
+(optimizes disk I/Os,
+but is oblivious to
+
+communication time)
+
+
+client
+
+client       client
+
+client
+
+Each client has its own R-tree
+for managing its own data
+
+
+P2PR-tree (Peer-to-Peer R-tree)
+
+•  A distributed R-tree-based indexing scheme
+designed for P2P systems
+
+•  Parts of the distributed indexes are built
+autonomously by each peer.
+
+•  Hierarchical and performs efficient pruning
+
+– Maintains minimal info about far-away peers and more
+info about nearby peers
+
+•  Completely decentralized, scalable and robust to
+peers joining/leaving the system
+
+
+Dividing the Universe
+
+
+P1   P2        P4
+
+P5     P6                           Ｐ                    P
+
+P                   P
+
+Level 0
+
+B1     B2     B3     B4
+
+
+P20
+
+P
+
+P3
+
+Block 1
+
+Ｐ
+
+P        P
+
+P
+
+Block 2
+
+P     Ｐ                        P
+
+Level 1
+
+
+P                                                            P         P
+
+G1     G2
+
+G3     G4
+
+
+Ｐ
+
+P                                       P                                Ｐ
+
+P                                       P                                       
+P
+
+P                                    P
+
+P
+
+Level 2
+SG1   SG2
+
+…..
+
+P5    P6    P3
+
+
+Block 3
+
+P     Ｐ                        P
+
+Block 4
+
+
+P         P                               P     Ｐ                        P
+P         P
+
+Level 3
+
+P1    P2   P20              P3    P4
+
+
+Definitions
+
+•   Unit: A Block, Group, Subgroup at any level, or a peer
+
+•   UnitMBR: Minimum Bounding Rectangle of a Unit
+
+•   Router: In order to route messages to a Unit X, a peer A
+needs to know at least one peer (say peer B)
+
+which belongs to Unit X. We define peer B as Peer       A’s
+Router to Unit X.
+
+•   UnitRouterInfo: The addresses of routers to a Unit
+
+•   UnitInfo:  UnitMBR and UnitRouterInfo of a Unit
+
+•   ChildInfo (Level i):  UnitInfo of Child Units at Level i+1 in
+the P2PR-tree
+
+
+Data Structure at a peer
+
+
+ A Peer of Level L can be specified as 
+
+ Peer(i0 .i1.i2 ...iL )
+
+
+ where 
+
+i j  =Unit ID at level  j
+
+
+ Peer(i0.i1.i2...iL )
+
+ maintains the following information 
+
+ All BlockInfo                             ✓
+
+ChildInfo(i  )                              
+
+                    0                                                       
+
+ChildInfo(i0 .i1 )                           
+
+...                                                  
+
+ChildInfo(i0 .i1.i2 ...iL - 1 )              
+
+                                                     
+
+Local R -  tree Data Structure
+
+
+Example of Data Structure
+
+P2 can be specified as Peer(1.2.1.2)
+
+All BlockInfo : B1, B2, B3, B4                           ✓
+
+
+ChildInfo(1) : Info of
+
+
+
+Groups in Block 1           
+
+
+
+ChildInfo(1.2) : Info of  SubGroups in Group 2
+
+
+ChildInfo(1.2.1) : Info of
+
+
+
+Peers in Subgroup 1 
+
+
+
+Level 0 Units
+
+B1     B2     B3     B4
+
+Local R - tree Data Structure                          
+
+
+Level 1 Units
+
+G1     G2
+
+G3     G4
+
+...
+
+G1     G2
+
+G3     G4
+
+
+Level 2 Units
+
+P5    P6    P3
+
+SG1   SG2
+
+SG1
+
+SG2
+
+
+Level 3 Units
+
+P1    P2
+
+P20
+
+P3    P4
+
+P11
+
+P12  P21
+
+P33  P66
+
+
+P2PR-tree
+
+BlockMBR information
+
+stored at every peer                                   
+
+
+P1      P2
+
+P4
+
+G1
+
+  P3  
+
+P5        P6
+P3       G2
+
+Level 0
+
+Level 1
+
+B1     B2     B3     B4
+
+G1    G2    G3    G4
+
+
+P8                                                                 Level 2
+
+P9
+
+P1   P2   P4   P3
+
+…..
+
+P5   P6   P3
+
+
+G3                              G4
+
+Block 1
+
+P10
+
+Maintaining information
+Peer Level = 2 ,
+(B1,B2,B3,B4)
+
+(G1,G2,G3,G4)
+(P6,P3)
+
+
+P2PR-tree
+
+BlockMBR information
+
+stored at every peer                                     
+
+
+P1      P2
+
+P4
+
+G1         P3
+
+P5        P6
+
+G2
+
+Level 0
+
+B1     B2     B3     B4
+
+Level 1         G1    G2    G3    G4
+
+
+P8                                                                 Level 2
+
+P9
+
+P1   P2   P4   P3
+
+…..
+
+P5   P6   P3
+
+
+G3                              G4
+
+Block 1
+
+P10
+
+Maintaining information
+Peer Level = 2 ,
+(B1,B2,B3,B4)
+
+(G1,G2,G3,G4)
+(P6,P3)
+
+
+Peer Join operation in P2PR-tree
+
+
+SG1        SG2
+
+BlockMBR information
+
+stored at every peer                                          
+
+
+P1      P2
+
+P20           P4
+
+G1         P3
+
+P5        P6
+
+G2
+
+ P30
+
+Level 0
+
+Level 1
+
+B1     B2     B3     B4
+
+G1    G2    G3    G4
+
+…..
+
+
+P8                                                                 Level 2
+
+P9
+
+P1   P2
+
+P3   P4
+
+P5   P6
+
+P3  P30
+
+
+G3                              G4
+
+Block 1
+
+P10
+
+Maintaining information
+Peer Level = 2 ,
+(B1,B2,B3,B4)
+
+(G1,G2,G3,G4)
+
+(P2,P3,P4)
+
+
+Peer Join operation in P2PR-tree
+
+
+SG1        SG2
+
+P1      P2
+
+P5        P6
+
+BlockMBR information
+stored at every peer
+
+Level 0
+
+B1     B2     B3     B4
+
+
+P20           P4
+
+G1         P3
+
+G2
+
+ P30
+
+Level 1
+
+G1     G2     G3     G4
+
+…..
+
+
+Level 2
+
+P8
+
+P9
+
+SG1   SG2
+
+P5    P6
+
+P3   P30
+
+
+G3                              G4
+
+P10
+
+P1    P2
+
+P20
+
+P3    P4
+
+Level 3
+
+
+Block 1
+
+Maintaining information
+
+Peer Level = 3 , (B1,B2,B3,B4)
+(G1,G2,G3,G4),  (SG1,SG2),
+(P2,P20)
+
+
+Routing Issues
+
+•  Assumption: A peer initially knows at least N
+routers for a Unit.
+
+•  Piggybacking to refresh routers for each peer.
+
+– During piggybacking, a peer sends the addresses and
+reliability information of other peers in its own Unit.
+
+•  Each peer maintains most reliable R routers for
+Units based on reliability.
+
+•  What if all routers that a peer knows in a specific
+Unit are unavailable?
+
+– Peer contacts the peers in other blocks to find out
+new routers for that block.
+
+
+Searching the P2PR-tree
+
+
+P42
+
+P44
+
+P45
+
+P46
+
+Query Level = 0
+
+Query comes to P60
+
+BlockMBR information
+stored at every peer
+
+
+P41
+
+P43
+
+G1
+
+P48
+
+Block 4
+
+G2
+
+P49
+
+ P60
+
+Level 0
+
+B1     B2
+
+B3     B4
+
+
+G3                               G4
+
+P40
+
+Level 1
+
+G1     G2
+
+G3     G4
+
+…
+
+G1     G2     G3     G4
+
+
+P1     P2
+
+SG2
+
+Level 2
+
+SG1
+
+SG2
+
+P5    P6
+
+P3   P30
+
+P45  P46  P60
+
+
+P4
+
+P3
+
+P20         G1
+
+SG1
+
+P5        P6
+
+G2
+
+P30
+
+Level 3
+
+P1    P2   P20              P3    P4
+
+Maintaining Information
+
+
+Block 1
+
+P8                              P9
+
+G3                             G4
+
+P10
+
+Peer Level = 2
+
+(P5→B1,  P25→B2, P35→B3, B4)
+(P41→G1, G2, P43→G3,  P49→G4)
+(P45, P46)
+
+
+Searching the P2PR-tree
+
+
+P42
+
+P44
+
+P45
+
+P46
+
+Query Level = 1
+
+Query comes to P60
+
+BlockMBR information
+stored at every peer
+
+
+P41
+
+P43
+
+G1
+
+P48
+
+Block 4
+
+G2
+
+P49
+
+P60
+
+Level 0
+
+B1     B2
+
+B3     B4
+
+
+G3                               G4
+
+P40
+
+Level 1
+
+G1     G2
+
+G3     G4
+
+…
+
+G1     G2     G3     G4
+
+
+P1     P2
+
+SG2
+
+Level 2
+
+SG1
+
+SG2
+
+P5    P6    P3   P30
+
+P45  P46  P60
+
+
+P4
+
+P3
+
+P20         G1
+
+P5        P6
+
+G2
+
+P30
+
+Level 3
+
+P1    P2   P20              P3    P4
+
+
+SG1
+
+P8
+
+G3
+
+Block 1
+
+P9
+
+G4
+
+P10
+
+Maintaining Information
+Peer Level = 2
+
+(B1,  P26→B2, P36→B3, P42→B4)
+(P4→G1, G2, P8→G3,  P9→G4)
+(P6, P30)
+
+
+Searching the P2PR-tree
+
+
+P42
+
+P44
+
+P45
+
+P46
+
+Query Level = 2
+
+Query comes to P60
+
+BlockMBR information
+stored at every peer
+
+
+P41
+
+P43
+
+G1
+
+P48
+
+Block 4
+
+G2
+
+P49
+
+P60
+
+Level 0
+
+B1     B2
+
+B3     B4
+
+
+G3                               G4
+
+P40
+
+Level 1
+
+G1     G2
+
+G3     G4
+
+…
+
+G1     G2     G3     G4
+
+
+P1     P2
+
+SG2
+
+Level 2
+
+SG1
+
+SG2
+
+P5    P6
+
+P3   P30
+
+P45  P46  P60
+
+
+P4
+
+P3
+
+P20         G1
+
+P5        P6
+
+G2
+
+P30
+
+Level 3
+
+P1    P2
+
+P20
+
+P3    P4
+
+
+SG1
+
+P8
+
+G3
+
+Block 1
+
+P9
+
+G4
+
+P10
+
+Maintaining Information
+
+Peer Level = 3
+
+(B1,  P27→B2, P37→B3, P43→B4)
+(G1, P6→G2, P8→G3,  P10→G4)
+(P20→SG1, SG2)
+
+(P3)
+
+
+Searching the P2PR-tree
+
+
+P42
+
+P44
+
+P45
+
+P46
+
+Query Level = 3
+
+Query comes to P60
+
+BlockMBR information
+stored at every peer
+
+
+P41
+
+P43
+
+G1
+
+P48
+
+Block 4
+
+G2
+
+P49
+
+P60
+
+Level 0
+
+B1     B2
+
+B3     B4
+
+
+G3                               G4
+
+P40
+
+Level 1
+
+G1     G2
+
+G3     G4
+
+…
+
+G1     G2     G3     G4
+
+
+P1     P2
+
+SG2
+
+Level 2
+
+SG1   SG2
+
+P5    P6
+
+P3   P30
+
+P45  P46  P60
+
+
+P4
+
+P3
+
+P20         G1
+
+P5        P6
+
+G2
+
+P30
+
+Level 3
+
+P1    P2
+
+P20
+
+P3    P4
+
+
+SG1
+
+P8
+
+G3
+
+Block 1
+
+P9
+
+G4
+
+P10
+
+Maintaining Information
+
+Peer Level = 3
+
+(B1,  P28→B2, P38→B3, P45→B4)
+(G1, P30→G2, P8→G3,  P9→G4)
+(SG1, P3→SG2)
+
+(P1, P22)
+
+
+In-class exercise: Design a large-scale search
+engine (the search engine is powered by a
+distributed system)
+

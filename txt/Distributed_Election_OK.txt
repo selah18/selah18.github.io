@@ -1,0 +1,232 @@
+Distributed Election
+
+Anirban Mondal (Ashoka University, India)
+
+Slides include information and materials from different publicly
+available    web-based    sources.    The    slides    also    contain
+information from Distributed Systems: Principles & Paradigms,
+2nd    ed.  By  Tanenbaum  and  Van  Steen;  Operating  System
+Concepts, 7th  ed., by Silbershatz, Galvin, & Gagne.
+
+
+Leader in Distributed Systems
+
+Consider a set of N nodes in a distributed system
+
+•  For coordinating the activities of the N nodes, a leader or coordinator is 
+required
+
+Example: Think of a cluster of 100 nodes
+
+Here, the leader’s functionality could be to facilitate search, data 
+replication, data
+migration, load-balancing, coordinating a collaborative task among the N nodes 
+etc.
+
+Even in P2P networks, there can be super-peers (these are leaders as well)
+
+The leader is selected by means of an election
+
+
+Distributed Election
+
+Initiated when nodes encounter failure in
+communicating with the current leader
+
+•  Or nodes don’t know which node will be the leader
+
+Can also be initiated on a dynamic basis
+
+•   leader gets elected only for a certain task and once the task is completed, 
+a
+new leader would get elected
+
+After the distributed election algorithm has completed
+its execution
+
+•  Every node in the distributed system will recognize the single elected node
+as the leader
+
+
+Distributed election algorithms
+
+Nodes need to communicate with each other
+
+•  By communicating with each other, nodes can decide upon a leader
+
+Distributed election algorithms are aimed at deciding
+
+•   which node will become the leader
+
+Distributed election algorithms should try to minimize
+overheads
+
+•  Communication cost among the nodes needs to be minimized as far as
+possible
+
+
+Conditions for a distributed election algorithm
+
+The algorithm needs to execute within a finite length of
+time
+
+•  If not, it would lead to thrashing conditions
+
+Only one leader would get elected when the algorithm
+completes its execution
+
+Other nodes would know and agree that the elected
+leader is indeed their leader
+
+
+Bully Algorithm
+
+Core idea
+
+•  The ALIVE node with the highest process ID number becomes the leader
+
+Assumptions
+
+•  Each process knows its own process ID and has knowledge of other processes
+
+•  Reliable message delivery among the nodes
+
+•  Nodes can fail arbitrarily at any point of time
+
+
+Types of messages in Bully algorithm
+
+Election message
+
+•  This is for announcing to the nodes that there is going to
+be an election
+
+ALIVE message
+
+•  This is a response to the election message by a given
+node to indicate that it is ALIVE
+
+Victory message
+
+•  This is the message sent out by the leader after it has won
+the election
+
+
+Election Algorithms
+
+The Bully Algorithm
+
+1.  P sends an ELECTION message to all
+processes with higher numbers.
+
+2.  If no one responds, P wins the election
+and becomes coordinator.
+
+3.  If one of the higher-ups answers, it takes
+over. P’s job is done.
+
+Source: Textbook slides of Tanenbaum & Van Steen, Distributed Systems:
+Principles and Paradigms, 2007. Available in the public domain & being used
+here  for academic purposes only.
+
+
+Ring algorithm
+
+All the nodes are organized in a ring
+
+•  In this ring, process IDs need not be consecutive
+
+•  Example: node 1 could connect to 5, node 5 could connect to node 3 and so on
+
+When a node observes that there is no leader
+
+•  It sends ELECTION message to its next ALIVE successor in the ring
+
+•  ALIVE means that if the immediator successor node is in a failed state, move 
+on to
+the next one and so on
+
+ELECTION message contains
+
+•  The node ID of the sending node
+
+
+Ring algorithm
+
+When any node receives ELECTION message
+
+•  It appends its own node ID to the ELECTION message
+
+•  And sends the ELECTION message to its next ALIVE successor node
+
+When a node receives back the ELECTION message with its
+own node ID in the message
+
+•  It means that the message has come back after circling through the ring
+
+•  The node will now send out a coordinator/leader message and transmit it
+throughout the ring (successor-by-successor)
+
+From the coordinator/leader message, every node
+recognizes the node with the highest node ID as the leader
+
+
+Ring algorithm
+
+Multiple messages may circulate in the ring
+
+• Because multiple nodes may detect the failure of the leader node
+and initiate the distributed election algorithm
+
+In any case, the messages would eventually converge
+
+• Because the same set of node IDs would eventually be in those
+messages
+
+
+Can distributed election algorithms also be
+applicable to wireless networks?
+
+
+Can distributed election algorithms also be
+applicable to large-scale distributed
+systems?
+
+
+Points to consider
+
+Wireless networks have a different set of assumptions
+
+•  Network topology keeps changing dynamically
+
+•  Messages do not necessarily get transmitted in a reliable manner
+
+Large-scale distributed systems have a tremendously large
+number of nodes (scalability issue)
+
+•  Can divide the system into smaller groups of nodes
+
+•  And select a leader for each group
+
+•  P2P: Can create multiple groups of peers and a super-peer as the leader of 
+each
+group
+
+In large-scale distributed systems, leader could also be
+elected based on semantic considerations & node
+capabilities
+
+
+In-class Discussion
+
+Consider services (e.g., search engines, e-
+commerce, e-travel portals etc.) powered by
+large-scale distributed systems. How can
+distributed election be done in such settings?
+
+
+In-class Discussion
+
+Consider a wireless network. How can
+distributed election be done in such settings?
+
