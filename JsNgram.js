@@ -909,6 +909,7 @@ var JsNgram = new function(){
     log.v1('Perfection:', _my.sprintf(_my.resultCount, hits.perfection));
     log.v1('Found:', _my.sprintf(_my.resultCount, hits.found));
     
+    
     $.when(_my.loadHeader()).done(function(){
       _my.showPage(true, _my.resultSelector, null, 0, _my.outputLimiter);
     });
