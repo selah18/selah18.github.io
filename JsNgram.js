@@ -1,5 +1,4 @@
 // N-gram full text search client module
-// https://github.com/sukuba/js-py-ngram-full-text-search
 
 /*############
 require JQuery
