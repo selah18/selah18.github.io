@@ -20,7 +20,7 @@
                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
               </svg>
             </div>
-            <input id="q" type="text" placeholder="input " />
+            <input id="q" type="text" placeholder="input" />
           </div>
           <div class="input-field second-wrap">
             <button class="btn-search" id="search" type="button">SEARCH</button>
@@ -28,86 +28,16 @@
         </div>
         <span class="info">ex. any text like ayt dmet ayt</span>
       </form>
-      <div id="error">
-        
-
-
-
-
-
-
-
-
-      </div>
+      <div id="error"></div>
          <main class="mw-100 bg-warning">
-  <div  id="result">
-    
-  </div>
-
+  <div  id="result"></div>
 </main>
-  <script type="text/javascript">
-
-      var _my = this;
-  var _verbose;
-  var _blankText = '';
-  function whenSearchRequestDone(useArgumentsToGetAllAsArray) {
-    var log = _my.log;
-    var work = _my.work;
-    
-    // adjust nesting level when length equals 1.
-    var results = (work.deferred.length > 1) ? arguments : [arguments];
-    log.v1('whole: ', results.length, results);
-    
-    var found = _my.sortResultsByLocation(results);
-    log.v1(JSON.stringify(found));
-    
-    var perfection = _my.findPerfection(found, work.nText);
-    log.v1(JSON.stringify(perfection));
-    
-    work.result['perfection'] = perfection;
-    work.result['found'] = _my.sortFoundByDocumentPosition(found);
-    
-    var hits = work.result.hits;
-    _my.showResultMessage(hits.perfection);
-    console.log.v1('Perfection:', _my.sprintf(_my.resultCount, hits.perfection));
-    log.v1('Found:', _my.sprintf(_my.resultCount, hits.found));
-    console.log(_my.resultCount,hits.perfection);
-    window.onload = function () {
-  var chart = new CanvasJS.Chart("chartContainer", {
-    title:{
-      text: "My First Chart in CanvasJS"              
-    },
-    data: [              
-    {
-      // Change type to "doughnut", "line", "splineArea", etc.
-      type: "column",
-      dataPoints: [
-        { my.resultCount,  hits.perfection }
-
-      ]
-    }
-    ]
-  });
-  chart.render();
-}
- }
-  
-</script>
     </div></div>
-    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
-
+    
+ 
       <script src="jquery-3.4.1.min.js"></script>
   <script src="JsNgram.js"></script>
   <script src="example1-JsNgram.js"></script>
     <script src="js/extention/choices.js"></script>
-
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
-
-
-
-</head>
-
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
-</body>
+  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
