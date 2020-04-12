@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 
 
-$('#error').click(function(){
+$('#chala').click(function(){
   
 var chart = new CanvasJS.Chart("chartContainer", {
   animationEnabled: true,
