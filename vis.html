@@ -36,20 +36,19 @@
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-                    <li class="active ">
+                    <li >
             <a href="./index.html">
               <i class="now-ui-icons loader_gear"></i>
               <p>keyword-based search</p>
             </a>
           </li>
           <li>
-          <li>
+          <li class="active ">
             <a href="./vis.html">
               <i class="now-ui-icons business_chart-bar-32"></i>
               <p>Visualization</p>
             </a>
           </li>
-
           <li class="active-pro">
       </div>
     </div>
@@ -91,75 +90,160 @@
         </div>
       </nav>
 
+
       <!-- End Navbar -->
-      
-              <html>
+      <div class="">
+      </div>
+ 
+              <div class="card-body ">
+           
+
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="author" content="colorlib.com">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-    <link href="css/main.css" rel="stylesheet" />
+    
+    <!-- amCharts javascript sources -->
+    <script type="text/javascript" src="amcharts/amcharts.js"></script>
+    <script type="text/javascript" src="amcharts/serial.js"></script>
+    <script type="text/javascript" src="amcharts/themes/dark.js"></script>
+    
 
-
+    <!-- amCharts javascript code -->
+  <!-- amCharts javascript code -->
+    <script type="text/javascript">
+      AmCharts.makeChart("chartdiv",
+        {
+          "type": "serial",
+          "categoryField": "category",
+          "angle": 30,
+          "depth3D": 30,
+          "startDuration": 1,
+          "theme": "dark",
+          "categoryAxis": {
+            "autoRotateAngle": 12.6,
+            "autoRotateCount": 2,
+            "gridPosition": "start",
+            "title": "Keywords"
+          },
+          "trendLines": [],
+          "graphs": [
+            {
+              "balloonText": "[[title]] of [[category]]:[[value]]",
+              "fillAlphas": 1,
+              "id": "AmGraph-1",
+              "title": "Document Node(s) ",
+              "type": "column",
+              "valueField": "Document Node "
+            },
+            {
+              "balloonText": "[[title]] of [[category]]:[[value]]",
+              "fillAlphas": 1,
+              "id": "AmGraph-2",
+              "title": "Nodeloads (hits)",
+              "type": "column",
+              "valueField": "Nodeload"
+            }
+          ],
+          "guides": [],
+          "valueAxes": [
+            {
+              "id": "ValueAxis-1",
+              "stackType": "3d",
+              "title": "Number of counts"
+            }
+          ],
+          "allLabels": [],
+          "balloon": {},
+          "legend": {
+            "enabled": true,
+            "useGraphSettings": true
+          },
+          "titles": [
+            {
+              "id": "Title-1",
+              "size": 15,
+              "text": "Chart Title"
+            }
+          ],
+          "dataProvider": [
+            {
+              "category": "map",
+              "Nodeload": "55",
+              "Document Node ": "1"
+            },
+            {
+              "category": "replication",
+              "Nodeload": "89",
+              "Document Node ": "3"
+            },
+            {
+              "category": "distributed",
+              "Nodeload": "161",
+              "Document Node ": "10"
+            },
+            {
+              "category": "systems",
+              "Nodeload": "127",
+              "Document Node ": "10"
+            },
+            {
+              "category": "data",
+              "Nodeload": "208",
+              "Document Node ": "8"
+            },
+            {
+              "category": "block",
+              "Nodeload": "35",
+              "Document Node ": "3"
+            },
+            {
+              "category": "server",
+              "Nodeload": "43",
+              "Document Node ": "7"
+            },
+            {
+              "category": "information",
+              "Nodeload": "31",
+              "Document Node ": "9"
+            },
+            {
+              "category": "ayt",
+              "Nodeload": "24",
+              "Document Node ": "1"
+            }
+          ]
+        }
+      );
+    </script>
   </head>
   <body>
-    <div class="s130">
-      <div id="console">
-      <form>
-        <div class="inner-form">
-          <div class="input-field first-wrap">
-            <div class="svg-wrapper">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-              </svg>
+    <div id="chartdiv" style="width: 100%; height: 400px; background-color: #222222;" ></div>
+  </body>
+         
+              <div class="card-body">
+                <div class="typography-line">
+                
+                  <blockquote>
+                    <p class="blockquote blockquote-primary">
+                      The graph shows the visualization of a set of keywords that have been abstracted from a set of documents that we have used for the keyword-based search engine, which is powered by a distributed system.
+
+                      <br>
+                      <br>
+                      <small>
+
+
+
+
+              </div>
             </div>
-            <input id="q" type="text" placeholder="input" />
-          </div>
-          <div class="input-field second-wrap">
-            <button class="btn-search" id="search" type="button">SEARCH</button>
           </div>
         </div>
-        <span class="info">ex. any text like ayt dmet ayt</span>
-      </form>
-      <div id="error"></div>
-         <main class="mw-100 bg-warning">
-  <div  id="result"></div>
-</main>
-    </div></div>
-    
- 
-      <script src="jquery-3.4.1.min.js"></script>
-  <script src="JsNgram.js"></script>
-  <script src="example1-JsNgram.js"></script>
-    <script src="js/extention/choices.js"></script>
-  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-</html>
-
+      </div>
       <footer class="footer">
         <div class=" container-fluid ">
-          <nav>
-            <ul>
-              <li>
-                <a>
-                  Distributed Systems
-                </a>
-              </li>
-              <li>
-                <a>
-                  Search Engine Assignment
-                </a>
-              </li>
-              <li>
-               
-              </li>
-            </ul>
-          </nav>
-          <div class="copyright" id="copyright">
+
+         <div class="copyright" id="copyright">
             &copy; <script>
               document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
-            </script>, Designed by <a target="_blank">Eden Tolosa, Abel Kidane, Selahadin Yasin</a><a href="https://www.instagram.com/selah_ri/" target="_blank"></a>.
+            </script>, Designed by <a target="_blank">Eden, Abel, Selahadin </a> <a href="https://www.instagram.com/selah_ri/" target="_blank"></a>.
           </div>
         </div>
       </footer>
@@ -182,8 +266,7 @@
   <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
-
+      demo.initGoogleMaps();
     });
   </script>
 </body>
