@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# written for python 3 but also run on python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
@@ -11,7 +8,7 @@ import jsngram.jsngram
 import jsngram.dir2
 
 def test():
-    base_dir = os.path.realpath('C:/Users/selah/OneDrive/Desktop/ds/js-py-ngram-full-text-search-master/js-py-ngram-full-text-search-master') # may be './scratch', or others.
+    base_dir = os.path.realpath('C:/Users/selah/OneDrive/Desktop/ds/searchengine') # may be './scratch', or others.
     ngram_size = 2
     ngram_shorter = True
     in_dir = os.path.join(base_dir, 'txt')
@@ -48,7 +45,7 @@ def test():
             else:
                 shutil.rmtree(fullpath)
         
-    def test_suite1():
+    def changer():
         print('Removing current index files ...')
         remove_entries(out_dir)
         
@@ -67,7 +64,7 @@ def test():
     start_time = datetime.datetime.now()
     print('Start: ', start_time)
     
-    test_suite1()
+    changer()
     
     end_time = datetime.datetime.now()
     span = end_time - start_time

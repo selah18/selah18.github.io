@@ -1,0 +1,419 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        103.8579019,
+         1.2907598
+        ]
+      },
+      "properties": {
+        "rank": 1,
+        "hotel": "The Ritz-Carlton, Millenia Singapore"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        103.8561349,
+        1.2907844
+        ]
+      },
+      "properties": {
+        "rank": 2,
+        "hotel": "Mandarin Oriental, Singapore"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        103.8344592,
+          1.2891904
+        ]
+      },
+      "properties": {
+        "rank": 3,
+        "hotel": "Four Points by Sheraton Singapore, Riverview"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        103.8392715,
+        1.2907643
+        ]
+      },
+      "properties": {
+        "rank": 4,
+        "hotel": "Robertson Quay Hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+       103.8493913,
+       1.2820429
+        ]
+      },
+      "properties": {
+        "rank": 5,
+        "hotel": "Ascott Raffles Place Singapore"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.821978,
+          1.2497276
+        ]
+      },
+      "properties": {
+        "rank": 6,
+        "hotel": "Capella Singapore"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.8565736,
+          1.2932458
+        ]
+      },
+      "properties": {
+        "rank": 7,
+        "hotel": "Conrad Centennial Singapore"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        103.9857785,
+        1.3585663
+        ]
+      },
+      "properties": {
+        "rank": 8,
+        "hotel": "Crowne Plaza Changi Airport"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         103.8515333,
+         1.2940991
+        ]
+      },
+      "properties": {
+        "rank": 9,
+        "hotel": "Fairmont Singapore"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.8261446,
+          1.3052832
+        ]
+      },
+      "properties": {
+        "rank": 10,
+        "hotel": "Four Seasons Hotel Singapore"
+        }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         101.7093953,
+         3.1559608
+        ]
+      },
+      "properties": {
+        "rank": 11,
+        "hotel": "Mandarin Oriental, Kuala Lumpur"
+   } },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         101.6867269,
+         3.1367726
+        ]
+      },
+      "properties": {
+        "rank": 12,
+        "hotel": "The St. Regis Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.7131826,
+          3.146925
+        ]
+      },
+      "properties": {
+        "rank": 13,
+        "hotel": "The Ritz-Carlton, Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         101.7099165,
+         3.1479903
+        ]
+      },
+      "properties": {
+        "rank": 14,
+        "hotel": "Grand Millennium Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        101.7123484,
+        3.1478489
+        ]
+      },
+      "properties": {
+        "rank": 15,
+        "hotel": "The Westin Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         101.7123484,
+         3.1478543
+        ]
+      },
+      "properties": {
+        "rank": 16,
+        "hotel": "Sunshine Bedz Hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         101.6852432,
+         3.1486597
+        ]
+      },
+      "properties": {
+        "rank": 17,
+        "hotel": "Hilton Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         101.7156665,
+         3.1595195
+        ]
+      },
+      "properties": {
+        "rank": 18,
+        "hotel": "InterContinental Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.6843433,
+          3.1357424
+        ]
+      },
+      "properties": {
+        "rank": 19,
+        "hotel": "Le Meridien Kuala Lumpur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        101.7122703,
+        3.1505294
+        ]
+      },
+      "properties": {
+        "rank": 20,
+        "hotel": "Pullman Kuala Lumpur City Centre Hotel & Residences"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5071233,
+        13.7110535
+        ]
+      },
+      "properties": {
+        "rank": 21,
+        "hotel": "Chatrium Hotel Riverside Bangkok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5608573,
+        13.7323782
+        ]
+      },
+      "properties": {
+        "rank": 22,
+        "hotel": "Rembrandt Hotel & Suites Bangkok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5365583,
+        13.7477222
+        ]
+      },
+      "properties": {
+        "rank": 23,
+        "hotel": "Centara Grand at CentralWorld"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         100.5073424,
+         13.7284423
+        ]
+      },
+      "properties": {
+        "rank": 24,
+        "hotel": "Millennium Hilton Bangkok"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+         100.5138406,
+         13.7541595
+        ]
+      },
+      "properties": {
+        "rank": 25,
+        "hotel": "Prince Palace Hotel"
+      }
+    },    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5556488,
+         13.7345557
+        ]
+      },
+      "properties": {
+        "rank": 26,
+        "hotel": "12th Avenue Hotel Bangkok"
+      }
+    },    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5454767,
+         13.7527908
+        ]
+      },
+      "properties": {
+        "rank": 27,
+        "hotel": "Bangkok Palace Hotel"
+      }
+    },    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5361112,
+         13.7258771
+        ]
+      },
+      "properties": {
+        "rank": 28,
+        "hotel": "Bandara Suites Silom, Bangkok"
+      }
+    },    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5767834,
+        13.7250645
+        ]
+      },
+      "properties": {
+        "rank": 29,
+        "hotel": "Hotel Nikko Bangkok"
+      }
+    },{
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        100.5669001,
+        13.7292341
+        ]
+      },
+      "properties": {
+        "rank": 30,
+        "hotel": "Compass Skyview Hotel by Compass Hospitality"
+      }
+    }
+  ]
+}
