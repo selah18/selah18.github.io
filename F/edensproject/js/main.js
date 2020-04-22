@@ -324,7 +324,7 @@ function myFunctioneden() {
 
 	  if (dots.style.display === "none") {
 	    dots.style.display = "inline";
-	    btnText.innerHTML = "Read moreed";
+	    btnText.innerHTML = "Read more";
 	    moreText.style.display = "none";
 	  } else {
 	    dots.style.display = "none";
@@ -356,7 +356,23 @@ function myFunctionede() {
 
 	  if (dots.style.display === "none") {
 	    dots.style.display = "inline";
-	    btnText.innerHTML = "Read moreed";
+	    btnText.innerHTML = "Read more";
+	    moreText.style.display = "none";
+	  } else {
+	    dots.style.display = "none";
+	    btnText.innerHTML = "Read less";
+	    moreText.style.display = "inline";
+	  }
+	}
+
+	function myFunctioned() {
+	  var dots = document.getElementById("dotsed");
+	  var moreText = document.getElementById("heyed");
+	  var btnText = document.getElementById("mbted");
+
+	  if (dots.style.display === "none") {
+	    dots.style.display = "inline";
+	    btnText.innerHTML = "Read more";
 	    moreText.style.display = "none";
 	  } else {
 	    dots.style.display = "none";
