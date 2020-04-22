@@ -6,7 +6,7 @@ var config = {
     alignment: 'center',
     title: 'SEX IN THE SHUTTLE?',
     // subtitle: 'A descriptive and interesting subtitle to draw in the reader',
-    subtitle: 'Ashoka University Being a Hypocrite to its Own Liberal Teachings & Values',
+    subtitle: 'Ashoka University Being a Hypocrite To Its Own Liberal Teachings & Values',
     byline: 'By SELAH',
     footer: 'Source: source citations, etc.',
     chapters: [
