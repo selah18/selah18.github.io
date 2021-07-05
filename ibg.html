@@ -36,7 +36,7 @@
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="./index.html">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
@@ -55,7 +55,7 @@
               <p>Payment by Gender</p>
             </a>
           </li>
-          <li>
+          <li class="active ">
             <a href="./ibg.html">
               <i class="now-ui-icons business_chart-bar-32"></i>
               <p>Item by Gender</p>
@@ -121,40 +121,172 @@
         </div>
       </nav>
 
+
       <!-- End Navbar -->
-      
+      <div class="">
+      </div>
+ 
+              <div class="card-body ">
+           
+
+  <head>
+    
+    <!-- amCharts javascript sources -->
+    <script type="text/javascript" src="amcharts/amcharts.js"></script>
+    <script type="text/javascript" src="amcharts/serial.js"></script>
+    <script type="text/javascript" src="amcharts/themes/black.js"></script>
+    
+
+    <!-- amCharts javascript code -->
+    <script type="text/javascript">
+      AmCharts.makeChart("chartdiv",
+        {
+          "type": "serial",
+          "categoryField": "category",
+          "columnSpacing": 3,
+          "autoMarginOffset": 7,
+          "depth3D": 6,
+          "marginBottom": 5,
+          "plotAreaBorderAlpha": 0.16,
+          "startDuration": 1,
+          "theme": "black",
+          "categoryAxis": {
+            "autoRotateAngle": 41.4,
+            "autoRotateCount": 7,
+            "gridPosition": "start",
+            "position": "left"
+          },
+          "chartCursor": {
+            "enabled": true
+          },
+          "chartScrollbar": {
+            "enabled": true
+          },
+          "trendLines": [],
+          "graphs": [
+            {
+              "balloonText": "[[title]] [[category]] [[value]]",
+              "fillAlphas": 1,
+              "fillColors": "#32F032",
+              "id": "AmGraph-1",
+              "title": "Female",
+              "type": "column",
+              "valueField": "Female"
+            },
+            {
+              "balloonText": "[[title]] [[category]] [[value]]",
+              "fillAlphas": 1,
+              "fillColors": "#FFFF00",
+              "id": "AmGraph-2",
+              "title": "Male",
+              "type": "column",
+              "valueField": "Male"
+            },
+            {
+              "balloonText": "[[title]] [[category]] [[value]]",
+              "fillAlphas": 1,
+              "fillColors": "#FF0000",
+              "id": "AmGraph-3",
+              "title": "Non-Binary",
+              "type": "column",
+              "valueField": "Non-Binary"
+            }
+          ],
+          "guides": [],
+          "valueAxes": [
+            {
+              "id": "ValueAxis-1",
+              "title": "Number of Students"
+            }
+
+          ],
+          "allLabels": [],
+          "balloon": {
+            "fillAlpha": 1
+          },
+          "legend": {
+            "enabled": true,
+            "useGraphSettings": true },
+          "titles": [
+            {
+              "id": "Title-1",
+              "size": 15,
+              "text": "Item Category By Gender"
+            }
+          ],
+          "dataProvider": [
+            {
+              "category": "Food",
+              "Female": "47",
+              "Male": "46",
+              "Non-Binary": "1"
+            },
+            {
+              "category": "Toiletries",
+              "Female": "18",
+              "Male": "24",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Dairy products",
+              "Female": "19",
+              "Male": "11",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Fruits/Vegs.",
+              "Female": "14",
+              "Male": "11",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Feminine Hyg.",
+              "Female": "19",
+              "Male": "",
+              "Non-Binary": "1"
+            },
+            {
+              "category": "Contraception",
+              "Female": "8",
+              "Male": "11",
+              "Non-Binary": ""
+            },
+            {
+              "category": "Cooking items",
+              "Female": "4",
+              "Male": "3",
+              "Non-Binary": ""
+            }
+          ]
+        }
+      );
+    </script>
+  </head>
+  <body>
+    <div id="chartdiv" style="width: 100%; height: 400px; background-color: #222222;" ></div>
+  </body>
+         
               <div class="card-body">
                 <div class="typography-line">
                 
                   <blockquote>
                     <p class="blockquote blockquote-primary">
-                      The following data was collected from the Ashokan Student Body in regards to their Tuckshop Consumption Patterns. Click to see the 
-
-
-                      <button class="btn btn-success" onclick=" window.open('https://drive.google.com/file/d/1J2uI4_BdMT2Bb_fd4yA5EvcE5U1FUaju/view?usp=sharing','_blank')">ANALYSIS TABLES</button>
+                      The graph shows that food is the category of item bought the most between both genders. In fact, there is hardly a difference between the purchasing habits of males and females for all items apart from feminine hygiene products. However, it is interesting to see that for all the different types of food items, it is always females who purchase more, while men purchase toiletries and contraception more. 
                       <br>
                       <br>
                       <small>
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <footer class="footer">
         <div class=" container-fluid ">
-          <nav>
-            <ul>
-              <li>
-                <a href="https://www.creative-tim.com">
-                  Web Journalism and Social Media
-                </a>
-              </li>
-              <li>
-                <a>
-                  Data Visualization Assignment
-                </a>
-              </li>
-              <li>
-               
-              </li>
-            </ul>
-          </nav>
-          <div class="copyright" id="copyright">
+         <div class="copyright" id="copyright">
             &copy; <script>
               document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
             </script>, Designed by <a target="_blank">ASP BOIZ</a>. Coded by <a href="https://www.instagram.com/selah_ri/" target="_blank">SELAH</a>.
@@ -180,8 +312,7 @@
   <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
-
+      demo.initGoogleMaps();
     });
   </script>
 </body>

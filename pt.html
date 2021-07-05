@@ -36,13 +36,13 @@
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="./index.html">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
             </a>
           </li>
-                    <li>
+                    <li class="active ">
             <a href="./pt.html">
               <i class="now-ui-icons business_chart-pie-36"></i>
               <p>Payment Type</p>
@@ -121,40 +121,90 @@
         </div>
       </nav>
 
+      <!-- Navbar -->
+
       <!-- End Navbar -->
-      
+      <div class="">
+      </div>
+ 
+              <div class="card-body ">
+           
+  <head>
+    
+    <!-- amCharts javascript sources -->
+    <script type="text/javascript" src="amcharts/amcharts.js"></script>
+    <script type="text/javascript" src="amcharts/pie.js"></script>
+    <script type="text/javascript" src="amcharts/themes/black.js"></script>
+    
+    
+
+    <!-- amCharts javascript code -->
+    <script type="text/javascript">
+      AmCharts.makeChart("chartdiv",
+        {
+          "type": "pie",
+          "angle": 12,
+          "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+          "depth3D": 15,
+          "innerRadius": "40%",
+          "titleField": "category",
+          "valueField": "column-1",
+          "theme": "black",
+          "allLabels": [],
+          "balloon": {
+            "pointerWidth": 4,
+            "shadowAlpha": 0
+          },
+          "legend": {
+            "enabled": true,
+            "align": "center",
+            "markerType": "circle"
+          },
+          "titles": [],
+          "dataProvider": [
+            {
+              "category": "Cash",
+              "column-1": "22"
+            },
+            {
+              "category": "Debit/credit card",
+              "column-1": "8"
+            },
+            {
+              "category": "E-Wallet (GPay, UPI, PayTM)",
+              "column-1": "73"
+            }
+          ]
+        }
+      );
+    </script>
+  </head>
+  <body>
+    <div id="chartdiv" style="width: 100%; height: 400px; background-color: #222222;" ></div>
+  </body>
+         
               <div class="card-body">
                 <div class="typography-line">
                 
                   <blockquote>
                     <p class="blockquote blockquote-primary">
-                      The following data was collected from the Ashokan Student Body in regards to their Tuckshop Consumption Patterns. Click to see the 
-
-
-                      <button class="btn btn-success" onclick=" window.open('https://drive.google.com/file/d/1J2uI4_BdMT2Bb_fd4yA5EvcE5U1FUaju/view?usp=sharing','_blank')">ANALYSIS TABLES</button>
+                      We can see here that e-wallet payment is the most preferred type, 
+                      followed by cash and debit/credit cards.  
                       <br>
                       <br>
                       <small>
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <footer class="footer">
         <div class=" container-fluid ">
-          <nav>
-            <ul>
-              <li>
-                <a href="https://www.creative-tim.com">
-                  Web Journalism and Social Media
-                </a>
-              </li>
-              <li>
-                <a>
-                  Data Visualization Assignment
-                </a>
-              </li>
-              <li>
-               
-              </li>
-            </ul>
-          </nav>
-          <div class="copyright" id="copyright">
+        <div class="copyright" id="copyright">
             &copy; <script>
               document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
             </script>, Designed by <a target="_blank">ASP BOIZ</a>. Coded by <a href="https://www.instagram.com/selah_ri/" target="_blank">SELAH</a>.
@@ -180,8 +230,7 @@
   <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
-
+      demo.initGoogleMaps();
     });
   </script>
 </body>
