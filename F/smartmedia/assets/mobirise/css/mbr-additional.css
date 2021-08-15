@@ -2,7 +2,7 @@ body {
   font-family: Jost;
 }
 .display-1 {
-  font-family: 'Ethiopic Abay Light';
+  font-family: 'omar-font';
   font-size: 4.6rem;
   line-height: 1.1;
 }
@@ -10,7 +10,7 @@ body {
   font-size: 5.75rem;
 }
 .display-2 {
-  font-family: 'Ethiopic Abay Light';
+  font-family: 'Jost', sans-serif;
   font-size: 3rem;
   line-height: 1.1;
 }
@@ -752,7 +752,7 @@ a {
 }
 .cid-sG9oAcRcvA .dropdown-menu,
 .cid-sG9oAcRcvA .navbar.opened {
-  background: #ffffff !important;
+  background: #4479d9 !important;
 }
 .cid-sG9oAcRcvA .nav-item:focus,
 .cid-sG9oAcRcvA .nav-link:focus {
@@ -787,7 +787,7 @@ a {
   transition: all 0.3s;
   border-bottom: 1px solid transparent;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  background: #ffffff;
+  background: #4479d9;
 }
 .cid-sG9oAcRcvA .navbar.opened {
   transition: all 0.3s;
@@ -932,7 +932,7 @@ a {
   padding: 0.667em 1.667em;
 }
 .cid-sG9oAcRcvA .navbar.navbar-expand-lg .dropdown .dropdown-menu {
-  background: #ffffff;
+  background: #4479d9;
 }
 .cid-sG9oAcRcvA .navbar.navbar-expand-lg .dropdown .dropdown-menu .dropdown-submenu {
   margin: 0;
@@ -963,7 +963,7 @@ a {
   width: 30px;
   height: 2px;
   border-right: 5px;
-  background-color: #000000;
+  background-color: #ffffff;
 }
 .cid-sG9oAcRcvA button.navbar-toggler .hamburger span:nth-child(1) {
   top: 0;
@@ -1041,10 +1041,12 @@ a {
 }
 .cid-sG7q9mfD5t .mbr-section-title {
   text-align: left;
+  color: #000000;
 }
 .cid-sG7q9mfD5t .mbr-text,
 .cid-sG7q9mfD5t .mbr-section-btn {
   text-align: left;
+  color: #000000;
 }
 .cid-sG9afVOWcL {
   padding-top: 0rem;
@@ -1171,6 +1173,7 @@ a {
 }
 .cid-sG9f27ADaj .card-title {
   text-align: center;
+  color: #4479d9;
 }
 .cid-sG9oQfoc4k {
   padding-top: 6rem;
@@ -1211,8 +1214,8 @@ a {
   display: flex;
   border-radius: 50%;
   text-align: center;
-  color: #000000;
-  border: 2px solid #000000;
+  color: #4479d9;
+  border: 2px solid #4479d9;
   justify-content: center;
   align-content: center;
   transition: all 0.3s;
@@ -1221,7 +1224,7 @@ a {
   padding: 0.6rem;
 }
 .cid-sG7qpaX66f .mbr-iconfont-social:hover {
-  background-color: #000000;
+  background-color: #4479d9;
   color: #ffffff;
 }
 @media (max-width: 768px) {
@@ -1232,9 +1235,12 @@ a {
     text-align: center;
   }
 }
+.cid-sG7qpaX66f .mbr-section-title {
+  color: #4479d9;
+}
 .cid-sG7qd4y4nb {
   padding-top: 30px;
   padding-bottom: 30px;
-  background-color: #232323;
+  background-color: #4479d9;
   overflow: hidden;
 }
