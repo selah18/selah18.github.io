@@ -1,0 +1,15 @@
+@font-face {
+   font-family: 'Ethiopic Abay Light';
+   font-display: swap;
+   src: url('Ethiopic Abay Light/font.ttf');
+}
+@font-face {
+   font-family: '11a AdwaSansSerif-Bold';
+   font-display: swap;
+   src: url('11a AdwaSansSerif-Bold/font.ttf');
+}
+@font-face {
+   font-family: '12 Godana-Regular';
+   font-display: swap;
+   src: url('12 Godana-Regular/font.ttf');
+}
