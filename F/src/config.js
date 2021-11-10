@@ -1,6 +1,6 @@
 var config = {
     // style: 'mapbox://styles/mapbox/streets-v11',
-    style: 'mapbox://styles/selahadinosma/ckvrs72on0d8216pdbb035m59',
+    style: 'mapbox://styles/selahadinosma/ckvt6w42x0rwh15oemkuxywr4',
     accessToken: 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg',
     showMarkers: true,
     markerColor: '',
