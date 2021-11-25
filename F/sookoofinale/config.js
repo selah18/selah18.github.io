@@ -51,7 +51,7 @@ var config = {
             hidden: false,
             title: 'TAMIRU',
             image: 'images/source.png',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-4'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-4'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.730453, 5.919032],
@@ -82,7 +82,7 @@ var config = {
             hidden: false,
             title: 'BIRHANU DULLO',
             image: 'images/source.png',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.766998, 5.868612],
@@ -113,7 +113,7 @@ var config = {
             hidden: false,
             title: 'BOBBASAA',
             image: 'images/source.png',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.715675, 5.937017],
@@ -145,7 +145,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'KOROMMI',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.739183, 5.9284672],
@@ -167,7 +167,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'DANNISSA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.73701, 5.926318],
@@ -188,7 +188,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'DANNISSA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.73701, 5.926318],
@@ -209,7 +209,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'BOKKISSA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.803552, 5.81751],
@@ -230,7 +230,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'SHOONDHISA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.73065, 5.911282],
@@ -251,7 +251,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'BIRBISSA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.777682, 5.845017],
@@ -272,7 +272,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'GORAA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.80909, 5.818693],
@@ -293,7 +293,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'UDDEYYI',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.767473, 5.854818],
@@ -314,7 +314,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'OKOLUU',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.703133, 5.878498],
@@ -335,7 +335,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'BOGALECH DUKALE',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.72978, 5.943207],
@@ -356,7 +356,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'TIMA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <div class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a></div>",
+            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.769504, 5.863468],
