@@ -224,7 +224,7 @@ var config = {
             onChapterExit: []
         },        
         {
-            id: 'other-iden',
+            id: 'other-ideasasasn',
             alignment: 'left',
             hidden: false,
             // title: 'Shoondhisa',
