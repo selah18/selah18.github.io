@@ -687,13 +687,13 @@ section.lazy-placeholder:after {
   opacity: 0.3;
 }
 .cid-sNNmKrkceH .navbar {
-  background: #ffffff;
+  background: #468f5e;
   transition: none;
   min-height: 77px;
   padding: .5rem 0;
 }
 .cid-sNNmKrkceH .navbar-dropdown.bg-color.transparent.opened {
-  background: #ffffff;
+  background: ##468f5e;
 }
 .cid-sNNmKrkceH a {
   font-style: normal;
@@ -856,7 +856,7 @@ section.lazy-placeholder:after {
   width: 30px;
   height: 2px;
   border-right: 5px;
-  background-color: #ffffff;
+  background-color: #468f5e;
 }
 .cid-sNNmKrkceH button.navbar-toggler .hamburger span:nth-child(1) {
   top: 0;
@@ -2402,7 +2402,7 @@ section.lazy-placeholder:after {
   width: 30px;
   height: 2px;
   border-right: 5px;
-  background-color: #ffffff;
+  background-color: #468f5e;
 }
 .cid-sNNmKrkceH button.navbar-toggler .hamburger span:nth-child(1) {
   top: 0;
