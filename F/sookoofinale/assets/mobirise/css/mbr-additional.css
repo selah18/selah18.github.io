@@ -1,7 +1,5 @@
-@import url(https://fonts.googleapis.com/css?family=Assistant:200,300,400,500,600,700,800&display=swap);
 @import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,600,700,800,900,300i,400i,500i,600i,700i,800i,900i&display=swap);
 @import url(https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap);
-
 
 
 
@@ -10,7 +8,7 @@ body {
   font-family: Rubik;
 }
 .display-1 {
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Helvetica';
   font-size: 4.25rem;
   font-display: swap;
 }
@@ -687,13 +685,13 @@ section.lazy-placeholder:after {
   opacity: 0.3;
 }
 .cid-sNNmKrkceH .navbar {
-  background: #468f5e;
+  background: #ffffff;
   transition: none;
   min-height: 77px;
   padding: .5rem 0;
 }
 .cid-sNNmKrkceH .navbar-dropdown.bg-color.transparent.opened {
-  background: ##468f5e;
+  background: #ffffff;
 }
 .cid-sNNmKrkceH a {
   font-style: normal;
@@ -856,7 +854,7 @@ section.lazy-placeholder:after {
   width: 30px;
   height: 2px;
   border-right: 5px;
-  background-color: #468f5e;
+  background-color: #ffffff;
 }
 .cid-sNNmKrkceH button.navbar-toggler .hamburger span:nth-child(1) {
   top: 0;
@@ -1377,7 +1375,7 @@ section.lazy-placeholder:after {
 }
 .cid-sNH6lVKRdn {
   padding-top: 0px;
-  padding-bottom: 15px;
+  padding-bottom: 0px;
   background-color: #ffffff;
 }
 .cid-sNH6lVKRdn .content-slider {
@@ -1646,6 +1644,20 @@ section.lazy-placeholder:after {
 .cid-sNH6lVKRdn .content-slider-wrap {
   width: 68%;
 }
+.cid-sRKpFADdTq {
+  background-image: url("../../../assets/images/sookoofruits-1920x1080.jpg");
+}
+.cid-sRKpFADdTq P {
+  color: #767676;
+}
+.cid-sRKpFADdTq H1 {
+  color: #468f5e;
+}
+.cid-sRKpFADdTq .mbr-text,
+.cid-sRKpFADdTq .mbr-section-btn {
+  color: #c09631;
+  text-align: left;
+}
 .cid-sIiZPMxHoB {
   padding-top: 75px;
   padding-bottom: 75px;
@@ -1711,12 +1723,6 @@ section.lazy-placeholder:after {
   padding-top: 0px;
   padding-bottom: 0px;
   background-color: #468f5e;
-}
-.cid-sIdmSVs8cZ {
-  background-image: url("../../../assets/images/GIF.gif");
-}
-.cid-sIdmSVs8cZ H1 {
-  color: #c09631;
 }
 .cid-sIjfcYzJ3w .testimonial-text {
   font-style: italic;
@@ -2022,7 +2028,7 @@ section.lazy-placeholder:after {
   color: #468f5e;
 }
 .cid-sIjJV1uzJB {
-  padding-top: 30px;
+  padding-top: 0px;
   padding-bottom: 30px;
   background: linear-gradient(0deg, #ffffff, #ffffff);
 }
@@ -2071,7 +2077,7 @@ section.lazy-placeholder:after {
 }
 .cid-sPAidw3cpF .card-title {
   color: #c09631;
-  text-align: center;
+  text-align: left;
 }
 .cid-sPAidw3cpF .mbr-text,
 .cid-sPAidw3cpF .mbr-section-btn {
@@ -2116,7 +2122,7 @@ section.lazy-placeholder:after {
 }
 .cid-sPAivWosb6 .card-title {
   color: #c09631;
-  text-align: center;
+  text-align: left;
 }
 .cid-sPAivWosb6 .mbr-text,
 .cid-sPAivWosb6 .mbr-section-btn {
@@ -2161,7 +2167,7 @@ section.lazy-placeholder:after {
 }
 .cid-sPAj4XUK80 .card-title {
   color: #c09631;
-  text-align: center;
+  text-align: left;
 }
 .cid-sPAj4XUK80 .mbr-text,
 .cid-sPAj4XUK80 .mbr-section-btn {
@@ -2206,7 +2212,7 @@ section.lazy-placeholder:after {
 }
 .cid-sPAjcsDDvc .card-title {
   color: #c09631;
-  text-align: center;
+  text-align: left;
 }
 .cid-sPAjcsDDvc .mbr-text,
 .cid-sPAjcsDDvc .mbr-section-btn {
@@ -2402,7 +2408,7 @@ section.lazy-placeholder:after {
   width: 30px;
   height: 2px;
   border-right: 5px;
-  background-color: #468f5e;
+  background-color: #ffffff;
 }
 .cid-sNNmKrkceH button.navbar-toggler .hamburger span:nth-child(1) {
   top: 0;
