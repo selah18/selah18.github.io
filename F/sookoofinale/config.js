@@ -213,7 +213,7 @@ var config = {
 
             location: {
                 center: [38.803552, 5.81751],
-                zoom: 14,
+                zoom: 16,
                 pitch: 60,
                 bearing: -43.2
             },
@@ -339,7 +339,7 @@ var config = {
 
             location: {
                 center: [38.72978, 5.943207],
-                zoom: 13,
+                zoom: 15,
                 pitch: 60,
                 bearing: -43.2
             },
@@ -360,7 +360,7 @@ var config = {
 
             location: {
                 center: [38.769504, 5.863468],
-                zoom: 14,
+                zoom: 15,
                 pitch: 60,
                 bearing: -43.2
             },
