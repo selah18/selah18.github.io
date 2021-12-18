@@ -188,7 +188,7 @@ var config = {
             // title: 'Shoondhisa',
             image: 'images/source.png',
             title: 'DANNISSA',
-            description: "Number of Farmers: <br> Altitude: <br> Origin: Varities: <br> Ecology: <br> Harvesting Season: <span class='mbr-section-btn align-left'><a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=Shoonddhisa%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-10'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
+            description: "<b>Number of Farmers:</b> 44 <br> <b>Altitude:</b> 2000-2100  <br> <b>Origin:</b> Guji Zone, sawana woreda, sukkee qutto Kebele <br> <b>Varities:</b> 74112<br> <b>Ecology:</b> This coffee grows under Indigenous shade trees<br> <b>Harvesting Season:</b> November- January<br> <span class='mbr-section-btn align-left'> <a href='mailto:info@sookoocoffee.com?cc=turewaji32%40gmail.com&subject=BOKKISSA%20Sample%20%7C%20Inquiry&body=Dear%20Sookoo%20Coffee%2C%0A%0AI%20am%20writing%20this%20email%20to%20request%20this%20Sample%20.....%0A.....%0A.....%0A%0ARegards%2C%0Axxxxx' class='btn btn-danger-outline display-4'><span class='mbri-cart-add mbr-iconfont mbr-iconfont-btn'></span>Inquire</a>",
 
             location: {
                 center: [38.73701, 5.926318],
