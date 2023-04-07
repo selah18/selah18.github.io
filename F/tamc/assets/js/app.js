@@ -83,7 +83,7 @@
   /*===== Search bar js end ======*/
   
   /*=== Text Animation ===*/
-  var words = ['Optimization and Scaling Ad Campaigns', 'Creating Winning TikTok Ads ', 'Starting Digital Marketing Business' ],
+  var words = ['Optimization and Scaling Campaigns', 'Creating Winning TikTok Ads ', 'Starting Digital Marketing Business' ],
   part,
   i = 0,
   offset = 0,
