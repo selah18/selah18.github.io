@@ -26,7 +26,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -42,7 +42,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area .header-btn .primary-btn {
@@ -58,7 +58,7 @@
 }
 .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ff0050;
+  background: #ffb400;
 }
 
 .header-top ul li a i::before {
@@ -140,7 +140,7 @@
 }
 .animated-btn .btn-submit {
   position: absolute;
-  background: #ff0050;
+  background: chocolate;
   color: #fff;
   font-size: 1.6rem;
   letter-spacing: 0.1px;
@@ -165,10 +165,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerIcon {
   width: 10rem;
@@ -196,7 +196,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -313,7 +313,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4 {
-  color: #ff0050;
+  color: #ffb400;
 }
 .blog-box-style .blog-content a h4 {
   font-size: 2rem;
@@ -342,7 +342,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 
@@ -463,10 +463,10 @@
 }
 .header-area nav.main-nav ul.primary-menu li:hover.has-child-menu:after {
   transform: rotate(-180deg);
-  color: #ff0050;
+  color: #ffb400;
 }
 .header-area nav.main-nav ul.primary-menu li a.active {
-  color: #ff0050;
+  color: #ffb400;
 }
 .header-area nav.main-nav ul.primary-menu li.has-child-menu::after {
   position: absolute;
@@ -608,7 +608,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -624,7 +624,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area .header-btn .primary-btn {
@@ -640,7 +640,7 @@
 }
 .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ff0050;
+  background: #ffb400;
 }
 
 .header-top ul li a i::before {
@@ -722,7 +722,7 @@
 }
 .animated-btn .btn-submit {
   position: absolute;
-  background: #ff0050;
+  background: chocolate;
   color: #fff;
   font-size: 1.6rem;
   letter-spacing: 0.1px;
@@ -747,10 +747,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerIcon {
   width: 10rem;
@@ -778,7 +778,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -895,7 +895,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4 {
-  color: #ff0050;
+  color: #ffb400;
 }
 .blog-box-style .blog-content a h4 {
   font-size: 2rem;
@@ -924,7 +924,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 
@@ -991,7 +991,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -1007,7 +1007,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area .header-btn .primary-btn {
@@ -1023,7 +1023,7 @@
 }
 .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ff0050;
+  background: #ffb400;
 }
 
 .header-top ul li a i::before {
@@ -1105,7 +1105,7 @@
 }
 .animated-btn .btn-submit {
   position: absolute;
-  background: #ff0050;
+  background: chocolate;
   color: #fff;
   font-size: 1.6rem;
   letter-spacing: 0.1px;
@@ -1130,10 +1130,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerIcon {
   width: 10rem;
@@ -1161,7 +1161,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -1278,7 +1278,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4 {
-  color: #ff0050;
+  color: #ffb400;
 }
 .blog-box-style .blog-content a h4 {
   font-size: 2rem;
@@ -1307,7 +1307,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 
@@ -1327,7 +1327,7 @@
   display: block;
 }
 .footer-area .social-area ul.social-links li:hover a i:before {
-  background: #ff0050;
+  background: #ffb400;
   color: #1F2044;
 }
 .footer-area .social-area ul.social-links li .cs-tooltip {
@@ -1385,7 +1385,7 @@
   transition: all 0.3s ease-in-out;
 }
 .copy-right p a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 /*=== End FOOTER AREA ===*/
@@ -1517,7 +1517,7 @@
     margin: 0;
   }
   .header-area nav.main-nav ul.primary-menu li a.active {
-    color: #ff0050;
+    color: #ffb400;
   }
   .header-area nav.main-nav .sidebar-support .header-btn {
     margin: 0;
@@ -1537,7 +1537,7 @@
     display: block;
   }
   .header-area nav.main-nav .sidebar-support ul.navbar-social-icon li:hover a i:before {
-    background: #ff0050;
+    background: #ffb400;
     color: #1F2044;
   }
   .header-area nav.main-nav .sidebar-support ul.navbar-social-icon li .cs-tooltip {

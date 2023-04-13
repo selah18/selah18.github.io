@@ -50,7 +50,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -66,7 +66,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .experience-area ul.nav__menu li.nav-item button.menu-item, .header-area .header-btn .primary-btn {
@@ -82,7 +82,7 @@
 }
 .experience-area ul.nav__menu li.nav-item button.menu-item:hover, .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ff0050;
+  background: #ffb400;
 }
 
 .about-area .content-area .personal-info .download-btn, .slider-area .slider-content .slider-button .banner-btn {
@@ -99,7 +99,7 @@
   text-decoration: none;
 }
 .about-area .content-area .personal-info .download-btn:hover, .slider-area .slider-content .slider-button .banner-btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #e5e5e5;
 }
 
@@ -248,7 +248,7 @@
 }
 .animated-btn .btn-submit {
   position: absolute;
-  background: #ff0050;
+  background: chocolate;
   color: #fff;
   font-size: 1.6rem;
   letter-spacing: 0.1px;
@@ -273,10 +273,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerIcon, .services-area .service-items .service-item .box_innerIcon {
   width: 10rem;
@@ -304,7 +304,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover, .services-area .service-items .service-item .box_innerContent h3 a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerContent p, .services-area .service-items .service-item .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -421,7 +421,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4, .blog-area .blog-box .blog-content:hover h4 {
-  color: #ff0050;
+  color: #ffb400;
 }
 .blog-box-style .blog-content a h4, .blog-area .blog-box .blog-content a h4 {
   font-size: 2rem;
@@ -450,7 +450,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover, .blog-area .blog-box .blog-content .readMore_btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 
@@ -562,7 +562,7 @@
   left: 0.3rem;
   width: 3.5rem;
   height: 3.5rem;
-  background: #ff0000;
+  background: #28ffff;
   border: 0.2rem solid #000;
   border-radius: 50%;
   transform: scale(0.9);
@@ -603,7 +603,7 @@
 }
 .main-wrapper .header-area #toggle.active .switch {
   left: 4rem;
-  background: #ff0000;
+  background: #28ffff;
   transform: scale(0.9) rotate(180deg);
   transition: all 0.3s ease-in-out;
 }
@@ -735,10 +735,10 @@
 }
 .header-area nav.main-nav ul.primary-menu li:hover.has-child-menu:after {
   transform: rotate(-180deg);
-  color: #ff0050;
+  color: #ffb400;
 }
 .header-area nav.main-nav ul.primary-menu li a.active {
-  color: #ff0050;
+  color: #ffb400;
 }
 .header-area nav.main-nav ul.primary-menu li.has-child-menu::after {
   position: absolute;
@@ -880,7 +880,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -896,7 +896,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .experience-area ul.nav__menu li.nav-item button.menu-item, .header-area .header-btn .primary-btn {
@@ -912,7 +912,7 @@
 }
 .experience-area ul.nav__menu li.nav-item button.menu-item:hover, .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ff0050;
+  background: #ffb400;
 }
 
 .about-area .content-area .personal-info .download-btn, .slider-area .slider-content .slider-button .banner-btn {
@@ -929,7 +929,7 @@
   text-decoration: none;
 }
 .about-area .content-area .personal-info .download-btn:hover, .slider-area .slider-content .slider-button .banner-btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #e5e5e5;
 }
 
@@ -1078,7 +1078,7 @@
 }
 .animated-btn .btn-submit {
   position: absolute;
-  background: #ff0050;
+  background: chocolate;
   color: #fff;
   font-size: 1.6rem;
   letter-spacing: 0.1px;
@@ -1103,10 +1103,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerIcon, .services-area .service-items .service-item .box_innerIcon {
   width: 10rem;
@@ -1134,7 +1134,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover, .services-area .service-items .service-item .box_innerContent h3 a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerContent p, .services-area .service-items .service-item .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -1251,7 +1251,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4, .blog-area .blog-box .blog-content:hover h4 {
-  color: #ff0050;
+  color: #ffb400;
 }
 .blog-box-style .blog-content a h4, .blog-area .blog-box .blog-content a h4 {
   font-size: 2rem;
@@ -1280,7 +1280,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover, .blog-area .blog-box .blog-content .readMore_btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 
@@ -1486,7 +1486,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -1502,7 +1502,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 .experience-area ul.nav__menu li.nav-item button.menu-item, .header-area .header-btn .primary-btn {
@@ -1518,7 +1518,7 @@
 }
 .experience-area ul.nav__menu li.nav-item button.menu-item:hover, .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ff0050;
+  background: #ffb400;
 }
 
 .about-area .content-area .personal-info .download-btn, .slider-area .slider-content .slider-button .banner-btn {
@@ -1535,7 +1535,7 @@
   text-decoration: none;
 }
 .about-area .content-area .personal-info .download-btn:hover, .slider-area .slider-content .slider-button .banner-btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #e5e5e5;
 }
 
@@ -1684,7 +1684,7 @@
 }
 .animated-btn .btn-submit {
   position: absolute;
-  background: #ff0050;
+  background: chocolate;
   color: #fff;
   font-size: 1.6rem;
   letter-spacing: 0.1px;
@@ -1709,10 +1709,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerIcon, .services-area .service-items .service-item .box_innerIcon {
   width: 10rem;
@@ -1740,7 +1740,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover, .services-area .service-items .service-item .box_innerContent h3 a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 .service-item-style .box_innerContent p, .services-area .service-items .service-item .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -1857,7 +1857,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4, .blog-area .blog-box .blog-content:hover h4 {
-  color: #ff0050;
+  color: #ffb400;
 }
 .blog-box-style .blog-content a h4, .blog-area .blog-box .blog-content a h4 {
   font-size: 2rem;
@@ -1886,7 +1886,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover, .blog-area .blog-box .blog-content .readMore_btn:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 
@@ -1906,7 +1906,7 @@
   display: block;
 }
 .footer-area .social-area ul.social-links li:hover a i:before {
-  background: #ff0050;
+  background: #ffb400;
   color: #1F2044;
 }
 .footer-area .social-area ul.social-links li .cs-tooltip {
@@ -1964,7 +1964,7 @@
   transition: all 0.3s ease-in-out;
 }
 .copy-right p a:hover {
-  color: #ff0050;
+  color: #ffb400;
 }
 
 /*=== End FOOTER AREA ===*/
@@ -2017,7 +2017,7 @@
   content: "";
   width: 2rem;
   height: 0rem;
-  background: #ff0050;
+  background: #ffb400;
   border-radius: 5rem;
   opacity: 1;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -2147,7 +2147,7 @@ a {
   padding-bottom: 5rem;
 }
 .section-inner-content .section-title h2 span {
-  color: #ff0050;
+  color: #ffb400;
 }
 .section-inner-content .section-title h2 span::before, .section-inner-content .section-title h2 span::after {
   display: none;
@@ -2229,7 +2229,7 @@ a {
   padding-bottom: 3rem;
 }
 .experience-area ul.nav__menu li.nav-item button.active {
-  background: #ff0050;
+  background: #ffb400;
 }
 .experience-area ul.nav__menu li.nav-item:not(:last-child) {
   margin-right: 1.5rem;
@@ -2443,7 +2443,7 @@ a {
   margin-bottom: 1.5rem;
 }
 .portfolio-area .portfolio_wrapper .button-group .button:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 .portfolio-area .portfolio_wrapper .button-group .button:not(:last-child) {
@@ -2451,7 +2451,7 @@ a {
 }
 .portfolio-area .portfolio_wrapper .button-group .button:active,
 .portfolio-area .portfolio_wrapper .button-group .button.is-checked {
-  background: #ff0050;
+  background: #ffb400;
 }
 .portfolio-area .portfolio_wrapper .button-group:after {
   content: "";
@@ -2527,7 +2527,7 @@ a {
 }
 .contact-area .contact-mailform .form-wrap .form-input:focus {
   border: 1px solid;
-  border-color: #ff0050;
+  border-color: #ffb400;
   box-shadow: none;
   outline: none;
 }
@@ -2544,7 +2544,7 @@ a {
   transition: all 0.3s ease-in-out;
 }
 .contact-area .contact-mailform .form-button .btn-submit:hover {
-  background: #ff0050;
+  background: #ffb400;
   color: #FFFFFF;
 }
 .contact-area .google_map {
