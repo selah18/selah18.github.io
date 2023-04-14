@@ -50,7 +50,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -66,7 +66,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 .experience-area ul.nav__menu li.nav-item button.menu-item, .header-area .header-btn .primary-btn {
@@ -82,7 +82,7 @@
 }
 .experience-area ul.nav__menu li.nav-item button.menu-item:hover, .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ffb400;
+  background: #28ffff;
 }
 
 .about-area .content-area .personal-info .download-btn, .slider-area .slider-content .slider-button .banner-btn {
@@ -99,7 +99,7 @@
   text-decoration: none;
 }
 .about-area .content-area .personal-info .download-btn:hover, .slider-area .slider-content .slider-button .banner-btn:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #e5e5e5;
 }
 
@@ -273,10 +273,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style .box_innerIcon, .services-area .service-items .service-item .box_innerIcon {
   width: 10rem;
@@ -304,7 +304,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover, .services-area .service-items .service-item .box_innerContent h3 a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style .box_innerContent p, .services-area .service-items .service-item .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -421,7 +421,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4, .blog-area .blog-box .blog-content:hover h4 {
-  color: #ffb400;
+  color: #28ffff;
 }
 .blog-box-style .blog-content a h4, .blog-area .blog-box .blog-content a h4 {
   font-size: 2rem;
@@ -450,7 +450,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover, .blog-area .blog-box .blog-content .readMore_btn:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #FFFFFF;
 }
 
@@ -474,8 +474,7 @@
   width: 10px;
   display: inline-block;
   margin-left: 2px;
-  -webkit-animation: delay 0.8s infinite ease-in-out;
-          animation: delay 0.8s infinite ease-in-out;
+  animation: delay 0.8s infinite ease-in-out;
 }
 .preloader .loader {
   margin: 0 auto;
@@ -492,45 +491,28 @@
   background-color: #1F2044;
 }
 .preloader .loader .bar2 {
-  -webkit-animation-delay: -0.7s;
-          animation-delay: -0.7s;
+  animation-delay: -0.7s;
 }
 .preloader .loader .bar3 {
-  -webkit-animation-delay: -0.6s;
-          animation-delay: -0.6s;
+  animation-delay: -0.6s;
 }
 .preloader .loader .bar4 {
-  -webkit-animation-delay: -0.5s;
-          animation-delay: -0.5s;
+  animation-delay: -0.5s;
 }
 .preloader .loader .bar5 {
-  -webkit-animation-delay: -0.4s;
-          animation-delay: -0.4s;
+  animation-delay: -0.4s;
 }
 .preloader .loader .bar6 {
-  -webkit-animation-delay: -0.3s;
-          animation-delay: -0.3s;
+  animation-delay: -0.3s;
 }
 .preloader .loader .bar7 {
-  -webkit-animation-delay: -0.2s;
-          animation-delay: -0.2s;
+  animation-delay: -0.2s;
 }
 .preloader .loader .bar8 {
-  -webkit-animation-delay: -0.1s;
-          animation-delay: -0.1s;
+  animation-delay: -0.1s;
 }
 .preloader .loader .bar9 {
-  -webkit-animation-delay: 0s;
-          animation-delay: 0s;
-}
-
-@-webkit-keyframes delay {
-  0%, 40%, 100% {
-    transform: scaleY(1);
-  }
-  20% {
-    transform: scaleY(1.5);
-  }
+  animation-delay: 0s;
 }
 @keyframes delay {
   0%, 40%, 100% {
@@ -563,7 +545,7 @@
   width: 3.5rem;
   height: 3.5rem;
   background: #28ffff;
-  border: 0.2rem solid #000;
+  border: 0.2rem solid #28ffff;
   border-radius: 50%;
   transform: scale(0.9);
   transition: all 0.3s ease-in-out;
@@ -573,13 +555,13 @@
   position: absolute;
   bottom: -0.1rem;
   left: -0.1rem;
-  background: #FFF;
+  background: #28ffff;
   width: 3.3rem;
   height: 1.8rem;
-  border: 0.2rem solid #000;
+  border: 0.2rem solid #28ffff;
   border-bottom-left-radius: 30rem;
   border-bottom-right-radius: 30rem;
-  box-shadow: inset 0.5rem 0rem 0.5rem #7f7c82;
+  box-shadow: inset 0.5rem 0rem 0.5rem #28ffff;
 }
 .main-wrapper .header-area #toggle .switch::after {
   content: "";
@@ -658,27 +640,16 @@
   box-shadow: 0 0 2rem rgb(38, 87, 54), 0 0 4rem rgb(38, 87, 54), 0 0 6rem rgb(38, 87, 54), 0 0 8rem rgb(38, 87, 54), 0 0 0 0.8rem rgba(38, 87, 54, 0.1);
 }
 .amimation .glowing span:nth-child(3n+1) {
-  -webkit-animation: spin 30s infinite linear;
-          animation: spin 30s infinite linear;
+  animation: spin 30s infinite linear;
   width: 25rem;
 }
 .amimation .glowing span:nth-child(3n+2) {
-  -webkit-animation: animate-reverse 25s infinite linear;
-          animation: animate-reverse 25s infinite linear;
+  animation: animate-reverse 25s infinite linear;
   width: 20rem;
 }
 .amimation .glowing span:nth-child(3n+3) {
-  -webkit-animation: animate 15s infinite linear;
-          animation: animate 15s infinite linear;
+  animation: animate 15s infinite linear;
   width: 8rem;
-}
-@-webkit-keyframes animate-reverse {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
 }
 @keyframes animate-reverse {
   0% {
@@ -686,14 +657,6 @@
   }
   100% {
     transform: rotate(-360deg);
-  }
-}
-@-webkit-keyframes animate {
-  0% {
-    transform: rotate(-360deg);
-  }
-  100% {
-    transform: rotate(0deg);
   }
 }
 @keyframes animate {
@@ -735,10 +698,10 @@
 }
 .header-area nav.main-nav ul.primary-menu li:hover.has-child-menu:after {
   transform: rotate(-180deg);
-  color: #ffb400;
+  color: #28ffff;
 }
 .header-area nav.main-nav ul.primary-menu li a.active {
-  color: #ffb400;
+  color: #28ffff;
 }
 .header-area nav.main-nav ul.primary-menu li.has-child-menu::after {
   position: absolute;
@@ -846,8 +809,7 @@
   left: 0;
   background: #FFFFFF;
   z-index: 9999;
-  -webkit-animation: 0.5s ease-in-out;
-          animation: 0.5s ease-in-out;
+  animation: 0.5s ease-in-out;
   width: 100%;
   padding: 0;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
@@ -880,7 +842,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -896,7 +858,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 .experience-area ul.nav__menu li.nav-item button.menu-item, .header-area .header-btn .primary-btn {
@@ -912,7 +874,7 @@
 }
 .experience-area ul.nav__menu li.nav-item button.menu-item:hover, .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ffb400;
+  background: #28ffff;
 }
 
 .about-area .content-area .personal-info .download-btn, .slider-area .slider-content .slider-button .banner-btn {
@@ -929,7 +891,7 @@
   text-decoration: none;
 }
 .about-area .content-area .personal-info .download-btn:hover, .slider-area .slider-content .slider-button .banner-btn:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #e5e5e5;
 }
 
@@ -1103,10 +1065,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style .box_innerIcon, .services-area .service-items .service-item .box_innerIcon {
   width: 10rem;
@@ -1134,7 +1096,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover, .services-area .service-items .service-item .box_innerContent h3 a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style .box_innerContent p, .services-area .service-items .service-item .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -1251,7 +1213,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4, .blog-area .blog-box .blog-content:hover h4 {
-  color: #ffb400;
+  color: #28ffff;
 }
 .blog-box-style .blog-content a h4, .blog-area .blog-box .blog-content a h4 {
   font-size: 2rem;
@@ -1280,7 +1242,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover, .blog-area .blog-box .blog-content .readMore_btn:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #FFFFFF;
 }
 
@@ -1381,7 +1343,6 @@
   transition-property: top, color;
   transition-duration: 0.1s;
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   perspective: 1000;
 }
@@ -1394,7 +1355,6 @@
   transition-property: top, color;
   transition-duration: 0.1s;
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   perspective: 1000;
 }
@@ -1407,7 +1367,6 @@
   transition-property: top, color;
   transition-duration: 0.1s;
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   perspective: 1000;
 }
@@ -1420,7 +1379,6 @@
   transition-property: top, color;
   transition-duration: 0.1s;
   transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   perspective: 1000;
 }
@@ -1486,7 +1444,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a {
@@ -1502,7 +1460,7 @@
   cursor: pointer;
 }
 .header-area nav.main-nav ul.primary-menu li > ul.sub-menu > li a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 .experience-area ul.nav__menu li.nav-item button.menu-item, .header-area .header-btn .primary-btn {
@@ -1518,7 +1476,7 @@
 }
 .experience-area ul.nav__menu li.nav-item button.menu-item:hover, .header-area .header-btn .primary-btn:hover {
   color: #FFFFFF;
-  background: #ffb400;
+  background: #28ffff;
 }
 
 .about-area .content-area .personal-info .download-btn, .slider-area .slider-content .slider-button .banner-btn {
@@ -1535,7 +1493,7 @@
   text-decoration: none;
 }
 .about-area .content-area .personal-info .download-btn:hover, .slider-area .slider-content .slider-button .banner-btn:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #e5e5e5;
 }
 
@@ -1709,10 +1667,10 @@
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore {
   letter-spacing: 0.75px;
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style:hover .box_innerContent a.btn_learnMore i:before, .services-area .service-items .service-item:hover .box_innerContent a.btn_learnMore i:before {
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style .box_innerIcon, .services-area .service-items .service-item .box_innerIcon {
   width: 10rem;
@@ -1740,7 +1698,7 @@
   transition: all 0.3s ease-in-out;
 }
 .service-item-style .box_innerContent h3 a:hover, .services-area .service-items .service-item .box_innerContent h3 a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 .service-item-style .box_innerContent p, .services-area .service-items .service-item .box_innerContent p {
   margin: 1rem 0 2rem 0;
@@ -1857,7 +1815,7 @@
   text-align: left;
 }
 .blog-box-style .blog-content:hover h4, .blog-area .blog-box .blog-content:hover h4 {
-  color: #ffb400;
+  color: #28ffff;
 }
 .blog-box-style .blog-content a h4, .blog-area .blog-box .blog-content a h4 {
   font-size: 2rem;
@@ -1886,7 +1844,7 @@
   margin-top: 3rem;
 }
 .blog-box-style .blog-content .readMore_btn:hover, .blog-area .blog-box .blog-content .readMore_btn:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #FFFFFF;
 }
 
@@ -1906,7 +1864,7 @@
   display: block;
 }
 .footer-area .social-area ul.social-links li:hover a i:before {
-  background: #ffb400;
+  background: #28ffff;
   color: #1F2044;
 }
 .footer-area .social-area ul.social-links li .cs-tooltip {
@@ -1964,7 +1922,7 @@
   transition: all 0.3s ease-in-out;
 }
 .copy-right p a:hover {
-  color: #ffb400;
+  color: #28ffff;
 }
 
 /*=== End FOOTER AREA ===*/
@@ -2017,7 +1975,7 @@
   content: "";
   width: 2rem;
   height: 0rem;
-  background: #ffb400;
+  background: #28ffff;
   border-radius: 5rem;
   opacity: 1;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -2147,7 +2105,7 @@ a {
   padding-bottom: 5rem;
 }
 .section-inner-content .section-title h2 span {
-  color: #ffb400;
+  color: #28ffff;
 }
 .section-inner-content .section-title h2 span::before, .section-inner-content .section-title h2 span::after {
   display: none;
@@ -2229,7 +2187,7 @@ a {
   padding-bottom: 3rem;
 }
 .experience-area ul.nav__menu li.nav-item button.active {
-  background: #ffb400;
+  background: #28ffff;
 }
 .experience-area ul.nav__menu li.nav-item:not(:last-child) {
   margin-right: 1.5rem;
@@ -2443,7 +2401,7 @@ a {
   margin-bottom: 1.5rem;
 }
 .portfolio-area .portfolio_wrapper .button-group .button:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #FFFFFF;
 }
 .portfolio-area .portfolio_wrapper .button-group .button:not(:last-child) {
@@ -2451,7 +2409,7 @@ a {
 }
 .portfolio-area .portfolio_wrapper .button-group .button:active,
 .portfolio-area .portfolio_wrapper .button-group .button.is-checked {
-  background: #ffb400;
+  background: #28ffff;
 }
 .portfolio-area .portfolio_wrapper .button-group:after {
   content: "";
@@ -2527,7 +2485,7 @@ a {
 }
 .contact-area .contact-mailform .form-wrap .form-input:focus {
   border: 1px solid;
-  border-color: #ffb400;
+  border-color: #28ffff;
   box-shadow: none;
   outline: none;
 }
@@ -2544,7 +2502,7 @@ a {
   transition: all 0.3s ease-in-out;
 }
 .contact-area .contact-mailform .form-button .btn-submit:hover {
-  background: #ffb400;
+  background: #28ffff;
   color: #FFFFFF;
 }
 .contact-area .google_map {
