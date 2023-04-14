@@ -508,10 +508,10 @@
         <!-- Portfolio area End -->
 
         <!-- Blog area start -->
-        <div id="blog" class="blog-area section-spacing">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-md-10 col-lg-8 m-auto">
+        <div id="blog" class="blog-area text-center">
+            <div class="text-center container">
+                <div class="text-center row">
+                    <div class="text-center m-auto text-center">
                         <div class="section-inner-content text-center">
                             <div class="section-title">
                                 <h2 class="wow animate fadeInUp" data-wow-duration="900ms" data-wow-delay="0s">Get Full <span>Access Now!</span></h2>
@@ -524,57 +524,69 @@
                     </div>
                 </div>
 
-                <!-- <div class="row">
-                    <div class="col-12 col-sm-8 col-md-6 col-lg-4 m-auto">
-                        <div class="blog-box wow animate fadeInUp" data-wow-duration="600ms" data-wow-delay="0s">
-                            <div class="blog-img">
-                                <a href="#">
-                                    <img class="img-fluid" src="./assets/images/blog_img1.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="blog-content bg-active">
-                                <a href="#"> 
-                                    <h4>Why you should hire UI/UX Guy Before work </h4> 
-                                </a>
-                                <p> There are many variations of passages available, but the majority have suffered alteration in some form, by .</p>
-                                <a href="#" class="btn readMore_btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
+                
+                
+                
 
-                    <div class="col-12 col-sm-8 col-md-6 col-lg-4 m-auto">
-                        <div class="blog-box wow animate fadeInUp" data-wow-duration="900ms" data-wow-delay="0s">
-                            <div class="blog-img">
-                                <a href="#">
-                                    <img class="img-fluid" src="./assets/images/blog_img2.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="blog-content bg-active">
-                                <a href="#"> 
-                                    <h4>A good website starts with a good idea.</h4> 
-                                </a>
-                                <p> There are many variations of passages available, but the majority have suffered alteration in some form, by .</p>
-                                <a href="#" class="btn readMore_btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Replace "test" with your own sandbox Business account app client ID -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    <!-- Set up a container element for the button -->
+    <div id="paypal-button-container"></div>
+    <script>
+      paypal.Buttons({
+        // Order is created on the server and the order id is returned
+        createOrder() {
+          return fetch("/my-server/create-paypal-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // use the "body" param to optionally pass additional order information
+            // like product skus and quantities
+            body: JSON.stringify({
+              cart: [
+                {
+                  sku: "YOUR_PRODUCT_STOCK_KEEPING_UNIT",
+                  quantity: "YOUR_PRODUCT_QUANTITY",
+                },
+              ],
+            }),
+          })
+          .then((response) => response.json())
+          .then((order) => order.id);
+        },
+        // Finalize the transaction on the server after payer approval
+        onApprove(data) {
+          return fetch("/my-server/capture-paypal-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderID: data.orderID
+            })
+          })
+          .then((response) => response.json())
+          .then((orderData) => {
+            // Successful capture! For dev/demo purposes:
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+            const transaction = orderData.purchase_units[0].payments.captures[0];
+            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+            // When ready to go live, remove the alert and show a success message within this page. For example:
+            // const element = document.getElementById('paypal-button-container');
+            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+            // Or go to another URL:  window.location.href = 'thank_you.html';
+          });
+        }
+      }).render('#paypal-button-container');
+    </script>
+ 
 
-                    <div class="col-12 col-sm-8 col-md-6 col-lg-4 m-auto">
-                        <div class="blog-box wow animate fadeInUp" data-wow-duration="1200ms" data-wow-delay="0s">
-                            <div class="blog-img">
-                                <a href="#">
-                                    <img class="img-fluid" src="./assets/images/blog_img3.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="blog-content bg-active">
-                                <a href="#"> 
-                                    <h4>Why you should hire UI/UX Guy Before work </h4> 
-                                </a>
-                                <p> There are many variations of passages available, but the majority have suffered alteration in some form, by .</p>
-                                <a href="#" class="btn readMore_btn">Read More</a>
-                            </div>
-                        </div>
-                    </div> -->
+                
+                
+                
+                
+        
                 </div>
 
             
@@ -606,7 +618,7 @@
     </h2>
     <div id="collapseOne" class="accordion-collapse box_innerContent text-left experience-part ex bg-active wow animate fadeInUp" data-wow-duration="1400ms" data-wow-delay="0s"   aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body box_innerContent text-left experience-part ex bg-active wow animate fadeInUp" data-wow-duration="1400ms" data-wow-delay="0s">
-        YES! This Course Teaches You Everything From The Ground Up!
+        Yes! This Course Teaches You Everything From The Ground Up!
       </div>
     </div>
   </div>
