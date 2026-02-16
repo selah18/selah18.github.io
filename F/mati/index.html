@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Adampur Floor Map Portal</title>
+<title>Adampur Land Portal - Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
@@ -10,226 +10,238 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body { margin:0; font-family:Arial,sans-serif; }
-#map { position:absolute; top:0; bottom:0; width:100%; }
-#panel { position:absolute; top:10px; left:10px; z-index:3; background:white; padding:15px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.25); width:320px; max-width:95%; }
-input, select{ width:100%; padding:8px; margin-bottom:6px; font-size:14px; }
-button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px; }
-#suggestions{ max-height:150px; overflow-y:auto; border:1px solid #ddd; margin-bottom:6px; }
-.suggestion{ padding:6px; cursor:pointer; }
-.suggestion:hover{ background:#f0f0f0; }
-#panel h4{ margin-top:10px; margin-bottom:6px; font-size:14px; }
+  body { margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f4f7f6; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  #panel { position:absolute; top:15px; left:15px; z-index:3; background:white; padding:20px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.2); width:340px; max-height: 90vh; overflow-y: auto; }
+  h3 { margin: 0 0 15px 0; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+  input, select { width:100%; padding:10px; margin-bottom:10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+  button { width:100%; padding:10px; margin-top:8px; cursor:pointer; border: none; border-radius: 5px; background: #1f78b4; color: white; font-weight: bold; transition: 0.3s; }
+  button:hover { background: #155a8a; }
+  button.secondary { background: #6c757d; }
+  #suggestions { max-height:120px; overflow-y:auto; border:1px solid #eee; border-radius: 5px; margin-bottom:10px; background: #fafafa; }
+  .suggestion { padding:8px; cursor:pointer; font-size: 13px; border-bottom: 1px solid #eee; }
+  .suggestion:hover { background:#e9ecef; }
+  .legend-item { display:flex; align-items:center; margin-bottom:6px; font-size: 13px; }
+  .color-box { width:18px; height:18px; margin-right:8px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
+  .measurement-info { background: #fff9db; padding: 8px; border-radius: 5px; margin-top: 10px; font-size: 13px; border: 1px solid #ffe066; display: none; }
 </style>
 </head>
 
 <body>
 <div id="panel">
-<h3>Adampur Land Portal</h3>
-<select id="searchType">
-  <option value="n_khas_no">Search by Khasra</option>
-  <option value="mu_ki">Search by Owner</option>
-</select>
-<input type="text" id="searchInput" placeholder="Search...">
-<div id="suggestions"></div>
-<button onclick="downloadPDF()">Download Floor Map PDF</button>
-<button onclick="toggleSatellite()">Toggle Satellite</button>
+  <h3>Adampur Land Portal</h3>
+  
+  <label style="font-size:12px; color:#666;">Search Category</label>
+  <select id="searchType">
+    <option value="n_khas_no">Search by Khasra No.</option>
+    <option value="mu_ki">Search by Owner Name</option>
+  </select>
+  
+  <input type="text" id="searchInput" placeholder="Type here...">
+  <div id="suggestions"></div>
+  
+  <button onclick="downloadPDF()">⬇️ Download PDF Certificate</button>
+  <button class="secondary" onclick="toggleSatellite()">🛰️ Toggle Satellite</button>
+  <button id="rulerBtn" class="secondary" onclick="toggleRuler()">📏 Distance Ruler: OFF</button>
+  
+  <div id="measureBox" class="measurement-info">
+    <strong>Distance:</strong> <span id="distanceVal">0</span> meters
+    <br><small>Click points on map to measure</small>
+  </div>
 
-<h4>Legend</h4>
-<div style="display:flex; align-items:center; margin-bottom:4px;">
-  <div style="width:20px;height:20px;background:#ff0000;margin-right:6px;"></div>Selected Parcel
-</div>
-<div style="display:flex; align-items:center; margin-bottom:4px;">
-  <div style="width:20px;height:20px;background:#ffd699;margin-right:6px;"></div>Adjacent Parcel
-</div>
-<div style="display:flex; align-items:center; margin-bottom:4px;">
-  <div style="width:20px;height:20px;background:#1f78b4;margin-right:6px;"></div>Other Parcels
-</div>
+  <h4 style="margin: 15px 0 8px 0; font-size: 14px;">Legend</h4>
+  <div class="legend-item"><div class="color-box" style="background:#ff0000;"></div> Selected Parcel</div>
+  <div class="legend-item"><div class="color-box" style="background:#ffd699;"></div> Adjacent Parcels</div>
+  <div class="legend-item"><div class="color-box" style="background:#1f78b4;"></div> Other Land</div>
 </div>
 
 <div id="map"></div>
 
 <script>
-mapboxgl.accessToken='pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg'; // Replace with your Mapbox token
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
+
 let map = new mapboxgl.Map({
-  container:'map',
-  style:'mapbox://styles/mapbox/light-v11',
-  center:[75.5045,29.2616],
-  zoom:18,
-  pitch:65,
-  bearing:-20,
-  antialias:true
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v11',
+  center: [75.5045, 29.2616],
+  zoom: 17,
+  pitch: 45,
+  preserveDrawingBuffer: true, // Essential for PDF export
+  antialias: true
 });
 
 const TILESET_LAYER_NAME = 'adampur_parcels_wgs8-5tkgpu';
 let selectedFeature = null;
 let adjacentFeatures = [];
 let satellite = false;
+let isRulerActive = false;
+let measurePoints = [];
 
-map.on('load', () => addTilesetLayers());
+map.on('load', () => {
+  addTilesetLayers();
+  setupRulerLayers();
+});
 
-function addTilesetLayers(){
-  if(map.getSource('tileset')) return;
+function addTilesetLayers() {
+  if (map.getSource('tileset')) return;
+  map.addSource('tileset', { type: 'vector', url: 'mapbox://selahadinosma.46aakx24' });
 
-  map.addSource('tileset',{
-    type:'vector',
-    url:'mapbox://selahadinosma.46aakx24'
-  });
-
-  // Fill
   map.addLayer({
-    id:'tileset-fill',
-    type:'fill',
-    source:'tileset',
-    'source-layer': TILESET_LAYER_NAME,
-    paint:{'fill-color':'#1f78b4','fill-opacity':0.4}
+    id: 'tileset-fill', type: 'fill', source: 'tileset', 'source-layer': TILESET_LAYER_NAME,
+    paint: { 'fill-color': '#1f78b4', 'fill-opacity': 0.3 }
   });
-  // Outline
   map.addLayer({
-    id:'tileset-outline',
-    type:'line',
-    source:'tileset',
-    'source-layer': TILESET_LAYER_NAME,
-    paint:{'line-color':'#666','line-width':1}
+    id: 'tileset-outline', type: 'line', source: 'tileset', 'source-layer': TILESET_LAYER_NAME,
+    paint: { 'line-color': '#444', 'line-width': 0.5 }
   });
-  // Labels
   map.addLayer({
-    id:'tileset-labels',
-    type:'symbol',
-    source:'tileset',
-    'source-layer': TILESET_LAYER_NAME,
-    layout:{'text-field':['get','n_khas_no'],'text-size':12},
-    paint:{'text-color':'#000'}
+    id: 'tileset-labels', type: 'symbol', source: 'tileset', 'source-layer': TILESET_LAYER_NAME,
+    layout: { 'text-field': ['get', 'n_khas_no'], 'text-size': 11, 'text-font': ['Open Sans Semibold'] },
+    paint: { 'text-color': '#333', 'text-halo-color': '#fff', 'text-halo-width': 1 }
   });
 }
 
-function toggleSatellite(){
+function toggleSatellite() {
   satellite = !satellite;
-  map.setStyle(satellite?'mapbox://styles/mapbox/satellite-streets-v12':'mapbox://styles/mapbox/light-v11');
-  map.once('style.load',()=>{
+  map.setStyle(satellite ? 'mapbox://styles/mapbox/satellite-streets-v12' : 'mapbox://styles/mapbox/light-v11');
+  map.once('style.load', () => {
     addTilesetLayers();
-    if(selectedFeature) highlightParcel(selectedFeature);
+    setupRulerLayers();
+    if (selectedFeature) highlightParcel(selectedFeature);
   });
 }
 
-// SEARCH
+// SEARCH LOGIC
 const searchInput = document.getElementById('searchInput');
-const searchType = document.getElementById('searchType');
 const suggestionsDiv = document.getElementById('suggestions');
 
-searchInput.addEventListener('input',()=>{
-  const q = searchInput.value.toLowerCase();
-  suggestionsDiv.innerHTML='';
-  if(!q) return;
+searchInput.addEventListener('input', () => {
+  const val = searchInput.value.toLowerCase();
+  suggestionsDiv.innerHTML = '';
+  if (!val) return;
 
-  const features = map.queryRenderedFeatures({layers:[TILESET_LAYER_NAME]})
-    .filter(f=>f.properties[searchType.value] && f.properties[searchType.value].toString().toLowerCase().includes(q))
-    .slice(0,10);
+  const features = map.queryRenderedFeatures({ layers: ['tileset-fill'] })
+    .filter(f => f.properties[searchType.value]?.toString().toLowerCase().includes(val))
+    .slice(0, 8);
 
-  features.forEach(f=>{
+  features.forEach(f => {
     const div = document.createElement('div');
-    div.className='suggestion';
-    div.innerText=`${f.properties.n_khas_no} — ${f.properties.mu_ki}`;
-    div.onclick=()=>{
-      suggestionsDiv.innerHTML='';
-      searchInput.value=f.properties.n_khas_no;
+    div.className = 'suggestion';
+    div.innerHTML = `<strong>Khasra: ${f.properties.n_khas_no}</strong><br><small>${f.properties.mu_ki || 'Unknown Owner'}</small>`;
+    div.onclick = () => {
+      suggestionsDiv.innerHTML = '';
+      searchInput.value = f.properties.n_khas_no;
       highlightParcel(f);
     };
     suggestionsDiv.appendChild(div);
   });
 });
 
-// Highlight parcel + adjacent
-function highlightParcel(feature){
+function highlightParcel(feature) {
   selectedFeature = feature;
-
-  if(map.getLayer('highlight')) map.removeLayer('highlight');
-  if(map.getSource('highlight')) map.removeSource('highlight');
-  if(map.getLayer('adjacent')) map.removeLayer('adjacent');
-  if(map.getSource('adjacent')) map.removeSource('adjacent');
-
-  const allFeatures = map.queryRenderedFeatures({layers:[TILESET_LAYER_NAME]});
-  adjacentFeatures = allFeatures.filter(f=>f.properties.n_khas_no!==feature.properties.n_khas_no &&
-    turf.booleanTouches(f, feature)
-  );
-
-  map.addSource('adjacent',{
-    type:'geojson',
-    data:{type:'FeatureCollection', features:adjacentFeatures}
+  
+  // Clean old highlights
+  ['highlight', 'adjacent'].forEach(id => {
+    if (map.getLayer(id)) map.removeLayer(id);
+    if (map.getSource(id)) map.removeSource(id);
   });
+
+  const all = map.queryRenderedFeatures({ layers: ['tileset-fill'] });
+  adjacentFeatures = all.filter(f => f.properties.n_khas_no !== feature.properties.n_khas_no && turf.booleanTouches(f, feature));
+
+  map.addSource('adjacent', { type: 'geojson', data: { type: 'FeatureCollection', features: adjacentFeatures } });
+  map.addLayer({ id: 'adjacent', type: 'fill', source: 'adjacent', paint: { 'fill-color': '#ffd699', 'fill-opacity': 0.6 } });
+
+  map.addSource('highlight', { type: 'geojson', data: feature });
   map.addLayer({
-    id:'adjacent',
-    type:'fill',
-    source:'adjacent',
-    paint:{'fill-color':'#ffd699','fill-opacity':0.5}
+    id: 'highlight', type: 'fill-extrusion', source: 'highlight',
+    paint: { 'fill-extrusion-color': '#ff0000', 'fill-extrusion-height': 3, 'fill-extrusion-opacity': 0.8 }
   });
 
-  map.addSource('highlight',{
-    type:'geojson',
-    data:{type:'Feature', geometry:feature.geometry, properties:feature.properties}
-  });
-  map.addLayer({
-    id:'highlight',
-    type:'fill-extrusion',
-    source:'highlight',
-    paint:{'fill-extrusion-color':'#ff0000','fill-extrusion-height':5,'fill-extrusion-opacity':0.9}
-  });
-
-  const combined = [feature, ...adjacentFeatures];
-  const bbox = turf.bbox({type:'FeatureCollection', features:combined});
-  map.fitBounds(bbox,{padding:100, pitch:65, bearing:-20});
+  const bbox = turf.bbox({ type: 'FeatureCollection', features: [feature, ...adjacentFeatures] });
+  map.fitBounds(bbox, { padding: 80, pitch: 45 });
 }
 
-// PDF
-function generateHash(str){ let hash=0; for(let i=0;i<str.length;i++){ hash=((hash<<5)-hash)+str.charCodeAt(i); hash|=0; return 'LR-'+Math.abs(hash); }
+// RULER LOGIC
+function setupRulerLayers() {
+  map.addSource('ruler', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+  map.addLayer({ id: 'ruler-line', type: 'line', source: 'ruler', paint: { 'line-color': '#f39c12', 'line-width': 3 } });
+  map.addLayer({ id: 'ruler-points', type: 'circle', source: 'ruler', paint: { 'circle-radius': 5, 'circle-color': '#e67e22' } });
+}
 
-function downloadPDF(){
-  if(!selectedFeature){ alert('Select a parcel first!'); return; }
+function toggleRuler() {
+  isRulerActive = !isRulerActive;
+  const btn = document.getElementById('rulerBtn');
+  const box = document.getElementById('measureBox');
+  
+  if (isRulerActive) {
+    btn.innerText = "📏 Ruler: ON (Click Map)";
+    btn.style.background = "#e67e22";
+    box.style.display = "block";
+    map.getCanvas().style.cursor = 'crosshair';
+  } else {
+    btn.innerText = "📏 Distance Ruler: OFF";
+    btn.style.background = "#6c757d";
+    box.style.display = "none";
+    map.getCanvas().style.cursor = '';
+    measurePoints = [];
+    map.getSource('ruler').setData({ type: 'FeatureCollection', features: [] });
+  }
+}
+
+map.on('click', (e) => {
+  if (!isRulerActive) return;
+  const coords = [e.lngLat.lng, e.lngLat.lat];
+  measurePoints.push(coords);
+
+  const geojson = {
+    type: 'FeatureCollection',
+    features: [
+      { type: 'Feature', geometry: { type: 'LineString', coordinates: measurePoints } },
+      ...measurePoints.map(p => ({ type: 'Feature', geometry: { type: 'Point', coordinates: p } }))
+    ]
+  };
+  
+  map.getSource('ruler').setData(geojson);
+
+  if (measurePoints.length > 1) {
+    const line = turf.lineString(measurePoints);
+    const length = turf.length(line, { units: 'meters' });
+    document.getElementById('distanceVal').innerText = length.toFixed(2);
+  }
+});
+
+// PDF EXPORT
+function generateHash(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return 'ADMP-' + Math.abs(hash);
+}
+
+function downloadPDF() {
+  if (!selectedFeature) return alert('Select a parcel first!');
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-
   const p = selectedFeature.properties;
-  const timestamp = new Date().toLocaleString();
-  const certID = generateHash(p.n_khas_no+p.mu_ki+timestamp);
 
-  doc.setFontSize(16); doc.text('OFFICIAL FLOOR MAP CERTIFICATE',105,15,{align:'center'});
-  doc.setFontSize(11);
-  doc.text(`Certificate ID: ${certID}`,105,25,{align:'center'});
-  doc.text(`Issued On: ${timestamp}`,105,32,{align:'center'});
-  doc.text(`Khasra No: ${p.n_khas_no}`,105,39,{align:'center'});
-  doc.text(`Owner: ${p.mu_ki}`,105,46,{align:'center'});
-  doc.text(`Village: ${p.n_v_name}`,105,53,{align:'center'});
-  doc.text(`Area: ${p.kanal} Kanal ${p.marla} Marla`,105,60,{align:'center'});
+  doc.setFontSize(18); doc.text('LAND RECORD CERTIFICATE', 105, 20, { align: 'center' });
+  doc.setFontSize(10); doc.text(`Ref ID: ${generateHash(p.n_khas_no + p.mu_ki)}`, 105, 27, { align: 'center' });
+  
+  doc.setDrawColor(200); doc.line(20, 35, 190, 35);
+  doc.text(`Khasra: ${p.n_khas_no}`, 20, 45);
+  doc.text(`Owner: ${p.mu_ki || 'N/A'}`, 20, 52);
+  doc.text(`Area: ${p.kanal || 0} Kanal, ${p.marla || 0} Marla`, 120, 45);
+  doc.text(`Village: ${p.n_v_name || 'Adampur'}`, 120, 52);
 
-  map.once('render',()=>{
-    const imgData = map.getCanvas().toDataURL('image/png');
-    doc.addImage(imgData,'PNG',10,70,190,120);
-
-    doc.setFontSize(9); doc.setTextColor(0,0,0);
-    adjacentFeatures.forEach(f=>{
-      const center = turf.center(f).geometry.coordinates;
-      const point = map.project(center);
-      const x = 10 + (point.x/map.getCanvas().width)*190;
-      const y = 70 + (point.y/map.getCanvas().height)*120;
-      doc.text(f.properties.n_khas_no,x,y);
-    });
-
-    // North arrow
-    doc.setFillColor(0);
-    doc.triangle(185,80,180,90,190,90,'F');
-    doc.text('N',185,75,{align:'center'});
-
-    // Scale bar
-    doc.line(20,185,60,185);
-    doc.line(20,183,20,187);
-    doc.line(60,183,60,187);
-    doc.text('0 m',20,192);
-    doc.text('50 m',60,192,{align:'right'});
-
-    // Signature
-    doc.text('Digitally Signed by Land Records Authority',105,205,{align:'center'});
-
-    doc.save(`Parcel_${p.n_khas_no}_FloorMap.pdf`);
-  });
+  const imgData = map.getCanvas().toDataURL('image/png');
+  doc.addImage(imgData, 'PNG', 15, 65, 180, 110);
+  
+  doc.setFontSize(8);
+  doc.text('This map is a digital representation of land records and is for verification purposes only.', 105, 185, { align: 'center' });
+  doc.save(`Map_${p.n_khas_no}.pdf`);
 }
 </script>
 </body>
