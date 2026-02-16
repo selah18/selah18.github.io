@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Adampur Public Land Portal</title>
+<title>Adampur Land Portal (Offline JSON)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
@@ -13,7 +13,7 @@
 body { margin:0; font-family:Arial,sans-serif; }
 #map { position:absolute; top:0; bottom:0; width:100%; }
 #panel { position:absolute; top:10px; left:10px; z-index:3; background:white; padding:15px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.25); width:300px; max-width:95%; }
-input{ width:100%; padding:8px; margin-bottom:6px; font-size:14px; }
+input, select{ width:100%; padding:8px; margin-bottom:6px; font-size:14px; }
 button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px; }
 #suggestions{ max-height:150px; overflow-y:auto; border:1px solid #ddd; margin-bottom:6px; }
 .suggestion{ padding:6px; cursor:pointer; }
@@ -24,7 +24,11 @@ button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px;
 <body>
 <div id="panel">
   <h3>Adampur Land Portal</h3>
-  <input type="text" id="searchInput" placeholder="Search Khasra or Owner">
+  <select id="searchType">
+    <option value="N_KHAS_NO">Search by Khasra</option>
+    <option value="MU_KI">Search by Owner</option>
+  </select>
+  <input type="text" id="searchInput" placeholder="Search...">
   <div id="suggestions"></div>
   <button onclick="downloadPDF()">Download Parcel Certificate</button>
   <button onclick="toggleSatellite()">Toggle Satellite</button>
@@ -34,10 +38,7 @@ button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px;
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
-const tilesetId = 'selahadinosma.46aakx24';
-const sourceLayer = 'adampur_parcels_wgs84-5tkgpu';
-
-const map = new mapboxgl.Map({
+let map = new mapboxgl.Map({
   container:'map',
   style:'mapbox://styles/mapbox/light-v11',
   center:[75.72,29.40],
@@ -47,104 +48,118 @@ const map = new mapboxgl.Map({
   antialias:true
 });
 
-let satellite = false;
-let selectedFeature = null;
 let parcelData = [];
+let selectedFeature = null;
+let satellite = false;
 
-// Toggle Satellite
-function toggleSatellite(){
-  satellite = !satellite;
-  map.setStyle(satellite?'mapbox://styles/mapbox/satellite-streets-v12':'mapbox://styles/mapbox/light-v11');
-  map.on('style.load', addLayers);
-}
-
-// Add vector layers
-function addLayers(){
-  map.addSource('parcels',{ type:'vector', url:`mapbox://${tilesetId}` });
-  map.addLayer({id:'parcel-fill', type:'fill', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-color':'#a6cee3','fill-opacity':0.6}});
-  map.addLayer({id:'parcel-outline', type:'line', source:'parcels', 'source-layer':sourceLayer, paint:{'line-color':'#000','line-width':1}});
-  map.addLayer({id:'parcel-3d', type:'fill-extrusion', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-extrusion-color':'#1f78b4','fill-extrusion-height':['*',['get','kanal'],6],'fill-extrusion-opacity':0.8}});
-  map.addLayer({id:'parcel-highlight', type:'fill-extrusion', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-extrusion-color':'#ff0000','fill-extrusion-height':['*',['get','kanal'],8],'fill-extrusion-opacity':0.9}, filter:['==',['get','n_khas_no'],'']});
-}
-
-map.on('load', addLayers);
-
-// Load parcels for search
+// Load JSON directly
 fetch('query.json')
   .then(res => res.json())
   .then(data => {
-    parcelData = data.features.map(f => f.attributes);
+    // Convert to GeoJSON and project coordinates to lon/lat
+    const geojson = {
+      type: "FeatureCollection",
+      features: data.features.map(f=>{
+        return {
+          type:"Feature",
+          properties:f.attributes,
+          geometry:{
+            type:"Polygon",
+            coordinates: f.geometry.rings.map(r=>r.map(pt=>{
+              const lon = (pt[0]/6378137)*180/Math.PI;
+              const lat = (2*Math.atan(Math.exp(pt[1]/6378137))-Math.PI/2)*180/Math.PI;
+              return [lon, lat];
+            }))
+          }
+        }
+      })
+    };
+    parcelData = geojson.features;
+    map.on('load', ()=>addLayers(geojson));
   });
 
-// --- Search + autocomplete ---
+// Add layers
+function addLayers(geojson){
+  map.addSource('parcels', { type:'geojson', data:geojson });
+  map.addLayer({id:'parcel-fill', type:'fill', source:'parcels', paint:{'fill-color':'#a6cee3','fill-opacity':0.6}});
+  map.addLayer({id:'parcel-outline', type:'line', source:'parcels', paint:{'line-color':'#000','line-width':1}});
+  map.addLayer({id:'parcel-3d', type:'fill-extrusion', source:'parcels', paint:{
+    'fill-extrusion-color':'#1f78b4',
+    'fill-extrusion-height':['*',['get','Kanal'],6],
+    'fill-extrusion-opacity':0.8
+  }});
+  map.addLayer({id:'parcel-highlight', type:'fill-extrusion', source:'parcels', paint:{
+    'fill-extrusion-color':'#ff0000',
+    'fill-extrusion-height':['*',['get','Kanal'],8],
+    'fill-extrusion-opacity':0.9
+  }, filter:['==',['get','N_KHAS_NO'],'']});
+}
+
+// Satellite toggle
+function toggleSatellite(){
+  satellite = !satellite;
+  map.setStyle(satellite?'mapbox://styles/mapbox/satellite-streets-v12':'mapbox://styles/mapbox/light-v11');
+  map.on('style.load', ()=>addLayers({type:"FeatureCollection", features:parcelData}));
+}
+
+// Search autocomplete
 const searchInput = document.getElementById("searchInput");
+const searchType = document.getElementById("searchType");
 const suggestionsDiv = document.getElementById("suggestions");
 
 searchInput.addEventListener("input", ()=>{
   const query = searchInput.value.toLowerCase();
   suggestionsDiv.innerHTML = "";
   if(!query) return;
+  const type = searchType.value;
 
-  const matches = parcelData.filter(p=>{
-    return (p.n_khas_no && p.n_khas_no.toLowerCase().includes(query)) ||
-           (p.mu_ki && p.mu_ki.toLowerCase().includes(query));
+  const matches = parcelData.filter(f=>{
+    const p = f.properties;
+    return p[type] && p[type].toLowerCase().includes(query);
   }).slice(0,10);
 
   matches.forEach(p=>{
     const div = document.createElement("div");
     div.className="suggestion";
-    div.innerText = `${p.n_khas_no} — ${p.mu_ki}`;
+    div.innerText = `${p.properties.N_KHAS_NO} — ${p.properties.MU_KI}`;
     div.onclick = ()=>selectParcel(p);
     suggestionsDiv.appendChild(div);
   });
 });
 
-function selectParcel(p){
-  suggestionsDiv.innerHTML = "";
-  searchInput.value = p.n_khas_no;
-
-  // Find feature in Mapbox tiles
-  const feature = map.querySourceFeatures('parcels',{sourceLayer:sourceLayer})
-                     .find(f => f.properties.n_khas_no === p.n_khas_no);
-
-  if(feature){
-    selectedFeature = feature;
-    map.setFilter('parcel-highlight', ['==',['get','n_khas_no'], p.n_khas_no]);
-    const bbox = turf.bbox(feature);
-    map.fitBounds(bbox, {padding:100});
-  } else {
-    alert("Parcel not loaded in view yet. Zoom to area to load tiles.");
-  }
+function selectParcel(f){
+  searchInput.value = f.properties.N_KHAS_NO;
+  selectedFeature = f;
+  map.setFilter('parcel-highlight',['==',['get','N_KHAS_NO'], f.properties.N_KHAS_NO]);
+  const bbox = turf.bbox(f);
+  map.fitBounds(bbox, {padding:100});
 }
 
-// --- PDF download ---
-function generateHash(str){
-  let hash=0; for(let i=0;i<str.length;i++){hash=((hash<<5)-hash)+str.charCodeAt(i);hash|=0;} return "LR-"+Math.abs(hash);
-}
+// PDF download
+function generateHash(str){ let hash=0; for(let i=0;i<str.length;i++){hash=((hash<<5)-hash)+str.charCodeAt(i);hash|=0;} return "LR-"+Math.abs(hash); }
 
-async function downloadPDF(){
+function downloadPDF(){
   if(!selectedFeature) return alert("Select a parcel first!");
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-
   const props = selectedFeature.properties;
   const timestamp = new Date().toLocaleString();
-  const certID = generateHash(props.n_khas_no + props.mu_ki + timestamp);
+  const certID = generateHash(props.N_KHAS_NO + props.MU_KI + timestamp);
 
   doc.setFontSize(18); doc.text("OFFICIAL LAND PARCEL CERTIFICATE",20,20);
   doc.setFontSize(12);
   doc.text(`Certificate ID: ${certID}`,20,32);
   doc.text(`Issued On: ${timestamp}`,20,40);
-  doc.text(`Khasra No: ${props.n_khas_no}`,20,52);
-  doc.text(`Owner: ${props.mu_ki}`,20,60);
-  doc.text(`Kanal: ${props.kanal}`,20,68);
-  doc.text(`Marla: ${props.marla}`,20,76);
-  doc.text(`Village: ${props.n_v_name}`,20,84);
+  doc.text(`Khasra No: ${props.N_KHAS_NO}`,20,52);
+  doc.text(`Owner: ${props.MU_KI}`,20,60);
+  doc.text(`Kanal: ${props.Kanal}`,20,68);
+  doc.text(`Marla: ${props.Marla}`,20,76);
+  doc.text(`Village: ${props.N_V_NAME}`,20,84);
 
   const imgData = map.getCanvas().toDataURL("image/png");
   doc.addImage(imgData,'PNG',20,100,170,90);
   doc.text("Digitally Signed by Land Records Authority",20,200);
-  doc.save(`Parcel_${props.n_khas_no}_Certificate.pdf`);
+  doc.save(`Parcel_${props.N_KHAS_NO}_Certificate.pdf`);
 }
 </script>
 </body>
