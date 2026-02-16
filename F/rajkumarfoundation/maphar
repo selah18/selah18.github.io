@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Adampur Parcel 3D Floor Plan</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+
+<style>
+body { margin:0; padding:0; font-family:Arial; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+
+#searchBox {
+  position:absolute;
+  top:20px;
+  left:20px;
+  z-index:1;
+  background:white;
+  padding:12px;
+  border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+input {
+  padding:6px;
+  width:200px;
+}
+button {
+  padding:6px 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="searchBox">
+  <input type="text" id="searchInput" placeholder="Search Khasra No">
+  <button onclick="searchParcel()">Search</button>
+</div>
+
+<div id="map"></div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v11',
+  center: [75.72, 29.40],
+  zoom: 15,
+  pitch: 60,
+  bearing: -20,
+  antialias: true
+});
+
+map.on('load', () => {
+
+  map.addSource('parcels', {
+    type: 'vector',
+    url: 'mapbox://selahadinosma.46aakx24'
+  });
+
+  // IMPORTANT: Replace 'layer_name_here'
+  // with your actual source-layer name from Tileset page
+  const layerName = 'adampur_parcels_wgs84'; 
+
+  // 2D Floor Fill
+  map.addLayer({
+    id: 'parcel-fill',
+    type: 'fill',
+    source: 'parcels',
+    'source-layer': layerName,
+    paint: {
+      'fill-color': '#e6f2ff',
+      'fill-opacity': 0.8
+    }
+  });
+
+  // Outline
+  map.addLayer({
+    id: 'parcel-outline',
+    type: 'line',
+    source: 'parcels',
+    'source-layer': layerName,
+    paint: {
+      'line-color': '#000000',
+      'line-width': 1
+    }
+  });
+
+  // 3D Extrusion
+  map.addLayer({
+    id: 'parcel-3d',
+    type: 'fill-extrusion',
+    source: 'parcels',
+    'source-layer': layerName,
+    paint: {
+      'fill-extrusion-color': '#4da6ff',
+      'fill-extrusion-height': ['*', ['get', 'kanal'], 6],
+      'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.75
+    }
+  });
+
+  // Click popup
+  map.on('click', 'parcel-fill', (e) => {
+    const props = e.features[0].properties;
+
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(`
+        <b>Khasra:</b> ${props.n_khas_no}<br>
+        <b>Kanal:</b> ${props.kanal}<br>
+        <b>Marla:</b> ${props.marla}<br>
+        <b>Village:</b> ${props.n_v_name}
+      `)
+      .addTo(map);
+  });
+
+});
+
+function searchParcel() {
+  const value = document.getElementById("searchInput").value;
+
+  map.setFilter('parcel-fill', ['==', ['get', 'n_khas_no'], value]);
+  map.setFilter('parcel-outline', ['==', ['get', 'n_khas_no'], value]);
+  map.setFilter('parcel-3d', ['==', ['get', 'n_khas_no'], value]);
+
+  setTimeout(() => {
+    map.setFilter('parcel-fill', null);
+    map.setFilter('parcel-outline', null);
+    map.setFilter('parcel-3d', null);
+  }, 6000);
+}
+
+</script>
+
+</body>
+</html>
