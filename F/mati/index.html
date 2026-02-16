@@ -50,7 +50,7 @@ button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px;
 <div id="map"></div>
 
 <script>
-mapboxgl.accessToken='pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg'; // Replace with your token
+mapboxgl.accessToken='pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg'; // Replace with your Mapbox token
 let map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v11',
@@ -63,8 +63,8 @@ let map = new mapboxgl.Map({
 
 const TILESET_LAYER_NAME = 'adampur_parcels_wgs8-5tkgpu';
 let selectedFeature = null;
-let satellite = false;
 let adjacentFeatures = [];
+let satellite = false;
 
 map.on('load', () => addTilesetLayers());
 
@@ -109,7 +109,7 @@ function toggleSatellite(){
   });
 }
 
-// Search
+// Search using rendered features
 const searchInput = document.getElementById('searchInput');
 const searchType = document.getElementById('searchType');
 const suggestionsDiv = document.getElementById('suggestions');
@@ -119,11 +119,10 @@ searchInput.addEventListener('input', () => {
   suggestionsDiv.innerHTML = '';
   if(!q) return;
 
-  const features = map.querySourceFeatures('tileset',{
-    sourceLayer:TILESET_LAYER_NAME
-  }).filter(f => f.properties[searchType.value] &&
+  const features = map.queryRenderedFeatures({layers:[TILESET_LAYER_NAME]})
+    .filter(f => f.properties[searchType.value] &&
       f.properties[searchType.value].toString().toLowerCase().includes(q)
-  ).slice(0,10);
+    ).slice(0,10);
 
   features.forEach(f => {
     const div = document.createElement('div');
@@ -149,7 +148,7 @@ function highlightParcel(feature){
   if(map.getSource('adjacent')) map.removeSource('adjacent');
 
   // Adjacent parcels using Turf.js
-  const allFeatures = map.querySourceFeatures('tileset',{sourceLayer:TILESET_LAYER_NAME});
+  const allFeatures = map.queryRenderedFeatures({layers:[TILESET_LAYER_NAME]});
   adjacentFeatures = allFeatures.filter(f => f.properties.n_khas_no !== feature.properties.n_khas_no &&
     turf.booleanTouches(f, feature)
   );
@@ -210,7 +209,6 @@ function downloadPDF(){
     // Overlay labels for adjacent parcels
     doc.setFontSize(9); doc.setTextColor(0,0,0);
     adjacentFeatures.forEach(f=>{
-      const coords = f.geometry.coordinates[0];
       const center = turf.center(f).geometry.coordinates;
       const point = map.project(center);
       const x = 10 + (point.x / map.getCanvas().width)*190;
