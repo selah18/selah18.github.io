@@ -23,7 +23,6 @@ button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px;
 </head>
 
 <body>
-
 <div id="panel">
 <h3>Adampur Land Portal</h3>
 <select id="searchType">
@@ -52,13 +51,13 @@ button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px;
 <script>
 mapboxgl.accessToken='pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg'; // Replace with your Mapbox token
 let map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/light-v11',
-  center: [75.72,29.40],
-  zoom: 15,
-  pitch: 65,
-  bearing: -20,
-  antialias: true
+  container:'map',
+  style:'mapbox://styles/mapbox/light-v11',
+  center:[75.5045,29.2616],
+  zoom:18,
+  pitch:65,
+  bearing:-20,
+  antialias:true
 });
 
 const TILESET_LAYER_NAME = 'adampur_parcels_wgs8-5tkgpu';
@@ -71,11 +70,12 @@ map.on('load', () => addTilesetLayers());
 function addTilesetLayers(){
   if(map.getSource('tileset')) return;
 
-  map.addSource('tileset', {
-    type: 'vector',
-    url: 'mapbox://selahadinosma.46aakx24'
+  map.addSource('tileset',{
+    type:'vector',
+    url:'mapbox://selahadinosma.46aakx24'
   });
 
+  // Fill
   map.addLayer({
     id:'tileset-fill',
     type:'fill',
@@ -83,6 +83,7 @@ function addTilesetLayers(){
     'source-layer': TILESET_LAYER_NAME,
     paint:{'fill-color':'#1f78b4','fill-opacity':0.4}
   });
+  // Outline
   map.addLayer({
     id:'tileset-outline',
     type:'line',
@@ -90,6 +91,7 @@ function addTilesetLayers(){
     'source-layer': TILESET_LAYER_NAME,
     paint:{'line-color':'#666','line-width':1}
   });
+  // Labels
   map.addLayer({
     id:'tileset-labels',
     type:'symbol',
@@ -103,53 +105,50 @@ function addTilesetLayers(){
 function toggleSatellite(){
   satellite = !satellite;
   map.setStyle(satellite?'mapbox://styles/mapbox/satellite-streets-v12':'mapbox://styles/mapbox/light-v11');
-  map.once('style.load', () => {
+  map.once('style.load',()=>{
     addTilesetLayers();
     if(selectedFeature) highlightParcel(selectedFeature);
   });
 }
 
-// Search using rendered features
+// SEARCH
 const searchInput = document.getElementById('searchInput');
 const searchType = document.getElementById('searchType');
 const suggestionsDiv = document.getElementById('suggestions');
 
-searchInput.addEventListener('input', () => {
+searchInput.addEventListener('input',()=>{
   const q = searchInput.value.toLowerCase();
-  suggestionsDiv.innerHTML = '';
+  suggestionsDiv.innerHTML='';
   if(!q) return;
 
   const features = map.queryRenderedFeatures({layers:[TILESET_LAYER_NAME]})
-    .filter(f => f.properties[searchType.value] &&
-      f.properties[searchType.value].toString().toLowerCase().includes(q)
-    ).slice(0,10);
+    .filter(f=>f.properties[searchType.value] && f.properties[searchType.value].toString().toLowerCase().includes(q))
+    .slice(0,10);
 
-  features.forEach(f => {
+  features.forEach(f=>{
     const div = document.createElement('div');
     div.className='suggestion';
-    div.innerText = `${f.properties.n_khas_no} — ${f.properties.mu_ki}`;
-    div.onclick = () => {
+    div.innerText=`${f.properties.n_khas_no} — ${f.properties.mu_ki}`;
+    div.onclick=()=>{
       suggestionsDiv.innerHTML='';
-      searchInput.value = f.properties.n_khas_no;
+      searchInput.value=f.properties.n_khas_no;
       highlightParcel(f);
     };
     suggestionsDiv.appendChild(div);
   });
 });
 
-// Highlight selected parcel and adjacent
+// Highlight parcel + adjacent
 function highlightParcel(feature){
   selectedFeature = feature;
 
-  // Remove old layers
   if(map.getLayer('highlight')) map.removeLayer('highlight');
   if(map.getSource('highlight')) map.removeSource('highlight');
   if(map.getLayer('adjacent')) map.removeLayer('adjacent');
   if(map.getSource('adjacent')) map.removeSource('adjacent');
 
-  // Adjacent parcels using Turf.js
   const allFeatures = map.queryRenderedFeatures({layers:[TILESET_LAYER_NAME]});
-  adjacentFeatures = allFeatures.filter(f => f.properties.n_khas_no !== feature.properties.n_khas_no &&
+  adjacentFeatures = allFeatures.filter(f=>f.properties.n_khas_no!==feature.properties.n_khas_no &&
     turf.booleanTouches(f, feature)
   );
 
@@ -175,14 +174,13 @@ function highlightParcel(feature){
     paint:{'fill-extrusion-color':'#ff0000','fill-extrusion-height':5,'fill-extrusion-opacity':0.9}
   });
 
-  // Zoom to parcel + adjacent
   const combined = [feature, ...adjacentFeatures];
   const bbox = turf.bbox({type:'FeatureCollection', features:combined});
-  map.fitBounds(bbox, {padding:100, pitch:65, bearing:-20});
+  map.fitBounds(bbox,{padding:100, pitch:65, bearing:-20});
 }
 
 // PDF
-function generateHash(str){ let hash=0; for(let i=0;i<str.length;i++){ hash=((hash<<5)-hash)+str.charCodeAt(i); hash|=0; return 'LR-'+Math.abs(hash); }}
+function generateHash(str){ let hash=0; for(let i=0;i<str.length;i++){ hash=((hash<<5)-hash)+str.charCodeAt(i); hash|=0; return 'LR-'+Math.abs(hash); }
 
 function downloadPDF(){
   if(!selectedFeature){ alert('Select a parcel first!'); return; }
@@ -206,14 +204,13 @@ function downloadPDF(){
     const imgData = map.getCanvas().toDataURL('image/png');
     doc.addImage(imgData,'PNG',10,70,190,120);
 
-    // Overlay labels for adjacent parcels
     doc.setFontSize(9); doc.setTextColor(0,0,0);
     adjacentFeatures.forEach(f=>{
       const center = turf.center(f).geometry.coordinates;
       const point = map.project(center);
-      const x = 10 + (point.x / map.getCanvas().width)*190;
-      const y = 70 + (point.y / map.getCanvas().height)*120;
-      doc.text(f.properties.n_khas_no, x, y);
+      const x = 10 + (point.x/map.getCanvas().width)*190;
+      const y = 70 + (point.y/map.getCanvas().height)*120;
+      doc.text(f.properties.n_khas_no,x,y);
     });
 
     // North arrow
