@@ -2,112 +2,57 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Adampur Official Floor Map Portal</title>
+<title>Adampur Floor Map Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
-
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 body { margin:0; font-family:Arial,sans-serif; }
 #map { position:absolute; top:0; bottom:0; width:100%; }
-
-#panel {
-  position:absolute;
-  top:10px;
-  left:10px;
-  z-index:3;
-  background:white;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.25);
-  width:320px;
-  max-width:95%;
-}
-
-input, select {
-  width:100%;
-  padding:8px;
-  margin-bottom:6px;
-  font-size:14px;
-}
-
-button {
-  width:100%;
-  padding:8px;
-  margin-top:6px;
-  cursor:pointer;
-  font-size:14px;
-}
-
-#suggestions {
-  max-height:150px;
-  overflow-y:auto;
-  border:1px solid #ddd;
-  margin-bottom:6px;
-}
-
-.suggestion {
-  padding:6px;
-  cursor:pointer;
-}
-
-.suggestion:hover {
-  background:#f0f0f0;
-}
-
-#panel h4 {
-  margin-top:10px;
-  margin-bottom:6px;
-  font-size:14px;
-}
+#panel { position:absolute; top:10px; left:10px; z-index:3; background:white; padding:15px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.25); width:320px; max-width:95%; }
+input, select{ width:100%; padding:8px; margin-bottom:6px; font-size:14px; }
+button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px; }
+#suggestions{ max-height:150px; overflow-y:auto; border:1px solid #ddd; margin-bottom:6px; }
+.suggestion{ padding:6px; cursor:pointer; }
+.suggestion:hover{ background:#f0f0f0; }
+#panel h4{ margin-top:10px; margin-bottom:6px; font-size:14px; }
 </style>
 </head>
 
 <body>
 
 <div id="panel">
-  <h3>Adampur Land Portal</h3>
+<h3>Adampur Land Portal</h3>
+<select id="searchType">
+  <option value="n_khas_no">Search by Khasra</option>
+  <option value="mu_ki">Search by Owner</option>
+</select>
+<input type="text" id="searchInput" placeholder="Search...">
+<div id="suggestions"></div>
+<button onclick="downloadPDF()">Download Parcel Certificate</button>
+<button onclick="toggleSatellite()">Toggle Satellite</button>
 
-  <select id="searchType">
-    <option value="n_khas_no">Search by Khasra</option>
-    <option value="mu_ki">Search by Owner</option>
-  </select>
-
-  <input type="text" id="searchInput" placeholder="Search...">
-  <div id="suggestions"></div>
-
-  <button onclick="downloadPDF()">Download Parcel Certificate</button>
-  <button onclick="toggleSatellite()">Toggle Satellite</button>
-
-  <h4>Legend</h4>
-
-  <div style="display:flex; align-items:center; margin-bottom:4px;">
-    <div style="width:20px;height:20px;background:#ff0000;margin-right:6px;"></div>
-    Selected Parcel
-  </div>
-
-  <div style="display:flex; align-items:center; margin-bottom:4px;">
-    <div style="width:20px;height:20px;background:#ffd699;margin-right:6px;"></div>
-    Adjacent Parcel
-  </div>
-
-  <div style="display:flex; align-items:center; margin-bottom:4px;">
-    <div style="width:20px;height:20px;background:#1f78b4;margin-right:6px;"></div>
-    Other Parcels
-  </div>
+<h4>Legend</h4>
+<div style="display:flex; align-items:center; margin-bottom:4px;">
+  <div style="width:20px;height:20px;background:#ff0000;margin-right:6px;"></div>Selected Parcel
+</div>
+<div style="display:flex; align-items:center; margin-bottom:4px;">
+  <div style="width:20px;height:20px;background:#ffd699;margin-right:6px;"></div>Adjacent Parcel
+</div>
+<div style="display:flex; align-items:center; margin-bottom:4px;">
+  <div style="width:20px;height:20px;background:#1f78b4;margin-right:6px;"></div>Other Parcels
+</div>
 </div>
 
 <div id="map"></div>
 
 <script>
+mapboxgl.accessToken='pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg'; // Replace with your Mapbox token
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
-
-let map = new mapboxgl.Map({
+let map=new mapboxgl.Map({
   container:'map',
   style:'mapbox://styles/mapbox/light-v11',
   center:[75.72,29.40],
@@ -121,12 +66,15 @@ let satellite=false;
 let parcelData=[];
 let selectedFeature=null;
 
-map.on('load', () => {
-  loadTileset();
+// Actual tileset layer name
+const TILESET_LAYER_NAME='adampur_parcels_wgs8-5tkgpu';
+
+map.on('load',()=>{
+  addTilesetLayer();
   loadQueryJSON();
 });
 
-function loadTileset(){
+function addTilesetLayer(){
   if(map.getSource('tileset')) return;
 
   map.addSource('tileset',{
@@ -134,25 +82,36 @@ function loadTileset(){
     url:'mapbox://selahadinosma.46aakx24'
   });
 
+  // Fill layer
   map.addLayer({
     id:'tileset-fill',
     type:'fill',
     source:'tileset',
-    'source-layer':'parcels',
-    paint:{
-      'fill-color':'#cccccc',
-      'fill-opacity':0.4
-    }
+    'source-layer':TILESET_LAYER_NAME,
+    paint:{'fill-color':'#cccccc','fill-opacity':0.4}
   });
 
+  // Outline layer
   map.addLayer({
     id:'tileset-outline',
     type:'line',
     source:'tileset',
-    'source-layer':'parcels',
+    'source-layer':TILESET_LAYER_NAME,
+    paint:{'line-color':'#666','line-width':1}
+  });
+
+  // Labels for each parcel
+  map.addLayer({
+    id:'tileset-labels',
+    type:'symbol',
+    source:'tileset',
+    'source-layer':TILESET_LAYER_NAME,
+    layout:{
+      'text-field':['get','n_khas_no'],
+      'text-size':12
+    },
     paint:{
-      'line-color':'#666',
-      'line-width':1
+      'text-color':'#000'
     }
   });
 }
@@ -163,13 +122,12 @@ function loadQueryJSON(){
   .then(data=>{
     parcelData=data.features.map(f=>{
       return {
-        type:"Feature",
+        type:'Feature',
         properties:Object.fromEntries(
-          Object.entries(f.attributes)
-          .map(([k,v])=>[k.toLowerCase(),v])
+          Object.entries(f.attributes).map(([k,v])=>[k.toLowerCase(),v])
         ),
         geometry:{
-          type:"Polygon",
+          type:'Polygon',
           coordinates:f.geometry.rings.map(r=>
             r.map(pt=>{
               const lon=(pt[0]/6378137)*180/Math.PI;
@@ -181,14 +139,17 @@ function loadQueryJSON(){
       };
     });
 
+    if(map.getSource('geo-parcels')) map.removeLayer('parcel-3d');
+    if(map.getSource('geo-parcels')) map.removeLayer('parcel-highlight');
+    if(map.getSource('geo-parcels')) map.removeLayer('parcel-adjacent');
+    if(map.getSource('geo-parcels')) map.removeSource('geo-parcels');
+
     map.addSource('geo-parcels',{
       type:'geojson',
-      data:{
-        type:'FeatureCollection',
-        features:parcelData
-      }
+      data:{type:'FeatureCollection',features:parcelData}
     });
 
+    // 3D parcels
     map.addLayer({
       id:'parcel-3d',
       type:'fill-extrusion',
@@ -200,6 +161,7 @@ function loadQueryJSON(){
       }
     });
 
+    // Highlighted parcel
     map.addLayer({
       id:'parcel-highlight',
       type:'fill-extrusion',
@@ -212,58 +174,56 @@ function loadQueryJSON(){
       filter:['==',['get','n_khas_no'],'']
     });
 
+    // Adjacent parcels
     map.addLayer({
       id:'parcel-adjacent',
       type:'fill',
       source:'geo-parcels',
-      paint:{
-        'fill-color':'#ffd699',
-        'fill-opacity':0.4
-      },
+      paint:{'fill-color':'#ffd699','fill-opacity':0.4},
       filter:['==',['get','n_khas_no'],'']
+    });
+
+    // Labels on parcels (GeoJSON)
+    map.addLayer({
+      id:'parcel-labels',
+      type:'symbol',
+      source:'geo-parcels',
+      layout:{
+        'text-field':['get','n_khas_no'],
+        'text-size':12
+      },
+      paint:{'text-color':'#000'}
     });
   });
 }
 
 function toggleSatellite(){
   satellite=!satellite;
-  map.setStyle(
-    satellite
-    ? 'mapbox://styles/mapbox/satellite-streets-v12'
-    : 'mapbox://styles/mapbox/light-v11'
-  );
+  map.setStyle(satellite?'mapbox://styles/mapbox/satellite-streets-v12':'mapbox://styles/mapbox/light-v11');
   map.once('style.load',()=>{
-    loadTileset();
+    addTilesetLayer();
     loadQueryJSON();
+    if(selectedFeature) selectParcel(selectedFeature);
   });
 }
 
-const searchInput=document.getElementById("searchInput");
-const searchType=document.getElementById("searchType");
-const suggestionsDiv=document.getElementById("suggestions");
+const searchInput=document.getElementById('searchInput');
+const searchType=document.getElementById('searchType');
+const suggestionsDiv=document.getElementById('suggestions');
 
-searchInput.addEventListener("input",()=>{
+searchInput.addEventListener('input',()=>{
   const q=searchInput.value.toLowerCase();
-  suggestionsDiv.innerHTML="";
+  suggestionsDiv.innerHTML='';
   if(!q) return;
-
-  const matches=parcelData.filter(f=>
-    f.properties[searchType.value] &&
-    f.properties[searchType.value]
-      .toString()
-      .toLowerCase()
-      .includes(q)
+  const matches=parcelData.filter(f=>f.properties[searchType.value] &&
+    f.properties[searchType.value].toString().toLowerCase().includes(q)
   ).slice(0,10);
 
   matches.forEach(f=>{
-    const div=document.createElement("div");
-    div.className="suggestion";
-    div.innerText=
-      `${f.properties.n_khas_no} — ${f.properties.mu_ki}`;
-    div.onclick=()=>{
-      suggestionsDiv.innerHTML="";
-      selectParcel(f);
-    };
+    const div=document.createElement('div');
+    div.className='suggestion';
+    div.innerText=`${f.properties.n_khas_no} — ${f.properties.mu_ki}`;
+    div.onclick=()=>{ suggestionsDiv.innerHTML=''; selectParcel(f); };
     suggestionsDiv.appendChild(div);
   });
 });
@@ -271,61 +231,34 @@ searchInput.addEventListener("input",()=>{
 function selectParcel(feature){
   selectedFeature=feature;
 
-  map.setFilter(
-    'parcel-highlight',
-    ['==',['get','n_khas_no'],feature.properties.n_khas_no]
-  );
+  map.setFilter('parcel-highlight',['==',['get','n_khas_no'],feature.properties.n_khas_no]);
 
   const adjacentIDs=parcelData.filter(p=>{
-    if(p.properties.n_khas_no===feature.properties.n_khas_no)
-      return false;
+    if(p.properties.n_khas_no===feature.properties.n_khas_no) return false;
     return turf.booleanTouches(p,feature);
   }).map(p=>p.properties.n_khas_no);
 
-  map.setFilter(
-    'parcel-adjacent',
-    ['in',['get','n_khas_no'],['literal',adjacentIDs]]
-  );
+  map.setFilter('parcel-adjacent',['in',['get','n_khas_no'],['literal',adjacentIDs]]);
 
   const bbox=turf.bbox(feature);
-  map.fitBounds(bbox,{
-    padding:100,
-    pitch:70,
-    bearing:-25
-  });
+  map.fitBounds(bbox,{padding:100,pitch:70,bearing:-25});
 }
 
 function generateHash(str){
-  let hash=0;
-  for(let i=0;i<str.length;i++){
-    hash=((hash<<5)-hash)+str.charCodeAt(i);
-    hash|=0;
-  }
-  return "LR-"+Math.abs(hash);
+  let hash=0; for(let i=0;i<str.length;i++){hash=((hash<<5)-hash)+str.charCodeAt(i);hash|=0;}
+  return 'LR-'+Math.abs(hash);
 }
 
 function downloadPDF(){
-
-  if(!selectedFeature){
-    alert("Select a parcel first!");
-    return;
-  }
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+  if(!selectedFeature){ alert('Select a parcel first!'); return; }
+  const { jsPDF }=window.jspdf;
+  const doc=new jsPDF();
 
   const p=selectedFeature.properties;
   const timestamp=new Date().toLocaleString();
-  const certID=generateHash(
-    p.n_khas_no+p.mu_ki+timestamp
-  );
+  const certID=generateHash(p.n_khas_no+p.mu_ki+timestamp);
 
-  doc.setFontSize(16);
-  doc.text(
-    "OFFICIAL LAND PARCEL CERTIFICATE",
-    105,15,{align:'center'}
-  );
-
+  doc.setFontSize(16); doc.text('OFFICIAL LAND PARCEL CERTIFICATE',105,15,{align:'center'});
   doc.setFontSize(11);
   doc.text(`Certificate ID: ${certID}`,105,25,{align:'center'});
   doc.text(`Issued On: ${timestamp}`,105,32,{align:'center'});
@@ -334,34 +267,26 @@ function downloadPDF(){
   doc.text(`Village: ${p.n_v_name}`,105,53,{align:'center'});
   doc.text(`Area: ${p.kanal} Kanal ${p.marla} Marla`,105,60,{align:'center'});
 
-  const canvas=map.getCanvas();
-  const imgData=canvas.toDataURL("image/png");
-
+  const imgData=map.getCanvas().toDataURL('image/png');
   doc.addImage(imgData,'PNG',10,70,190,120);
 
   // North Arrow
   doc.setFillColor(0);
   doc.triangle(185,80,180,90,190,90,'F');
-  doc.text("N",185,75,{align:'center'});
+  doc.text('N',185,75,{align:'center'});
 
   // Scale Bar
   doc.line(20,185,60,185);
   doc.line(20,183,20,187);
   doc.line(60,183,60,187);
-  doc.text("0 m",20,192);
-  doc.text("50 m",60,192,{align:'right'});
+  doc.text('0 m',20,192);
+  doc.text('50 m',60,192,{align:'right'});
 
   // Signature
-  doc.text(
-    "Digitally Signed by Land Records Authority",
-    105,205,{align:'center'}
-  );
+  doc.text('Digitally Signed by Land Records Authority',105,205,{align:'center'});
 
-  doc.save(
-    `Parcel_${p.n_khas_no}_Certificate.pdf`
-  );
+  doc.save(`Parcel_${p.n_khas_no}_Certificate.pdf`);
 }
-
 </script>
 
 </body>
