@@ -34,6 +34,9 @@ button{ width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px;
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
+const tilesetId = 'selahadinosma.46aakx24';
+const sourceLayer = 'adampur_parcels_wgs84-5tkgpu';
+
 const map = new mapboxgl.Map({
   container:'map',
   style:'mapbox://styles/mapbox/light-v11',
@@ -44,11 +47,9 @@ const map = new mapboxgl.Map({
   antialias:true
 });
 
-const tilesetId = 'selahadinosma.46aakx24';
-const sourceLayer = 'adampur_parcels_wgs84-5tkgpu';
-
-let selectedFeature = null;
 let satellite = false;
+let selectedFeature = null;
+let parcelData = [];
 
 // Toggle Satellite
 function toggleSatellite(){
@@ -62,53 +63,61 @@ function addLayers(){
   map.addSource('parcels',{ type:'vector', url:`mapbox://${tilesetId}` });
   map.addLayer({id:'parcel-fill', type:'fill', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-color':'#a6cee3','fill-opacity':0.6}});
   map.addLayer({id:'parcel-outline', type:'line', source:'parcels', 'source-layer':sourceLayer, paint:{'line-color':'#000','line-width':1}});
-  map.addLayer({id:'parcel-3d', type:'fill-extrusion', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-extrusion-color':'#1f78b4','fill-extrusion-height':['*',['get','Kanal'],6],'fill-extrusion-opacity':0.8}});
-  map.addLayer({id:'parcel-highlight', type:'fill-extrusion', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-extrusion-color':'#ff0000','fill-extrusion-height':['*',['get','Kanal'],8],'fill-extrusion-opacity':0.9}, filter:['==','N_KHAS_NO','']});
-
-  // Optional: Village / Admin boundary layers if available in Mapbox
-  // map.addSource('village',{type:'vector', url:'mapbox://selahadinosma.village'}); 
-  // map.addLayer({id:'village-boundary', type:'line', source:'village', 'source-layer':'village_layer', paint:{'line-color':'#ff9900','line-width':2,'line-dasharray':[2,2]}});
-  // map.addSource('admin',{type:'vector', url:'mapbox://selahadinosma.admin'}); 
-  // map.addLayer({id:'admin-boundary', type:'line', source:'admin', 'source-layer':'admin_layer', paint:{'line-color':'#33cc33','line-width':2,'line-dasharray':[3,2]}});
+  map.addLayer({id:'parcel-3d', type:'fill-extrusion', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-extrusion-color':'#1f78b4','fill-extrusion-height':['*',['get','kanal'],6],'fill-extrusion-opacity':0.8}});
+  map.addLayer({id:'parcel-highlight', type:'fill-extrusion', source:'parcels', 'source-layer':sourceLayer, paint:{'fill-extrusion-color':'#ff0000','fill-extrusion-height':['*',['get','kanal'],8],'fill-extrusion-opacity':0.9}, filter:['==',['get','n_khas_no'],'']});
 }
 
 map.on('load', addLayers);
 
-// --- Search + Autocomplete ---
+// Load parcels for search
+fetch('query.json')
+  .then(res => res.json())
+  .then(data => {
+    parcelData = data.features.map(f => f.attributes);
+  });
+
+// --- Search + autocomplete ---
 const searchInput = document.getElementById("searchInput");
 const suggestionsDiv = document.getElementById("suggestions");
-let parcelData = [];
-map.on('idle', ()=>{
-  parcelData = map.querySourceFeatures('parcels',{sourceLayer:sourceLayer});
-});
 
 searchInput.addEventListener("input", ()=>{
   const query = searchInput.value.toLowerCase();
-  suggestionsDiv.innerHTML="";
+  suggestionsDiv.innerHTML = "";
   if(!query) return;
-  const matches = parcelData.filter(f=>{
-    const p = f.properties;
-    return (p.N_KHAS_NO && p.N_KHAS_NO.toLowerCase().includes(query))||(p.MU_KI && p.MU_KI.toLowerCase().includes(query));
-  }).slice(0,5);
-  matches.forEach(f=>{
+
+  const matches = parcelData.filter(p=>{
+    return (p.n_khas_no && p.n_khas_no.toLowerCase().includes(query)) ||
+           (p.mu_ki && p.mu_ki.toLowerCase().includes(query));
+  }).slice(0,10);
+
+  matches.forEach(p=>{
     const div = document.createElement("div");
     div.className="suggestion";
-    div.innerText = `${f.properties.N_KHAS_NO} — ${f.properties.MU_KI}`;
-    div.onclick = ()=>selectParcel(f);
+    div.innerText = `${p.n_khas_no} — ${p.mu_ki}`;
+    div.onclick = ()=>selectParcel(p);
     suggestionsDiv.appendChild(div);
   });
 });
 
-function selectParcel(f){
-  selectedFeature = f;
-  suggestionsDiv.innerHTML="";
-  searchInput.value=f.properties.N_KHAS_NO;
-  map.setFilter('parcel-highlight',['==','N_KHAS_NO',f.properties.N_KHAS_NO]);
-  const bbox = turf.bbox(f);
-  map.fitBounds(bbox,{padding:100});
+function selectParcel(p){
+  suggestionsDiv.innerHTML = "";
+  searchInput.value = p.n_khas_no;
+
+  // Find feature in Mapbox tiles
+  const feature = map.querySourceFeatures('parcels',{sourceLayer:sourceLayer})
+                     .find(f => f.properties.n_khas_no === p.n_khas_no);
+
+  if(feature){
+    selectedFeature = feature;
+    map.setFilter('parcel-highlight', ['==',['get','n_khas_no'], p.n_khas_no]);
+    const bbox = turf.bbox(feature);
+    map.fitBounds(bbox, {padding:100});
+  } else {
+    alert("Parcel not loaded in view yet. Zoom to area to load tiles.");
+  }
 }
 
-// --- PDF download with map snapshot ---
+// --- PDF download ---
 function generateHash(str){
   let hash=0; for(let i=0;i<str.length;i++){hash=((hash<<5)-hash)+str.charCodeAt(i);hash|=0;} return "LR-"+Math.abs(hash);
 }
@@ -117,27 +126,25 @@ async function downloadPDF(){
   if(!selectedFeature) return alert("Select a parcel first!");
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
+
   const props = selectedFeature.properties;
   const timestamp = new Date().toLocaleString();
-  const certID = generateHash(props.N_KHAS_NO+props.MU_KI+timestamp);
+  const certID = generateHash(props.n_khas_no + props.mu_ki + timestamp);
 
   doc.setFontSize(18); doc.text("OFFICIAL LAND PARCEL CERTIFICATE",20,20);
   doc.setFontSize(12);
   doc.text(`Certificate ID: ${certID}`,20,32);
   doc.text(`Issued On: ${timestamp}`,20,40);
-  doc.text(`Khasra No: ${props.N_KHAS_NO}`,20,52);
-  doc.text(`Owner: ${props.MU_KI}`,20,60);
-  doc.text(`Kanal: ${props.Kanal}`,20,68);
-  doc.text(`Marla: ${props.Marla}`,20,76);
-  doc.text(`Village: ${props.N_V_NAME}`,20,84);
+  doc.text(`Khasra No: ${props.n_khas_no}`,20,52);
+  doc.text(`Owner: ${props.mu_ki}`,20,60);
+  doc.text(`Kanal: ${props.kanal}`,20,68);
+  doc.text(`Marla: ${props.marla}`,20,76);
+  doc.text(`Village: ${props.n_v_name}`,20,84);
 
-  // Map snapshot half-page
-  const mapCanvas = map.getCanvas();
-  const imgData = mapCanvas.toDataURL("image/png");
+  const imgData = map.getCanvas().toDataURL("image/png");
   doc.addImage(imgData,'PNG',20,100,170,90);
-
   doc.text("Digitally Signed by Land Records Authority",20,200);
-  doc.save(`Parcel_${props.N_KHAS_NO}_Certificate.pdf`);
+  doc.save(`Parcel_${props.n_khas_no}_Certificate.pdf`);
 }
 </script>
 </body>
