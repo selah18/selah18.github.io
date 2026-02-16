@@ -27,53 +27,21 @@ body { margin:0; font-family:Arial, sans-serif; }
   max-width:95%;
 }
 
-input {
-  width:100%;
-  padding:8px;
-  margin-bottom:6px;
-  font-size:14px;
-}
-
-button {
-  width:100%;
-  padding:8px;
-  margin-top:6px;
-  cursor:pointer;
-  font-size:14px;
-}
-
-#suggestions {
-  max-height:150px;
-  overflow-y:auto;
-  border:1px solid #ddd;
-  margin-bottom:6px;
-}
-
-.suggestion {
-  padding:6px;
-  cursor:pointer;
-}
-.suggestion:hover {
-  background:#f2f2f2;
-}
-
-@media(max-width:600px){
-  #panel{
-    width:95%;
-    left:2.5%;
-  }
-}
+input { width:100%; padding:8px; margin-bottom:6px; font-size:14px; }
+button { width:100%; padding:8px; margin-top:6px; cursor:pointer; font-size:14px; }
+#suggestions { max-height:150px; overflow-y:auto; border:1px solid #ddd; margin-bottom:6px; }
+.suggestion { padding:6px; cursor:pointer; }
+.suggestion:hover { background:#f2f2f2; }
+@media(max-width:600px){ #panel{ width:95%; left:2.5%; } }
 </style>
 </head>
 
 <body>
-
 <div id="panel">
   <h3>Land Records Portal</h3>
-
   <input type="text" id="searchInput" placeholder="Search Khasra or Owner">
   <div id="suggestions"></div>
-
+  <button onclick="searchParcel()">Search</button>
   <button onclick="toggleSatellite()">Toggle Satellite</button>
   <button onclick="downloadPDF()">Download Parcel Certificate</button>
 </div>
@@ -81,15 +49,14 @@ button {
 <div id="map"></div>
 
 <script>
-
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
 
 const tileset = 'mapbox://selahadinosma.46aakx24';
-const sourceLayer = 'adampur_parcels_wgs84'; // Confirm exact layer name
+const sourceLayer = 'adampur_parcels_wgs84-5tkgpu'; // Confirm in Studio
 
 let selectedFeature = null;
-let isSatellite = false;
 let allFeatures = [];
+let isSatellite = false;
 
 const map = new mapboxgl.Map({
   container: 'map',
@@ -102,211 +69,125 @@ const map = new mapboxgl.Map({
 });
 
 function addParcelLayers() {
-
   if (map.getSource('parcels')) return;
 
-  map.addSource('parcels', {
-    type: 'vector',
-    url: tileset
-  });
+  map.addSource('parcels', { type: 'vector', url: tileset });
 
   map.addLayer({
-    id: 'parcel-fill',
-    type: 'fill',
-    source: 'parcels',
-    'source-layer': sourceLayer,
+    id: 'parcel-fill', type: 'fill', source: 'parcels', 'source-layer': sourceLayer,
     paint: {
       'fill-color': [
-        'interpolate',
-        ['linear'],
-        ['to-number', ['get', 'kanal']],
-        0, '#e6f2ff',
-        5, '#99ccff',
-        10, '#3399ff',
-        20, '#0066cc'
+        'interpolate', ['linear'], ['to-number', ['get', 'kanal']],
+        0,'#e6f2ff',5,'#99ccff',10,'#3399ff',20,'#0066cc'
       ],
       'fill-opacity': 0.9
     }
   });
 
   map.addLayer({
-    id: 'parcel-outline',
-    type: 'line',
-    source: 'parcels',
-    'source-layer': sourceLayer,
-    paint: {
-      'line-color': '#000',
-      'line-width': 1
+    id: 'parcel-outline', type:'line', source:'parcels','source-layer':sourceLayer,
+    paint: { 'line-color':'#000','line-width':1 }
+  });
+
+  map.addLayer({
+    id:'parcel-3d', type:'fill-extrusion', source:'parcels','source-layer':sourceLayer,
+    paint:{
+      'fill-extrusion-color':'#4da6ff',
+      'fill-extrusion-height':['*',['to-number',['get','kanal']],12],
+      'fill-extrusion-opacity':0.85
     }
   });
 
   map.addLayer({
-    id: 'parcel-3d',
-    type: 'fill-extrusion',
-    source: 'parcels',
-    'source-layer': sourceLayer,
-    paint: {
-      'fill-extrusion-color': '#4da6ff',
-      'fill-extrusion-height': [
-        '*',
-        ['to-number', ['get', 'kanal']],
-        12
-      ],
-      'fill-extrusion-opacity': 0.85
-    }
-  });
-
-  map.addLayer({
-    id: 'highlight',
-    type: 'line',
-    source: 'parcels',
-    'source-layer': sourceLayer,
-    paint: {
-      'line-color': '#ff0000',
-      'line-width': 4
-    },
-    filter: ['==', 'n_khas_no', '']
+    id:'highlight', type:'line', source:'parcels','source-layer':sourceLayer,
+    paint:{ 'line-color':'#ff0000','line-width':4 }, filter:['==','n_khas_no','']
   });
 }
 
 map.on('load', () => {
-
   addParcelLayers();
 
   map.on('idle', () => {
-    if (allFeatures.length === 0) {
-      allFeatures = map.querySourceFeatures('parcels', {
-        sourceLayer: sourceLayer
-      });
+    if(allFeatures.length===0){
+      allFeatures = map.querySourceFeatures('parcels',{ sourceLayer });
     }
   });
-
-  setupAutocomplete();
 });
 
-function setupAutocomplete() {
-
+// Autocomplete + search button
+function searchParcel(){
   const input = document.getElementById("searchInput");
+  const value = input.value.toLowerCase();
   const suggestionBox = document.getElementById("suggestions");
+  suggestionBox.innerHTML = "";
 
-  input.addEventListener("input", () => {
+  if(!value) return alert("Enter Khasra or Owner");
 
-    const value = input.value.toLowerCase();
-    suggestionBox.innerHTML = "";
+  const matches = allFeatures.filter(f=>
+    (f.properties.n_khas_no && f.properties.n_khas_no.toLowerCase().includes(value))||
+    (f.properties.owner && f.properties.owner.toLowerCase().includes(value))
+  );
 
-    if (value.length < 1) return;
+  if(matches.length===0) return alert("No parcel found");
 
-    const matches = allFeatures.filter(f =>
-      (f.properties.n_khas_no && f.properties.n_khas_no.toString().toLowerCase().includes(value)) ||
-      (f.properties.owner && f.properties.owner.toLowerCase().includes(value))
-    );
-
-    matches.slice(0,8).forEach(f => {
-
-      const div = document.createElement("div");
-      div.className = "suggestion";
-      div.innerHTML = `<b>${f.properties.n_khas_no}</b> - ${f.properties.owner || 'N/A'}`;
-
-      div.onclick = () => selectParcel(f);
-
-      suggestionBox.appendChild(div);
-    });
+  matches.slice(0,8).forEach(f=>{
+    const div = document.createElement("div");
+    div.className="suggestion";
+    div.innerHTML=`<b>${f.properties.n_khas_no}</b> - ${f.properties.owner||'N/A'}`;
+    div.onclick=()=>selectParcel(f);
+    suggestionBox.appendChild(div);
   });
 }
 
 function selectParcel(feature){
-
   selectedFeature = feature;
-
-  map.setFilter('highlight', ['==', 'n_khas_no', feature.properties.n_khas_no]);
-
+  map.setFilter('highlight',['==','n_khas_no',feature.properties.n_khas_no]);
   const bbox = turf.bbox(feature);
-  map.fitBounds(bbox, { padding: 100 });
-
-  document.getElementById("suggestions").innerHTML = "";
+  map.fitBounds(bbox,{padding:100});
+  document.getElementById("suggestions").innerHTML="";
   document.getElementById("searchInput").value = feature.properties.n_khas_no;
 }
 
 function toggleSatellite(){
-
   isSatellite = !isSatellite;
-
-  map.setStyle(
-    isSatellite
-      ? 'mapbox://styles/mapbox/satellite-streets-v12'
-      : 'mapbox://styles/mapbox/light-v11'
-  );
-
-  map.once('style.load', addParcelLayers);
+  map.setStyle(isSatellite?'mapbox://styles/mapbox/satellite-streets-v12':'mapbox://styles/mapbox/light-v11');
+  map.once('style.load',addParcelLayers);
 }
 
-function generateHash(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return "LR-" + Math.abs(hash);
+function generateHash(str){
+  let hash=0; for(let i=0;i<str.length;i++){hash=((hash<<5)-hash)+str.charCodeAt(i);hash|=0;}
+  return "LR-"+Math.abs(hash);
 }
 
+// PDF download with digital signature
 function downloadPDF(){
-
-  if(!selectedFeature){
-    alert("Select a parcel first.");
-    return;
-  }
-
+  if(!selectedFeature) return alert("Select a parcel first");
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  const khasra = selectedFeature.properties.n_khas_no;
-  const owner = selectedFeature.properties.owner || "N/A";
-  const kanal = selectedFeature.properties.kanal;
-  const marla = selectedFeature.properties.marla;
-  const village = selectedFeature.properties.n_v_name;
-
+  const props = selectedFeature.properties;
   const timestamp = new Date().toLocaleString();
-  const certificateID = generateHash(khasra + owner + timestamp);
+  const certID = generateHash(props.n_khas_no + (props.owner||'') + timestamp);
 
-  doc.setFontSize(18);
-  doc.text("OFFICIAL LAND PARCEL CERTIFICATE", 20, 20);
+  doc.setFontSize(18); doc.text("OFFICIAL LAND PARCEL CERTIFICATE",20,20);
+  doc.setFontSize(12); doc.text(`Certificate ID: ${certID}`,20,35);
+  doc.text(`Issued On: ${timestamp}`,20,42); doc.line(20,45,190,45);
 
-  doc.setFontSize(12);
-  doc.text(`Certificate ID: ${certificateID}`, 20, 35);
-  doc.text(`Issued On: ${timestamp}`, 20, 42);
+  doc.text(`Khasra No: ${props.n_khas_no}`,20,60);
+  doc.text(`Owner: ${props.owner||'N/A'}`,20,70);
+  doc.text(`Kanal: ${props.kanal}`,20,80);
+  doc.text(`Marla: ${props.marla}`,20,90);
+  doc.text(`Village: ${props.n_v_name}`,20,100); doc.line(20,110,190,110);
 
-  doc.line(20, 45, 190, 45);
+  doc.text("Digitally Signed By:",20,125); doc.text("Land Records Authority",20,132);
+  doc.addImage("signature.png","PNG",20,140,50,25);
+  doc.text("Authorized Officer Signature",20,170);
 
-  doc.text(`Khasra No: ${khasra}`, 20, 60);
-  doc.text(`Owner: ${owner}`, 20, 70);
-  doc.text(`Kanal: ${kanal}`, 20, 80);
-  doc.text(`Marla: ${marla}`, 20, 90);
-  doc.text(`Village: ${village}`, 20, 100);
+  const verifyURL = "https://yourdomain.com/verify?id="+certID;
+  doc.addImage("https://api.qrserver.com/v1/create-qr-code/?size=100x100&data="+verifyURL,"PNG",140,135,40,40);
 
-  doc.line(20, 110, 190, 110);
-
-  doc.text("Digitally Signed By:", 20, 125);
-  doc.text("Land Records Authority", 20, 132);
-
-  doc.addImage("signature.png", "PNG", 20, 140, 50, 25);
-
-  doc.text("Authorized Officer Signature", 20, 170);
-
-  const verifyURL = "https://yourdomain.com/verify?id=" + certificateID;
-
-  doc.addImage(
-    "https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=" + verifyURL,
-    "PNG",
-    140,
-    135,
-    40,
-    40
-  );
-
-  doc.save(`Parcel_${khasra}_Certificate.pdf`);
+  doc.save(`Parcel_${props.n_khas_no}_Certificate.pdf`);
 }
-
 </script>
-
 </body>
 </html>
