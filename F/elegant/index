@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Adampur Digital Sajra - Professional Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+    <style>
+        body { margin:0; font-family:'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+
+        .panel {
+            position:absolute; top:20px; left:20px; background:white; padding:18px;
+            border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.15); z-index:10; width:280px;
+        }
+        .panel h2 { margin: 0 0 10px 0; font-size: 16px; color: #1a237e; border-bottom: 2px solid #e8eaf6; padding-bottom: 5px; }
+        .panel button { 
+            width:100%; padding:10px; margin-bottom: 8px; border:none; 
+            border-radius:6px; cursor:pointer; font-weight: 600; font-size: 13px;
+        }
+        .btn-primary { background:#1a237e; color:white; }
+        .btn-measure { background:#43a047; color:white; }
+        .btn-measure.active { background:#e53935; }
+        .btn-clear { background:#cfd8dc; color: #37474f; }
+
+        .info-container {
+            position: absolute; top: 20px; right: 20px; z-index: 10;
+            background: rgba(25, 25, 25, 0.9); color: #00ff00; padding: 15px;
+            border-radius: 8px; font-family: 'Courier New', monospace; border: 1px solid #444; min-width: 220px;
+        }
+
+        .legend {
+            position: absolute; bottom: 40px; left: 20px; background: white;
+            padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 12px; z-index: 10;
+        }
+        .legend-item { display: flex; align-items: center; margin-bottom: 6px; }
+        .color-box { width: 14px; height: 14px; margin-right: 10px; border-radius: 2px; }
+
+        .title-box { 
+            position:absolute; top:15px; left:50%; transform:translateX(-50%); 
+            font-weight:bold; font-size:16px; background:white; 
+            padding:8px 25px; border: 2px solid #1a237e; border-radius:50px; z-index:9; 
+        }
+        
+        @media print { .panel, .mapboxgl-ctrl, .legend, .info-container { display:none !important; } }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="title-box">ADAMPUR PRECISION REVENUE TOOL</div>
+<div id="infoBox" class="info-container">Select a parcel to begin</div>
+
+<div class="legend">
+    <div style="font-weight:bold; margin-bottom:8px;">Classification</div>
+    <div class="legend-item"><div class="color-box" style="background:#00bcd4;"></div> Large (8K+)</div>
+    <div class="legend-item"><div class="color-box" style="background:#f06292;"></div> Medium (2-8K)</div>
+    <div class="legend-item"><div class="color-box" style="background:#ffeb3b;"></div> Small (<2K)</div>
+    <div class="legend-item"><div class="color-box" style="background:#ff9800;"></div> Current Selection</div>
+</div>
+
+<div class="panel">
+    <h2>Cadastral Toolkit</h2>
+    <input type="text" id="searchInput" placeholder="Search Khasra..." style="width:100%; padding:10px; margin-bottom:12px; border:1px solid #ccc; border-radius:4px;">
+    <button class="btn-primary" onclick="exportPDF()">Export Final PDF</button>
+    <button id="measureBtn" class="btn-measure" onclick="toggleMeasure()">Ruler Tool (Snap-to-Grid)</button>
+    <button class="btn-clear" onclick="clearMeasure()">Reset Measurements</button>
+</div>
+
+<script>
+mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+
+const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [75.462, 29.261], 
+    zoom: 16,
+    preserveDrawingBuffer: true 
+});
+
+let measureMode = false;
+let selectedId = null;
+let linestring = { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [] }};
+
+map.on('load', () => {
+    map.addSource('parcels', { type: 'vector', url: 'mapbox://selahadinosma.39n1a9cd' });
+
+    map.addLayer({
+        id: 'parcel-fill',
+        type: 'fill',
+        source: 'parcels',
+        'source-layer': 'query-bo3cb9',
+        paint: {
+            'fill-color': [
+                'let', 'totalMarla', ['+', ['*', ['to-number', ['get', 'kanal'], 0], 20], ['to-number', ['get', 'marla'], 0]],
+                ['case',
+                    ['==', ['get', 'OBJECTID'], selectedId], '#ff9800',
+                    ['>=', ['var', 'totalMarla'], 160], '#00bcd4',
+                    ['>=', ['var', 'totalMarla'], 40], '#f06292',
+                    '#ffeb3b'
+                ]
+            ],
+            'fill-opacity': 0.7
+        }
+    });
+
+    map.addLayer({
+        id: 'parcel-outline',
+        type: 'line',
+        source: 'parcels',
+        'source-layer': 'query-bo3cb9',
+        paint: { 'line-color': '#000', 'line-width': 1.2 }
+    });
+
+    map.addSource('measure-source', { type: 'geojson', data: linestring });
+    map.addLayer({
+        id: 'measure-line',
+        type: 'line',
+        source: 'measure-source',
+        paint: { 'line-color': '#e53935', 'line-width': 3, 'line-dasharray': [2, 1] }
+    });
+});
+
+function toggleMeasure() {
+    measureMode = !measureMode;
+    const btn = document.getElementById('measureBtn');
+    if (measureMode) {
+        btn.innerText = "Exit Ruler Tool";
+        btn.classList.add('active');
+        map.getCanvas().style.cursor = 'crosshair';
+    } else {
+        btn.innerText = "Ruler Tool (Snap-to-Grid)";
+        btn.classList.remove('active');
+        map.getCanvas().style.cursor = '';
+    }
+}
+
+function clearMeasure() {
+    linestring.geometry.coordinates = [];
+    map.getSource('measure-source').setData(linestring);
+    document.getElementById('infoBox').innerHTML = "Measurements Cleared";
+}
+
+map.on('click', (e) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: ['parcel-fill'] });
+    
+    // 1. Manual Measuring (If tool is active)
+    if (measureMode) {
+        let clickPoint = [e.lngLat.lng, e.lngLat.lat];
+        if (features.length > 0) {
+            const snapped = turf.nearestPointOnLine(turf.polygonToLine(features[0].geometry), turf.point(clickPoint));
+            clickPoint = snapped.geometry.coordinates;
+        }
+        linestring.geometry.coordinates.push(clickPoint);
+        map.getSource('measure-source').setData(linestring);
+        
+        if (linestring.geometry.coordinates.length > 1) {
+            const m = turf.length(linestring, {units: 'meters'});
+            document.getElementById('infoBox').innerHTML = `PATH DISTANCE:<br>${m.toFixed(2)}m / ${(m * 3.28).toFixed(1)}ft`;
+        }
+        return;
+    }
+
+    // 2. Automated Perimeter Calculation
+    if (features.length > 0) {
+        const feature = features[0];
+        selectedId = feature.properties.OBJECTID;
+        map.setPaintProperty('parcel-fill', 'fill-color', [
+            'case', ['==', ['get', 'OBJECTID'], selectedId], '#ff9800',
+            ['let', 'totalMarla', ['+', ['*', ['to-number', ['get', 'kanal'], 0], 20], ['to-number', ['get', 'marla'], 0]],
+            ['case', ['>=', ['var', 'totalMarla'], 160], '#00bcd4', ['>=', ['var', 'totalMarla'], 40], '#f06292', '#ffeb3b']]
+        ]);
+
+        const line = turf.polygonToLine(feature.geometry);
+        const perimeter = turf.length(line, {units: 'meters'});
+        
+        document.getElementById('infoBox').innerHTML = `
+            PROPERTY ANALYSIS:<br>
+            KHASRA: ${feature.properties.n_khas_no}<br>
+            PERIMETER: ${perimeter.toFixed(1)}m<br>
+            ~ ${(perimeter * 3.28).toFixed(1)}ft Total
+        `;
+    }
+});
+
+function exportPDF() {
+    const imgData = map.getCanvas().toDataURL('image/png');
+    const win = window.open('', '_blank');
+    win.document.write(`<html><body style="padding:40px; font-family:sans-serif;">
+        <h1 style="border-bottom:3px solid #1a237e;">ADAMPUR PRECISION LAND REPORT</h1>
+        <img src="${imgData}" style="width:100%; border:1px solid #000;">
+        <p>Verified Revenue Record Copy</p>
+        <script>window.onload = function() { window.print(); window.close(); }</script>
+    </body></html>`);
+    win.document.close();
+}
+</script>
+</body>
+</html>
