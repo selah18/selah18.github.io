@@ -2,83 +2,52 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Adampur Cadastral GIS Portal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Cadastral Floor Map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
 <style>
-body { margin:0; font-family:Arial, sans-serif; }
+body { margin:0; padding:0; background:white; font-family:Arial; }
 #map { position:absolute; top:0; bottom:0; width:100%; }
 
-.panel {
+.a4-border{
     position:absolute;
     top:20px;
+    bottom:20px;
     left:20px;
-    background:white;
-    padding:15px;
-    border-radius:8px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.2);
-    z-index:2;
-    width:300px;
-    font-size:13px;
+    right:20px;
+    border:3px solid black;
+    pointer-events:none;
 }
 
-.panel input {
-    width:100%;
-    padding:8px;
-    margin-top:6px;
-    margin-bottom:10px;
-}
-
-.panel button {
-    width:100%;
-    padding:10px;
-    background:#1f3c88;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.title-block {
+.title-box{
     position:absolute;
-    bottom:0;
-    width:100%;
-    background:white;
-    border-top:2px solid black;
-    padding:10px;
-    display:flex;
-    justify-content:space-between;
+    top:30px;
+    left:50%;
+    transform:translateX(-50%);
+    font-weight:bold;
+    font-size:18px;
+}
+
+.signature{
+    position:absolute;
+    bottom:40px;
+    right:50px;
     font-size:12px;
 }
 
-.signature-block {
+.north-arrow{
     position:absolute;
-    bottom:120px;
-    right:20px;
-    background:white;
-    padding:10px;
-    border:1px solid black;
-    font-size:11px;
-}
-
-.north-arrow {
-    position:absolute;
-    top:20px;
-    right:20px;
-    background:white;
-    padding:6px;
+    top:80px;
+    right:40px;
+    font-size:24px;
     font-weight:bold;
-    border-radius:6px;
 }
 
-@media print {
-    body * { visibility:hidden; }
-    #map, #map * { visibility:visible; }
-    #map { position:absolute; left:0; top:0; width:100%; height:85%; }
-    .title-block, .signature-block { visibility:visible; }
+@media print{
+    .no-print{ display:none; }
 }
 </style>
 </head>
@@ -86,52 +55,38 @@ body { margin:0; font-family:Arial, sans-serif; }
 <body>
 
 <div id="map"></div>
+<div class="a4-border"></div>
+<div class="title-box">ADAMPUR CADASTRAL FLOOR MAP</div>
+<div class="north-arrow">N ↑</div>
 
-<div class="panel">
-<strong>Parcel Search</strong>
-<input type="text" id="searchInput" placeholder="Search Khasra / MuKi">
-<button onclick="window.print()">Export A4 PDF</button>
-</div>
-
-<div class="north-arrow">↑ N</div>
-
-<div class="signature-block">
-<strong>Digitally Signed</strong><br>
-GIS Land Records Portal<br>
-Officer: Selahadin Yasin<br>
-Signature ID: <span id="sigID"></span><br>
-Date: <span id="sigDate"></span>
-</div>
-
-<div class="title-block">
-<div>
-<strong>Project:</strong> Adampur Cadastral Map<br>
-Village: ADAMPUR(34)<br>
-District: HISAR
-</div>
-<div>
-Scale: Auto<br>
-Prepared By: GIS Portal<br>
-Tileset Ref: selahadinosma.39n1a9cd
-</div>
+<div class="signature">
+    GIS Officer<br>
+    Digital Signature: Auto Verified<br>
+    Date: <span id="date"></span>
 </div>
 
 <script>
 
+document.getElementById("date").innerHTML =
+new Date().toLocaleDateString();
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
 
-let selectedParcelId = null;
+let selectedId = null;
 let adjacentIds = [];
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [75.46, 29.26],
+    style: {
+        version: 8,
+        sources: {},
+        layers: []
+    },
+    center: [75.46,29.26],
     zoom: 16
 });
 
-map.addControl(new mapboxgl.NavigationControl());
-map.addControl(new mapboxgl.ScaleControl());
+map.addControl(new mapboxgl.ScaleControl({maxWidth:150, unit:'metric'}));
 
 map.on('load', () => {
 
@@ -140,29 +95,14 @@ map.on('load', () => {
         url: 'mapbox://selahadinosma.39n1a9cd'
     });
 
-    // FIT MAP TO PARCEL BOUNDS AUTOMATICALLY
-    const bounds = new mapboxgl.LngLatBounds();
-
-    map.querySourceFeatures('parcels', {
-        sourceLayer: 'query-bo3cb9'
-    }).forEach(feature => {
-        feature.geometry.coordinates[0].forEach(coord => {
-            bounds.extend(coord);
-        });
-    });
-
-    if (!bounds.isEmpty()) {
-        map.fitBounds(bounds, { padding: 50 });
-    }
-
     map.addLayer({
         id: 'parcel-fill',
         type: 'fill',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'fill-color': '#f2f2f2',
-            'fill-opacity': 0.9
+            'fill-color': '#eeeeee',
+            'fill-opacity': 1
         }
     });
 
@@ -172,8 +112,8 @@ map.on('load', () => {
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'line-color': '#000',
-            'line-width': 2
+            'line-color': '#000000',
+            'line-width': 2.5
         }
     });
 
@@ -184,70 +124,65 @@ map.on('load', () => {
         'source-layer': 'query-bo3cb9',
         layout: {
             'text-field': ['get','n_khas_no'],
-            'text-size': 13,
-            'text-font': ['Open Sans Bold']
+            'text-size': 14,
+            'text-font': ['Open Sans Bold'],
+            'text-anchor': 'center'
         },
         paint: {
             'text-color': '#000'
         }
     });
 
-    map.on('click', 'parcel-fill', (e) => {
+    map.on('click','parcel-fill',(e)=>{
 
         const feature = e.features[0];
-        selectedParcelId = feature.properties.OBJECTID;
+        selectedId = feature.properties.OBJECTID;
         adjacentIds = [];
 
         const features = map.queryRenderedFeatures({
-            layers: ['parcel-fill']
+            layers:['parcel-fill']
         });
 
-        const selectedGeom = feature.geometry;
+        const geom = feature.geometry;
 
-        features.forEach(f => {
-            if (f.properties.OBJECTID !== selectedParcelId) {
-                if (isAdjacent(selectedGeom, f.geometry)) {
+        features.forEach(f=>{
+            if(f.properties.OBJECTID !== selectedId){
+                if(isAdjacent(geom,f.geometry)){
                     adjacentIds.push(f.properties.OBJECTID);
                 }
             }
         });
 
-        updateStyles();
+        updateColors();
 
-        const p = feature.properties;
-        new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(
-            "<b>Khasra:</b> " + p.n_khas_no + "<br>" +
-            "<b>MuKi:</b> " + p.mu_ki + "<br>" +
-            "<b>Murraba:</b> " + p.n_murr_no + "<br>" +
-            "<b>Area:</b> " + p.kanal + " Kanal " + p.marla + " Marla<br>" +
-            "<b>Status:</b> " + p.remarks
-        )
-        .addTo(map);
+        map.fitBounds(turf.bbox(feature),{
+            padding:100,
+            maxZoom:18
+        });
+
     });
 
 });
 
-function updateStyles() {
-    map.setPaintProperty('parcel-fill', 'fill-color', [
+function updateColors(){
+
+    map.setPaintProperty('parcel-fill','fill-color',[
         'case',
-        ['==', ['get','OBJECTID'], selectedParcelId], '#ff0000',
-        ['in', ['get','OBJECTID'], ['literal', adjacentIds]], '#ffa500',
-        '#f2f2f2'
+        ['==',['get','OBJECTID'],selectedId],'#ff0000',
+        ['in',['get','OBJECTID'],['literal',adjacentIds]],'#ffcc80',
+        '#eeeeee'
     ]);
+
 }
 
-function isAdjacent(geom1, geom2) {
-    const coords1 = geom1.coordinates[0];
-    const coords2 = geom2.coordinates[0];
+function isAdjacent(g1,g2){
+    const c1 = g1.coordinates[0];
+    const c2 = g2.coordinates[0];
 
-    for (let i = 0; i < coords1.length; i++) {
-        for (let j = 0; j < coords2.length; j++) {
-            if (
-                coords1[i][0] === coords2[j][0] &&
-                coords1[i][1] === coords2[j][1]
-            ) {
+    for(let i=0;i<c1.length;i++){
+        for(let j=0;j<c2.length;j++){
+            if(c1[i][0]===c2[j][0] &&
+               c1[i][1]===c2[j][1]){
                 return true;
             }
         }
@@ -256,6 +191,8 @@ function isAdjacent(geom1, geom2) {
 }
 
 </script>
+
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
 </body>
 </html>
