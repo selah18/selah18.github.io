@@ -2,115 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Adampur GIS - Precision Portal</title>
+    <title>Adampur Official Cadastral Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <style>
-        body { margin:0; font-family:'Segoe UI', Arial, sans-serif; }
-        #map { position:absolute; top:0; bottom:0; width:100%; background: #f0f0f0; }
+        body { margin:0; font-family:'Times New Roman', serif; background: #fff; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
 
-        /* Modern UI Panel */
+        /* Professional Control Panel */
         .panel {
-            position:absolute; top:20px; left:20px; background:white; padding:20px;
-            border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.2); z-index:10; width:280px;
+            position:absolute; top:20px; left:20px; background:white; padding:15px;
+            border: 2px solid #1f3c88; border-radius:4px; z-index:10; width:300px;
+            box-shadow: 5px 5px 0px rgba(31, 60, 136, 0.2);
         }
-        .panel h2 { margin: 0 0 10px 0; font-size: 16px; color: #1f3c88; border-bottom: 2px solid #eee; padding-bottom: 5px; }
-        .panel input { width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:6px; box-sizing: border-box; }
-        .panel button { 
-            width:100%; padding:12px; margin-bottom: 8px; border:none; border-radius:6px; 
-            cursor:pointer; font-weight: bold; transition: 0.3s;
-        }
-        .btn-export { background:#1f3c88; color:white; }
-        .btn-measure { background:#4caf50; color:white; }
-        .btn-measure.active { background:#f44336; }
+        .panel h2 { margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; color: #1f3c88; border-bottom: 1px solid #ccc; }
+        .select-box { width:100%; padding:8px; margin-bottom:10px; border:1px solid #333; font-weight: bold; cursor: pointer; }
+        .btn-print { width:100%; padding:10px; background:#1f3c88; color:white; border:none; cursor:pointer; font-weight:bold; }
 
-        /* Dynamic Status/Measurement Box */
-        .info-box {
+        /* Map Elements */
+        .north-arrow {
             position: absolute; top: 20px; right: 20px; z-index: 10;
-            background: rgba(31, 60, 136, 0.9); color: white; padding: 15px;
-            border-radius: 8px; font-family: monospace; min-width: 200px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: white; padding: 5px 10px; border: 2px solid black;
+            font-weight: bold; font-size: 20px; text-align: center;
+        }
+        
+        .signature-box {
+            position: absolute; bottom: 140px; right: 20px; z-index: 10;
+            background: white; padding: 10px; border: 1px solid black;
+            font-size: 12px; line-height: 1.4;
         }
 
-        .legend {
-            position: absolute; bottom: 140px; left: 20px; background: white;
-            padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 11px; z-index: 10;
-        }
-        .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
-        .color-box { width: 14px; height: 14px; margin-right: 8px; border: 1px solid #000; }
-
-        /* Printing/Signature Footer */
-        .title-block {
-            position:absolute; bottom:0; width:100%; background:white;
-            border-top:2px solid #1f3c88; padding:15px; display:flex;
-            justify-content:space-between; font-size:12px; z-index: 5;
+        .footer-strip {
+            position: absolute; bottom: 0; width: 100%; height: 100px;
+            background: white; border-top: 3px double black; z-index: 5;
+            display: flex; justify-content: space-around; align-items: center; padding: 10px;
+            box-sizing: border-box; font-size: 13px;
         }
 
         @media print {
-            .panel, .mapboxgl-ctrl, .legend, .info-box { display:none !important; }
-            #map { height: 75vh !important; border: 1px solid #000; }
+            .panel, .mapboxgl-ctrl { display:none !important; }
+            #map { height: 80vh !important; border: 2px solid black; }
+            .footer-strip { position: fixed; bottom: 0; border-top: 2px solid black; }
         }
     </style>
 </head>
 <body>
 
 <div id="map"></div>
-<div id="infoBox" class="info-box">Click a parcel to analyze</div>
+<div class="north-arrow">N<br>↑</div>
 
 <div class="panel">
-    <h2>Adampur GIS Tool</h2>
-    <input type="text" id="searchInput" placeholder="Search Khasra No...">
-    <button class="btn-export" onclick="window.print()">Export A4 PDF</button>
-    <button id="measureBtn" class="btn-measure" onclick="toggleMeasure()">Ruler Tool (Snap)</button>
-    <p style="font-size:11px; color:#666; margin-top:5px;">Center: [75.46, 29.26]</p>
+    <h2>Official Parcel Lookup</h2>
+    <select id="parcelSelect" class="select-box" onchange="zoomToParcel(this.value)">
+        <option value="">-- Select Khasra No --</option>
+    </select>
+    <button class="btn-print" onclick="window.print()">PRINT REVENUE MAP</button>
 </div>
 
-<div class="legend">
-    <strong>Legend (By Area)</strong>
-    <div class="legend-item"><div class="color-box" style="background:#00bcd4;"></div> Large (>8 Kanal)</div>
-    <div class="legend-item"><div class="color-box" style="background:#f06292;"></div> Medium (2-8 Kanal)</div>
-    <div class="legend-item"><div class="color-box" style="background:#ffeb3b;"></div> Small (<2 Kanal)</div>
-    <div class="legend-item"><div class="color-box" style="background:#ff9800;"></div> Selected</div>
+<div class="signature-box">
+    <strong>OFFICIAL VERIFICATION</strong><br>
+    Digitally Signed By:<br>
+    Selahadin Yasin<br>
+    Date: <span id="sigDate"></span><br>
+    <div style="margin-top:5px; border-top: 1px solid #000; padding-top:2px;">Registry Seal</div>
 </div>
 
-<div class="title-block">
-    <div><strong>Project:</strong> Adampur Cadastral GIS<br>Village: ADAMPUR(34) | HISAR</div>
-    <div style="text-align:right;">
-        Tileset: selahadinosma.39n1a9cd<br>
-        Officer: Selahadin Yasin | <span id="currentDate"></span>
-    </div>
+<div class="footer-strip">
+    <div><strong>VILLAGE:</strong> ADAMPUR (34)<br><strong>TEHSIL:</strong> ADAMPUR</div>
+    <div style="text-align: center;"><strong>MAP REF:</strong> SAJRA-2024-DIGITAL<br><strong>STATUS:</strong> VERIFIED RECORD</div>
+    <div><strong>PREPARED BY:</strong> GIS PORTAL<br><strong>ID:</strong> pk.selahadinosma</div>
 </div>
 
 <script>
-document.getElementById('currentDate').innerText = new Date().toLocaleDateString();
+document.getElementById('sigDate').innerText = new Date().toLocaleDateString();
 
-// Replace with your actual token
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
-
-let measureMode = false;
-let selectedId = null;
-let linestring = { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [] }};
 
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11',
-    center: [75.460, 29.260],
+    center: [75.462, 29.261],
     zoom: 15,
     preserveDrawingBuffer: true
 });
 
-map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.ScaleControl({ maxWidth: 100, unit: 'metric' }));
 
 map.on('load', () => {
-    // 1. DATA SOURCE
+    // 1. SET UP INFRASTRUCTURE (ROADS & BUILDINGS)
+    // Darken building footprints for "Floor Plan" visibility
+    map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 14,
+        'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-base': ['get', 'min_height'],
+            'fill-extrusion-opacity': 0.6
+        }
+    });
+
+    // 2. YOUR CADASTRAL DATA SOURCE
     map.addSource('parcels', {
         type: 'vector',
         url: 'mapbox://selahadinosma.39n1a9cd'
     });
 
-    // 2. FILL LAYER (Auto-Coloring Logic)
+    // Main Parcel Styling
     map.addLayer({
         id: 'parcel-fill',
         type: 'fill',
@@ -119,28 +123,24 @@ map.on('load', () => {
         paint: {
             'fill-color': [
                 'case',
-                ['==', ['get', 'OBJECTID'], selectedId], '#ff9800', // Selected
-                ['let', 'totalMarla', ['+', ['*', ['to-number', ['get', 'kanal'], 0], 20], ['to-number', ['get', 'marla'], 0]],
-                ['case',
-                    ['>=', ['var', 'totalMarla'], 160], '#00bcd4', // Blue (>8K)
-                    ['>=', ['var', 'totalMarla'], 40], '#f06292',  // Pink (2-8K)
-                    '#ffeb3b'                                     // Yellow (<2K)
-                ]]
+                ['boolean', ['feature-state', 'selected'], false], '#ff9800',
+                '#ffffff'
             ],
-            'fill-opacity': 0.75
+            'fill-opacity': 0.4 // Lowered so roads/buildings show through
         }
     });
 
-    // 3. OUTLINE LAYER
     map.addLayer({
         id: 'parcel-outline',
         type: 'line',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
-        paint: { 'line-color': '#333', 'line-width': 1.2 }
+        paint: {
+            'line-color': '#000',
+            'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1]
+        }
     });
 
-    // 4. LABEL LAYER (Khasra No)
     map.addLayer({
         id: 'parcel-label',
         type: 'symbol',
@@ -148,84 +148,41 @@ map.on('load', () => {
         'source-layer': 'query-bo3cb9',
         layout: {
             'text-field': ['get', 'n_khas_no'],
-            'text-size': 12,
+            'text-size': 11,
             'text-font': ['Open Sans Bold']
-        },
-        paint: { 'text-halo-color': '#fff', 'text-halo-width': 1 }
-    });
-
-    // 5. MEASUREMENT OVERLAY
-    map.addSource('measure-source', { type: 'geojson', data: linestring });
-    map.addLayer({
-        id: 'measure-line',
-        type: 'line',
-        source: 'measure-source',
-        paint: { 'line-color': '#f44336', 'line-width': 3, 'line-dasharray': [2, 1] }
-    });
-});
-
-// Search functionality
-document.getElementById('searchInput').addEventListener('keyup', function() {
-    const val = this.value.toLowerCase();
-    const filter = ['any', ['in', val, ['downcase', ['get','n_khas_no']]]];
-    map.setFilter('parcel-fill', filter);
-    map.setFilter('parcel-outline', filter);
-});
-
-// Toggle Measurement Tool
-function toggleMeasure() {
-    measureMode = !measureMode;
-    const btn = document.getElementById('measureBtn');
-    if (measureMode) {
-        btn.innerText = "Exit Ruler Tool";
-        btn.classList.add('active');
-        map.getCanvas().style.cursor = 'crosshair';
-    } else {
-        btn.innerText = "Ruler Tool (Snap)";
-        btn.classList.remove('active');
-        map.getCanvas().style.cursor = '';
-        linestring.geometry.coordinates = [];
-        map.getSource('measure-source').setData(linestring);
-    }
-}
-
-// Global Click Handler
-map.on('click', 'parcel-fill', (e) => {
-    const feature = e.features[0];
-    const p = feature.properties;
-
-    if (measureMode) {
-        // Snapping Logic
-        let clickPt = [e.lngLat.lng, e.lngLat.lat];
-        const snapped = turf.nearestPointOnLine(turf.polygonToLine(feature.geometry), turf.point(clickPt));
-        linestring.geometry.coordinates.push(snapped.geometry.coordinates);
-        map.getSource('measure-source').setData(linestring);
-        
-        if (linestring.geometry.coordinates.length > 1) {
-            const dist = turf.length(linestring, {units: 'meters'});
-            document.getElementById('infoBox').innerHTML = `PATH DISTANCE:<br>${dist.toFixed(2)}m / ${(dist * 3.28).toFixed(1)}ft`;
         }
-        return;
-    }
+    });
 
-    // Selection & Perimeter Logic
-    selectedId = p.OBJECTID;
-    map.setPaintProperty('parcel-fill', 'fill-color', [
-        'case',
-        ['==', ['get', 'OBJECTID'], selectedId], '#ff9800',
-        ['let', 'totalMarla', ['+', ['*', ['to-number', ['get', 'kanal'], 0], 20], ['to-number', ['get', 'marla'], 0]],
-        ['case', ['>=', ['var', 'totalMarla'], 160], '#00bcd4', ['>=', ['var', 'totalMarla'], 40], '#f06292', '#ffeb3b']]
-    ]);
-
-    const perimeter = turf.length(turf.polygonToLine(feature.geometry), {units: 'meters'});
-    
-    document.getElementById('infoBox').innerHTML = `
-        <strong>KHASRA: ${p.n_khas_no}</strong><br>
-        Area: ${p.kanal}K - ${p.marla}M<br>
-        Perimeter: ${perimeter.toFixed(1)}m<br>
-        ~ ${(perimeter * 3.28).toFixed(1)} ft
-    `;
+    // Populating the list automatically
+    map.on('idle', () => {
+        const select = document.getElementById('parcelSelect');
+        if (select.options.length <= 1) {
+            const features = map.querySourceFeatures('parcels', { sourceLayer: 'query-bo3cb9' });
+            const uniqueKhasras = [...new Set(features.map(f => f.properties.n_khas_no))].sort();
+            uniqueKhasras.forEach(no => {
+                if(no) {
+                    let opt = document.createElement('option');
+                    opt.value = no;
+                    opt.innerHTML = "Khasra: " + no;
+                    select.appendChild(opt);
+                }
+            });
+        }
+    });
 });
+
+function zoomToParcel(khasraNo) {
+    if (!khasraNo) return;
+    const features = map.querySourceFeatures('parcels', { sourceLayer: 'query-bo3cb9' });
+    features.forEach(f => {
+        map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: f.id }, { selected: false });
+        if(f.properties.n_khas_no === khasraNo) {
+            map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: f.id }, { selected: true });
+            const bbox = turf.bbox(f);
+            map.fitBounds(bbox, { padding: 150 });
+        }
+    });
+}
 </script>
 </body>
 </html>
