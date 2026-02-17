@@ -1,171 +1,230 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Adampur Land Portal - Search Fix</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<title>Adampur Cadastral GIS Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-  body { margin:0; font-family: 'Segoe UI', sans-serif; }
-  #map { position:absolute; top:0; bottom:0; width:100%; }
-  #panel { position:absolute; top:15px; left:15px; z-index:3; background:white; padding:20px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.2); width:320px; }
-  input, select, button { width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #ccc; box-sizing: border-box; }
-  button { background:#1a73e8; color:white; font-weight:bold; cursor:pointer; border:none; }
-  #suggestions { background:white; max-height:200px; overflow-y:auto; border:1px solid #ddd; margin-top:5px; border-radius:8px; display:none; }
-  .suggestion-item { padding:12px; cursor:pointer; border-bottom:1px solid #eee; font-size:13px; }
-  .suggestion-item:hover { background:#f1f3f4; }
-  .status-msg { font-size:11px; color:#d93025; margin-top:5px; font-weight:bold; }
+body { margin:0; font-family:Arial, sans-serif; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+
+.panel {
+    position:absolute;
+    top:20px;
+    left:20px;
+    background:white;
+    padding:15px;
+    border-radius:8px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.2);
+    z-index:2;
+    width:300px;
+    font-size:13px;
+}
+
+.panel input {
+    width:100%;
+    padding:8px;
+    margin-top:6px;
+    margin-bottom:10px;
+}
+
+.panel button {
+    width:100%;
+    padding:10px;
+    background:#1f3c88;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.title-block {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:white;
+    border-top:2px solid black;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.signature-block {
+    position:absolute;
+    bottom:120px;
+    right:20px;
+    background:white;
+    padding:10px;
+    border:1px solid black;
+    font-size:11px;
+}
+
+.north-arrow {
+    position:absolute;
+    top:20px;
+    right:20px;
+    background:white;
+    padding:6px;
+    font-weight:bold;
+    border-radius:6px;
+}
+
+@media print {
+    body * { visibility:hidden; }
+    #map, #map * { visibility:visible; }
+    #map { position:absolute; left:0; top:0; width:100%; height:85%; }
+    .title-block, .signature-block { visibility:visible; }
+}
 </style>
 </head>
+
 <body>
-
-<div id="panel">
-  <h3 style="margin:0 0 10px 0; color:#1a73e8;">Adampur Land Portal</h3>
-  
-  <button onclick="zoomToAdampur()">📍 1. CLICK TO LOAD DATA</button>
-  <div id="zoomWarning" class="status-msg" style="display:none;">⚠️ Please click the button above first!</div>
-
-  <select id="searchType" style="margin-top:15px;">
-    <option value="n_khas_no">Search Khasra No.</option>
-    <option value="mu_ki">Search Owner Name</option>
-  </select>
-  <input type="text" id="searchInput" placeholder="Type number here...">
-  <div id="suggestions"></div>
-
-  <button onclick="downloadPDF()" style="margin-top:20px; background:#34a853;">⬇️ 2. Download PDF</button>
-</div>
 
 <div id="map"></div>
 
+<div class="panel">
+<strong>Parcel Search</strong>
+<input type="text" id="searchInput" placeholder="Search Khasra / MuKi">
+<button onclick="window.print()">Export A4 PDF</button>
+</div>
+
+<div class="north-arrow">↑ N</div>
+
+<div class="signature-block">
+<strong>Digitally Signed</strong><br>
+GIS Land Records Portal<br>
+Officer: Selahadin Yasin<br>
+Signature ID: <span id="sigID"></span><br>
+Date: <span id="sigDate"></span>
+</div>
+
+<div class="title-block">
+<div>
+<strong>Project:</strong> Adampur Cadastral Map<br>
+Village: ADAMPUR(34)<br>
+District: HISAR
+</div>
+<div>
+Scale: Auto<br>
+Prepared By: GIS Portal<br>
+Tileset Ref: selahadinosma.39n1a9cd
+</div>
+</div>
+
 <script>
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
 
 const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/light-v11',
-  center: [75.5045, 29.2616],
-  zoom: 12,
-  preserveDrawingBuffer: true
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [75.46, 29.26],
+    zoom: 14
 });
 
-const LAYER_ID = 'adampur_parcels_wgs8-5tkgpu';
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.ScaleControl());
 
 map.on('load', () => {
-  map.addSource('parcels-src', {
-    type: 'vector',
-    url: 'mapbox://selahadinosma.46aakx24'
-  });
 
-  map.addLayer({
-    id: 'parcels-layer',
-    type: 'fill',
-    source: 'parcels-src',
-    'source-layer': LAYER_ID,
-    paint: { 'fill-color': '#1a73e8', 'fill-opacity': 0.2 }
-  });
-});
-
-function zoomToAdampur() {
-  map.flyTo({ center: [75.5045, 29.2616], zoom: 17 });
-  document.getElementById('zoomWarning').style.display = 'none';
-}
-
-const searchInput = document.getElementById('searchInput');
-const suggestions = document.getElementById('suggestions');
-
-searchInput.addEventListener('input', () => {
-  const val = searchInput.value.trim().toLowerCase();
-  const zoom = map.getZoom();
-
-  // If user isn't zoomed in, the data won't exist in the browser yet
-  if (zoom < 14) {
-    document.getElementById('zoomWarning').style.display = 'block';
-    suggestions.style.display = 'none';
-    return;
-  }
-
-  if (val.length < 1) {
-    suggestions.style.display = 'none';
-    return;
-  }
-
-  // Find features in the currently loaded tiles
-  const features = map.queryRenderedFeatures({ layers: ['parcels-layer'] });
-  const type = document.getElementById('searchType').value;
-  
-  // Use a Map to keep unique Khasra numbers
-  const uniqueMatches = new Map();
-
-  features.forEach(f => {
-    const propValue = f.properties[type]?.toString().toLowerCase() || "";
-    if (propValue.includes(val)) {
-      uniqueMatches.set(f.properties.n_khas_no, f);
-    }
-  });
-
-  if (uniqueMatches.size > 0) {
-    suggestions.innerHTML = '';
-    suggestions.style.display = 'block';
-    
-    uniqueMatches.forEach((f, khasra) => {
-      const item = document.createElement('div');
-      item.className = 'suggestion-item';
-      item.innerHTML = `<strong>Khasra: ${khasra}</strong><br><small>Owner: ${f.properties.mu_ki || 'N/A'}</small>`;
-      item.onclick = () => {
-        selectParcel(f);
-        searchInput.value = khasra;
-        suggestions.style.display = 'none';
-      };
-      suggestions.appendChild(item);
+    map.addSource('parcels', {
+        type: 'vector',
+        url: 'mapbox://selahadinosma.39n1a9cd'
     });
-  } else {
-    suggestions.innerHTML = '<div class="suggestion-item">No results. Try moving the map slightly.</div>';
-    suggestions.style.display = 'block';
-  }
+
+    map.addLayer({
+        id: 'parcel-fill',
+        type: 'fill',
+        source: 'parcels',
+        'source-layer': 'query-bo3cb9',
+        paint: {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['to-number',['get','kanal']],
+                0, '#cde5ff',
+                5, '#4A90E2',
+                10, '#1f3c88'
+            ],
+            'fill-opacity': 0.6
+        }
+    });
+
+    map.addLayer({
+        id: 'parcel-outline',
+        type: 'line',
+        source: 'parcels',
+        'source-layer': 'query-bo3cb9',
+        paint: {
+            'line-color': '#000',
+            'line-width': 1
+        }
+    });
+
+    map.addLayer({
+        id: 'parcel-label',
+        type: 'symbol',
+        source: 'parcels',
+        'source-layer': 'query-bo3cb9',
+        layout: {
+            'text-field': ['get','n_khas_no'],
+            'text-size': 11
+        },
+        paint: {
+            'text-color': '#000'
+        }
+    });
+
+    map.on('click', 'parcel-fill', (e) => {
+        const p = e.features[0].properties;
+        new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+            "<b>Khasra:</b> " + p.n_khas_no + "<br>" +
+            "<b>MuKi:</b> " + p.mu_ki + "<br>" +
+            "<b>Murraba:</b> " + p.n_murr_no + "<br>" +
+            "<b>Area:</b> " + p.kanal + " Kanal " + p.marla + " Marla<br>" +
+            "<b>Status:</b> " + p.remarks
+        )
+        .addTo(map);
+    });
+
+    document.getElementById('searchInput')
+    .addEventListener('keyup', function() {
+        const val = this.value.toLowerCase();
+
+        map.setFilter('parcel-fill', [
+            'any',
+            ['in', val, ['downcase', ['get','n_khas_no']]],
+            ['in', val, ['downcase', ['get','mu_ki']]]
+        ]);
+
+        map.setFilter('parcel-outline', [
+            'any',
+            ['in', val, ['downcase', ['get','n_khas_no']]],
+            ['in', val, ['downcase', ['get','mu_ki']]]
+        ]);
+    });
+
 });
 
-let selectedFeature = null;
-
-function selectParcel(f) {
-  selectedFeature = f;
-  
-  if (map.getLayer('highlight')) map.removeLayer('highlight');
-  if (map.getSource('highlight-src')) map.removeSource('highlight-src');
-
-  map.addSource('highlight-src', { type: 'geojson', data: f });
-  map.addLayer({
-    id: 'highlight',
-    type: 'line',
-    source: 'highlight-src',
-    paint: { 'line-color': '#ff0000', 'line-width': 3 }
-  });
-
-  const bbox = turf.bbox(f);
-  map.fitBounds(bbox, { padding: 80 });
+// Auto Digital Signature Generator
+function generateSignature() {
+    const random = Math.random().toString(36).substring(2,10).toUpperCase();
+    const timestamp = Date.now().toString().slice(-6);
+    return "ADP-" + random + "-" + timestamp;
 }
 
-function downloadPDF() {
-  if (!selectedFeature) {
-    alert("Dropdown selection required! Type a Khasra number, then click the result from the list.");
-    return;
-  }
-  const doc = new window.jspdf.jsPDF();
-  const p = selectedFeature.properties;
-  
-  doc.text("ADAMPUR LAND RECORD", 105, 20, { align: 'center' });
-  doc.text(`Khasra: ${p.n_khas_no} | Owner: ${p.mu_ki}`, 20, 40);
-  
-  map.once('idle', () => {
-    const imgData = map.getCanvas().toDataURL('image/png');
-    doc.addImage(imgData, 'PNG', 15, 50, 180, 110);
-    doc.save(`Parcel_${p.n_khas_no}.pdf`);
-  });
-  map.setBearing(map.getBearing());
-}
+document.getElementById("sigID").innerText = generateSignature();
+document.getElementById("sigDate").innerText =
+    new Date().toLocaleString();
+
 </script>
+
 </body>
 </html>
