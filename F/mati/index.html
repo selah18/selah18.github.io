@@ -5,7 +5,7 @@
 <title>Adampur Cadastral GIS Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
 <style>
@@ -120,6 +120,9 @@ Tileset Ref: selahadinosma.39n1a9cd
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
 
+let selectedParcelId = null;
+let adjacentIds = [];
+
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11',
@@ -143,15 +146,8 @@ map.on('load', () => {
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'fill-color': [
-                'interpolate',
-                ['linear'],
-                ['to-number',['get','kanal']],
-                0, '#cde5ff',
-                5, '#4A90E2',
-                10, '#1f3c88'
-            ],
-            'fill-opacity': 0.6
+            'fill-color': '#e6e6e6',
+            'fill-opacity': 0.85
         }
     });
 
@@ -161,8 +157,8 @@ map.on('load', () => {
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'line-color': '#000',
-            'line-width': 1
+            'line-color': '#333',
+            'line-width': 1.2
         }
     });
 
@@ -173,15 +169,37 @@ map.on('load', () => {
         'source-layer': 'query-bo3cb9',
         layout: {
             'text-field': ['get','n_khas_no'],
-            'text-size': 11
+            'text-size': 12,
+            'text-font': ['Open Sans Bold']
         },
         paint: {
-            'text-color': '#000'
+            'text-color': '#111'
         }
     });
 
     map.on('click', 'parcel-fill', (e) => {
-        const p = e.features[0].properties;
+
+        const feature = e.features[0];
+        selectedParcelId = feature.properties.OBJECTID;
+        adjacentIds = [];
+
+        const features = map.queryRenderedFeatures({
+            layers: ['parcel-fill']
+        });
+
+        const selectedGeom = feature.geometry;
+
+        features.forEach(f => {
+            if (f.properties.OBJECTID !== selectedParcelId) {
+                if (isAdjacent(selectedGeom, f.geometry)) {
+                    adjacentIds.push(f.properties.OBJECTID);
+                }
+            }
+        });
+
+        updateStyles();
+
+        const p = feature.properties;
         new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
@@ -213,7 +231,32 @@ map.on('load', () => {
 
 });
 
-// Auto Digital Signature Generator
+function updateStyles() {
+    map.setPaintProperty('parcel-fill', 'fill-color', [
+        'case',
+        ['==', ['get','OBJECTID'], selectedParcelId], '#d7191c',
+        ['in', ['get','OBJECTID'], ['literal', adjacentIds]], '#fdae61',
+        '#e6e6e6'
+    ]);
+}
+
+function isAdjacent(geom1, geom2) {
+    const coords1 = geom1.coordinates[0];
+    const coords2 = geom2.coordinates[0];
+
+    for (let i = 0; i < coords1.length; i++) {
+        for (let j = 0; j < coords2.length; j++) {
+            if (
+                coords1[i][0] === coords2[j][0] &&
+                coords1[i][1] === coords2[j][1]
+            ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function generateSignature() {
     const random = Math.random().toString(36).substring(2,10).toUpperCase();
     const timestamp = Date.now().toString().slice(-6);
