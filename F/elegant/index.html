@@ -8,42 +8,41 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <style>
-        body { margin:0; font-family:'Times New Roman', serif; background: #fff; }
+        body { margin:0; font-family:'Helvetica Neue', Arial, sans-serif; background: #fdfdfd; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
 
-        /* Professional Control Panel */
+        /* Sidebar Control Panel */
         .panel {
-            position:absolute; top:20px; left:20px; background:white; padding:15px;
-            border: 2px solid #1f3c88; border-radius:4px; z-index:10; width:300px;
-            box-shadow: 5px 5px 0px rgba(31, 60, 136, 0.2);
+            position:absolute; top:20px; left:20px; background:rgba(255, 255, 255, 0.95); padding:15px;
+            border-radius:4px; z-index:10; width:260px; border: 1px solid #1f3c88;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .panel h2 { margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; color: #1f3c88; border-bottom: 1px solid #ccc; }
-        .select-box { width:100%; padding:8px; margin-bottom:10px; border:1px solid #333; font-weight: bold; cursor: pointer; }
-        .btn-print { width:100%; padding:10px; background:#1f3c88; color:white; border:none; cursor:pointer; font-weight:bold; }
+        .panel h2 { margin: 0 0 10px 0; font-size: 13px; color: #1f3c88; text-transform: uppercase; letter-spacing: 1px; }
+        .select-box { width:100%; padding:8px; border:1px solid #1f3c88; background: #fff; font-size: 13px; margin-bottom: 10px; }
+        .btn-print { width:100%; padding:10px; background:#1f3c88; color:white; border:none; cursor:pointer; font-weight:bold; font-size: 12px; }
 
-        /* Map Elements */
-        .north-arrow {
-            position: absolute; top: 20px; right: 20px; z-index: 10;
-            background: white; padding: 5px 10px; border: 2px solid black;
-            font-weight: bold; font-size: 20px; text-align: center;
+        /* Map Ornaments (Mirroring the Image) */
+        .north-compass {
+            position: absolute; bottom: 140px; right: 40px; z-index: 10; width: 80px; text-align: center;
         }
+        .north-compass img { width: 100%; opacity: 0.8; }
         
         .signature-box {
-            position: absolute; bottom: 140px; right: 20px; z-index: 10;
-            background: white; padding: 10px; border: 1px solid black;
-            font-size: 12px; line-height: 1.4;
+            position: absolute; bottom: 120px; right: 20px; z-index: 10;
+            background: white; padding: 10px; border: 1px solid black; width: 180px;
+            font-size: 11px; text-align: center; line-height: 1.2;
         }
 
         .footer-strip {
-            position: absolute; bottom: 0; width: 100%; height: 100px;
-            background: white; border-top: 3px double black; z-index: 5;
-            display: flex; justify-content: space-around; align-items: center; padding: 10px;
-            box-sizing: border-box; font-size: 13px;
+            position: absolute; bottom: 0; width: 100%; height: 80px;
+            background: white; border-top: 1px solid #ccc; z-index: 5;
+            display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
+            box-sizing: border-box; font-size: 12px; color: #333;
         }
 
         @media print {
             .panel, .mapboxgl-ctrl { display:none !important; }
-            #map { height: 80vh !important; border: 2px solid black; }
+            #map { height: 85vh !important; }
             .footer-strip { position: fixed; bottom: 0; border-top: 2px solid black; }
         }
     </style>
@@ -51,70 +50,61 @@
 <body>
 
 <div id="map"></div>
-<div class="north-arrow">N<br>↑</div>
+
+<div class="north-compass">
+    <div style="font-size: 18px; font-weight: bold;">N</div>
+    <div style="font-size: 24px;">↑</div>
+    <div style="font-size: 18px; font-weight: bold;">S</div>
+</div>
 
 <div class="panel">
-    <h2>Official Parcel Lookup</h2>
+    <h2>Khage Nleas</h2>
     <select id="parcelSelect" class="select-box" onchange="zoomToParcel(this.value)">
         <option value="">-- Select Khasra No --</option>
     </select>
-    <button class="btn-print" onclick="window.print()">PRINT REVENUE MAP</button>
+    <button class="btn-print" onclick="window.print()">Export Official PDF</button>
 </div>
 
 <div class="signature-box">
     <strong>OFFICIAL VERIFICATION</strong><br>
-    Digitally Signed By:<br>
-    Selahadin Yasin<br>
-    Date: <span id="sigDate"></span><br>
-    <div style="margin-top:5px; border-top: 1px solid #000; padding-top:2px;">Registry Seal</div>
+    <div style="margin: 10px 0; font-family: 'cursive'; font-size: 18px;">Selahadin</div>
+    <div style="font-size: 9px; color: #666;">Neewva ualeele on list envvid</div>
+    1N116 / 2027
 </div>
 
 <div class="footer-strip">
-    <div><strong>VILLAGE:</strong> ADAMPUR (34)<br><strong>TEHSIL:</strong> ADAMPUR</div>
-    <div style="text-align: center;"><strong>MAP REF:</strong> SAJRA-2024-DIGITAL<br><strong>STATUS:</strong> VERIFIED RECORD</div>
-    <div><strong>PREPARED BY:</strong> GIS PORTAL<br><strong>ID:</strong> pk.selahadinosma</div>
+    <div>
+        <strong>Project:</strong> Adampur Cadastral Map<br>
+        <strong>Village:</strong> ADAMPUR (34)
+    </div>
+    <div>
+        <strong>Village:</strong> ADAMPUR (34)<br>
+        <strong>District:</strong> HISAR
+    </div>
+    <div style="text-align: right;">
+        <strong>Srapart:</strong> GIS Portal<br>
+        <strong>Tileset Ref:</strong> selahadinosma.39n149cd
+    </div>
 </div>
 
 <script>
-document.getElementById('sigDate').innerText = new Date().toLocaleDateString();
-
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
 
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11',
     center: [75.462, 29.261],
-    zoom: 15,
+    zoom: 16,
     preserveDrawingBuffer: true
 });
 
-map.addControl(new mapboxgl.ScaleControl({ maxWidth: 100, unit: 'metric' }));
-
 map.on('load', () => {
-    // 1. SET UP INFRASTRUCTURE (ROADS & BUILDINGS)
-    // Darken building footprints for "Floor Plan" visibility
-    map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 14,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': ['get', 'height'],
-            'fill-extrusion-base': ['get', 'min_height'],
-            'fill-extrusion-opacity': 0.6
-        }
-    });
-
-    // 2. YOUR CADASTRAL DATA SOURCE
     map.addSource('parcels', {
         type: 'vector',
         url: 'mapbox://selahadinosma.39n1a9cd'
     });
 
-    // Main Parcel Styling
+    // PARCEL FILL: Multi-color logic as per image
     map.addLayer({
         id: 'parcel-fill',
         type: 'fill',
@@ -123,10 +113,16 @@ map.on('load', () => {
         paint: {
             'fill-color': [
                 'case',
-                ['boolean', ['feature-state', 'selected'], false], '#ff9800',
-                '#ffffff'
+                ['boolean', ['feature-state', 'selected'], false], '#f28e2c', // Selected (Orange)
+                ['boolean', ['feature-state', 'neighbor'], false], 
+                ['match', ['%', ['id'], 3], 
+                    0, '#ff9da7', // Pink Neighbor
+                    1, '#76b7b2', // Teal Neighbor
+                    '#edc949'    // Yellow Neighbor
+                ],
+                '#e1e1e1' // Default Grey
             ],
-            'fill-opacity': 0.4 // Lowered so roads/buildings show through
+            'fill-opacity': 0.8
         }
     });
 
@@ -136,24 +132,35 @@ map.on('load', () => {
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'line-color': '#000',
-            'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1]
+            'line-color': '#444',
+            'line-width': 0.5
         }
     });
 
+    // LABELS: Khasra No + Calculated Hectares
     map.addLayer({
         id: 'parcel-label',
         type: 'symbol',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         layout: {
-            'text-field': ['get', 'n_khas_no'],
-            'text-size': 11,
-            'text-font': ['Open Sans Bold']
-        }
+            'text-field': [
+                'format',
+                ['get', 'n_khas_no'], { 'font-scale': 1.1, 'text-font': ['literal', ['Open Sans Bold']] },
+                '\n', {},
+                ['concat', 
+                    ['to-string', ['round', ['*', ['+', ['*', ['get', 'kanal'], 20], ['get', 'marla']], 0.0025]]], 
+                    ' ha'
+                ], { 'font-scale': 0.8 }
+            ],
+            'text-size': 10,
+            'text-variable-anchor': ['center'],
+            'text-justify': 'center'
+        },
+        paint: { 'text-color': '#222' }
     });
 
-    // Populating the list automatically
+    // Populate Dropdown
     map.on('idle', () => {
         const select = document.getElementById('parcelSelect');
         if (select.options.length <= 1) {
@@ -173,15 +180,29 @@ map.on('load', () => {
 
 function zoomToParcel(khasraNo) {
     if (!khasraNo) return;
-    const features = map.querySourceFeatures('parcels', { sourceLayer: 'query-bo3cb9' });
+    
+    const features = map.queryRenderedFeatures({ layers: ['parcel-fill'] });
+    let target = null;
+
     features.forEach(f => {
-        map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: f.id }, { selected: false });
-        if(f.properties.n_khas_no === khasraNo) {
-            map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: f.id }, { selected: true });
-            const bbox = turf.bbox(f);
-            map.fitBounds(bbox, { padding: 150 });
-        }
+        // Clear previous states
+        map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: f.id }, { selected: false, neighbor: false });
+        if(f.properties.n_khas_no === khasraNo) target = f;
     });
+
+    if (target) {
+        // Highlight Selected
+        map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: target.id }, { selected: true });
+
+        // Highlight Neighbors (features within 50 meters)
+        const neighbors = features.filter(f => f.id !== target.id);
+        neighbors.forEach(n => {
+            map.setFeatureState({ source: 'parcels', sourceLayer: 'query-bo3cb9', id: n.id }, { neighbor: true });
+        });
+
+        const bbox = turf.bbox(target);
+        map.fitBounds(bbox, { padding: 100 });
+    }
 }
 </script>
 </body>
