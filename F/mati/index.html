@@ -2,90 +2,73 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Professional Cadastral Floor Map</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Adampur Cadastral Floor Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
 <style>
-body { margin:0; padding:0; background:white; font-family:Arial; }
+body { margin:0; font-family:Arial; }
 #map { position:absolute; top:0; bottom:0; width:100%; }
 
-.a4-border{
+.panel {
     position:absolute;
     top:20px;
-    bottom:20px;
     left:20px;
-    right:20px;
-    border:3px solid black;
-    pointer-events:none;
+    background:white;
+    padding:10px;
+    border-radius:6px;
+    box-shadow:0 3px 15px rgba(0,0,0,0.2);
+    z-index:10;
+    width:250px;
+    font-size:13px;
 }
 
-.title-box{
-    position:absolute;
-    top:30px;
-    left:50%;
-    transform:translateX(-50%);
-    font-weight:bold;
-    font-size:18px;
-}
+.panel input { width:100%; padding:6px; margin-bottom:6px; }
+.panel button { width:100%; padding:8px; background:#1f3c88; color:white; border:none; border-radius:4px; cursor:pointer; }
 
-.signature{
-    position:absolute;
-    bottom:40px;
-    right:50px;
-    font-size:12px;
-}
+.title-box{ position:absolute; top:10px; left:50%; transform:translateX(-50%); font-weight:bold; font-size:18px; background:white; padding:4px 10px; border-radius:4px; z-index:9; }
+.north-arrow{ position:absolute; top:10px; right:20px; font-size:22px; font-weight:bold; background:white; padding:4px 6px; border-radius:4px; }
+.signature{ position:absolute; bottom:20px; right:20px; font-size:12px; background:white; padding:4px 6px; border:1px solid #000; border-radius:4px; }
 
-.north-arrow{
-    position:absolute;
-    top:80px;
-    right:40px;
-    font-size:24px;
-    font-weight:bold;
-}
-
-@media print{
-    .no-print{ display:none; }
-}
+@media print{ .panel { display:none; } }
 </style>
 </head>
-
 <body>
 
 <div id="map"></div>
-<div class="a4-border"></div>
 <div class="title-box">ADAMPUR CADASTRAL FLOOR MAP</div>
-<div class="north-arrow">N ↑</div>
-
+<div class="north-arrow">↑ N</div>
 <div class="signature">
-    GIS Officer<br>
-    Digital Signature: Auto Verified<br>
-    Date: <span id="date"></span>
+Officer: Selahadin Yasin<br>
+Signature: Auto Verified<br>
+Date: <span id="sigDate"></span>
+</div>
+
+<div class="panel">
+<input type="text" id="searchInput" placeholder="Search Khasra / MuKi">
+<button onclick="exportPDF()">Export A4 PDF</button>
 </div>
 
 <script>
-
-document.getElementById("date").innerHTML =
-new Date().toLocaleDateString();
+document.getElementById("sigDate").innerText = new Date().toLocaleDateString();
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VsYWhhZGlub3NtYSIsImEiOiJjazN0bWd5MnIwMXpoM2Rxc25vYTh2cWZwIn0.jLJ0WYJz1asf5kJa80iCBg';
 
 let selectedId = null;
 let adjacentIds = [];
+let borderIds = [];
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: {
-        version: 8,
-        sources: {},
-        layers: []
-    },
+    style: 'mapbox://styles/mapbox/light-v11',
     center: [75.46,29.26],
     zoom: 16
 });
 
+map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.ScaleControl({maxWidth:150, unit:'metric'}));
 
 map.on('load', () => {
@@ -100,10 +83,7 @@ map.on('load', () => {
         type: 'fill',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
-        paint: {
-            'fill-color': '#eeeeee',
-            'fill-opacity': 1
-        }
+        paint: { 'fill-color': '#eeeeee','fill-opacity': 1 }
     });
 
     map.addLayer({
@@ -111,10 +91,7 @@ map.on('load', () => {
         type: 'line',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
-        paint: {
-            'line-color': '#000000',
-            'line-width': 2.5
-        }
+        paint: { 'line-color':'#000','line-width':2 }
     });
 
     map.addLayer({
@@ -122,27 +99,30 @@ map.on('load', () => {
         type: 'symbol',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
-        layout: {
-            'text-field': ['get','n_khas_no'],
-            'text-size': 14,
-            'text-font': ['Open Sans Bold'],
-            'text-anchor': 'center'
-        },
-        paint: {
-            'text-color': '#000'
-        }
+        layout: { 'text-field': ['get','n_khas_no'],'text-size': 12,'text-font': ['Open Sans Bold'],'text-anchor':'center'},
+        paint: { 'text-color':'#000' }
     });
 
-    map.on('click','parcel-fill',(e)=>{
+    // COMPUTE BORDER PARCELS USING CONVEX HULL
+    map.once('idle', () => {
+        const features = map.queryRenderedFeatures({layers:['parcel-fill']});
+        const fc = turf.featureCollection(features.map(f=>f));
+        const hull = turf.convex(fc);
 
+        borderIds = features.filter(f=>{
+            return turf.booleanIntersects(f,hull);
+        }).map(f=>f.properties.OBJECTID);
+
+        updateColors();
+    });
+
+    // CLICK PARCEL
+    map.on('click','parcel-fill', (e)=>{
         const feature = e.features[0];
         selectedId = feature.properties.OBJECTID;
         adjacentIds = [];
 
-        const features = map.queryRenderedFeatures({
-            layers:['parcel-fill']
-        });
-
+        const features = map.queryRenderedFeatures({layers:['parcel-fill']});
         const geom = feature.geometry;
 
         features.forEach(f=>{
@@ -155,44 +135,74 @@ map.on('load', () => {
 
         updateColors();
 
-        map.fitBounds(turf.bbox(feature),{
-            padding:100,
-            maxZoom:18
-        });
+        const bbox = turf.bbox(feature);
+        map.fitBounds(bbox,{padding:60});
+    });
 
+    // SEARCH FILTER
+    document.getElementById('searchInput').addEventListener('keyup', function(){
+        const val = this.value.toLowerCase();
+        map.setFilter('parcel-fill',[
+            'any',
+            ['in', val, ['downcase', ['get','n_khas_no']]],
+            ['in', val, ['downcase', ['get','mu_ki']]]
+        ]);
+        map.setFilter('parcel-outline',[
+            'any',
+            ['in', val, ['downcase', ['get','n_khas_no']]],
+            ['in', val, ['downcase', ['get','mu_ki']]]
+        ]);
+        map.setFilter('parcel-label',[
+            'any',
+            ['in', val, ['downcase', ['get','n_khas_no']]],
+            ['in', val, ['downcase', ['get','mu_ki']]]
+        ]);
     });
 
 });
 
 function updateColors(){
-
     map.setPaintProperty('parcel-fill','fill-color',[
         'case',
-        ['==',['get','OBJECTID'],selectedId],'#ff0000',
-        ['in',['get','OBJECTID'],['literal',adjacentIds]],'#ffcc80',
+        ['==',['get','OBJECTID'],selectedId],'#ff0000',           // Selected red
+        ['in',['get','OBJECTID'],['literal',adjacentIds]],'#ffa500', // Adjacent orange
+        ['in',['get','OBJECTID'],['literal',borderIds]],'#ffff66',   // Border yellow
         '#eeeeee'
     ]);
-
 }
 
 function isAdjacent(g1,g2){
     const c1 = g1.coordinates[0];
     const c2 = g2.coordinates[0];
-
     for(let i=0;i<c1.length;i++){
         for(let j=0;j<c2.length;j++){
-            if(c1[i][0]===c2[j][0] &&
-               c1[i][1]===c2[j][1]){
-                return true;
-            }
+            if(c1[i][0]===c2[j][0] && c1[i][1]===c2[j][1]) return true;
         }
     }
     return false;
 }
 
+// PRINT / PDF
+function exportPDF(){
+    const canvas = map.getCanvas();
+    const imgData = canvas.toDataURL('image/png');
+    const printWindow = window.open('','_blank');
+    printWindow.document.write(`
+        <html>
+        <head><title>Floor Map PDF</title></head>
+        <body style="margin:0;text-align:center;">
+            <h3>ADAMPUR CADASTRAL FLOOR MAP</h3>
+            <img src="${imgData}" style="width:95%;border:2px solid black;">
+            <div style="text-align:right;margin:10px;">
+                GIS Officer<br>Signature: Auto Verified<br>Date: ${new Date().toLocaleDateString()}
+            </div>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
 </script>
-
-<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
-
 </body>
 </html>
