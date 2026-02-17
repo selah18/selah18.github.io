@@ -39,7 +39,7 @@ body { margin:0; font-family:Arial; }
 <body>
 
 <div id="map"></div>
-<div class="title-box">ADAMPUR CADASTRAL FLOOR MAP</div>
+<div class="title-box"> CADASTRAL FLOOR MAP</div>
 <div class="north-arrow">↑ N</div>
 <div class="signature">
 Officer: Selahadin Yasin<br>
@@ -78,6 +78,7 @@ map.on('load', () => {
         url: 'mapbox://selahadinosma.39n1a9cd'
     });
 
+    // Fill layer
     map.addLayer({
         id: 'parcel-fill',
         type: 'fill',
@@ -86,6 +87,7 @@ map.on('load', () => {
         paint: { 'fill-color': '#eeeeee','fill-opacity': 1 }
     });
 
+    // Outline layer
     map.addLayer({
         id: 'parcel-outline',
         type: 'line',
@@ -94,6 +96,7 @@ map.on('load', () => {
         paint: { 'line-color':'#000','line-width':2 }
     });
 
+    // Labels
     map.addLayer({
         id: 'parcel-label',
         type: 'symbol',
@@ -103,20 +106,16 @@ map.on('load', () => {
         paint: { 'text-color':'#000' }
     });
 
-    // COMPUTE BORDER PARCELS USING CONVEX HULL
+    // Compute true border parcels using convex hull
     map.once('idle', () => {
         const features = map.queryRenderedFeatures({layers:['parcel-fill']});
         const fc = turf.featureCollection(features.map(f=>f));
         const hull = turf.convex(fc);
-
-        borderIds = features.filter(f=>{
-            return turf.booleanIntersects(f,hull);
-        }).map(f=>f.properties.OBJECTID);
-
+        borderIds = features.filter(f=>turf.booleanIntersects(f,hull)).map(f=>f.properties.OBJECTID);
         updateColors();
     });
 
-    // CLICK PARCEL
+    // CLICK PARCEL for highlight and popup
     map.on('click','parcel-fill', (e)=>{
         const feature = e.features[0];
         selectedId = feature.properties.OBJECTID;
@@ -135,8 +134,25 @@ map.on('load', () => {
 
         updateColors();
 
+        // Zoom to selected
         const bbox = turf.bbox(feature);
         map.fitBounds(bbox,{padding:60});
+
+        // Show popup with details
+        const p = feature.properties;
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(`
+                <b>Khasra No:</b> ${p.n_khas_no}<br>
+                <b>MuKi:</b> ${p.mu_ki}<br>
+                <b>Murraba:</b> ${p.n_murr_no}<br>
+                <b>Area:</b> ${p.kanal} Kanal ${p.marla} Marla<br>
+                <b>Village:</b> ${p.n_v_name}<br>
+                <b>Tehsil:</b> ${p.n_t_name}<br>
+                <b>District:</b> ${p.n_d_name}<br>
+                <b>Remarks:</b> ${p.remarks}
+            `)
+            .addTo(map);
     });
 
     // SEARCH FILTER
@@ -161,16 +177,18 @@ map.on('load', () => {
 
 });
 
+// UPDATE COLORS
 function updateColors(){
     map.setPaintProperty('parcel-fill','fill-color',[
         'case',
-        ['==',['get','OBJECTID'],selectedId],'#ff0000',           // Selected red
-        ['in',['get','OBJECTID'],['literal',adjacentIds]],'#ffa500', // Adjacent orange
-        ['in',['get','OBJECTID'],['literal',borderIds]],'#ffff66',   // Border yellow
+        ['==',['get','OBJECTID'],selectedId],'#ff0000',           // Selected
+        ['in',['get','OBJECTID'],['literal',adjacentIds]],'#ffa500', // Adjacent
+        ['in',['get','OBJECTID'],['literal',borderIds]],'#ffff66',   // Border
         '#eeeeee'
     ]);
 }
 
+// ADJACENCY CHECK
 function isAdjacent(g1,g2){
     const c1 = g1.coordinates[0];
     const c2 = g2.coordinates[0];
@@ -182,26 +200,37 @@ function isAdjacent(g1,g2){
     return false;
 }
 
-// PRINT / PDF
+// EXPORT PDF
 function exportPDF(){
-    const canvas = map.getCanvas();
-    const imgData = canvas.toDataURL('image/png');
-    const printWindow = window.open('','_blank');
-    printWindow.document.write(`
-        <html>
-        <head><title>Floor Map PDF</title></head>
-        <body style="margin:0;text-align:center;">
-            <h3>ADAMPUR CADASTRAL FLOOR MAP</h3>
-            <img src="${imgData}" style="width:95%;border:2px solid black;">
-            <div style="text-align:right;margin:10px;">
-                GIS Officer<br>Signature: Auto Verified<br>Date: ${new Date().toLocaleDateString()}
-            </div>
-        </body>
-        </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
+    map.once('idle', ()=>{
+        const canvas = map.getCanvas();
+        const width = canvas.width * 2;
+        const height = canvas.height * 2;
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = width;
+        tmpCanvas.height = height;
+        const ctx = tmpCanvas.getContext('2d');
+        ctx.scale(2,2);
+        ctx.drawImage(canvas,0,0);
+        const imgData = tmpCanvas.toDataURL('image/png');
+
+        const printWindow = window.open('','_blank');
+        printWindow.document.write(`
+            <html>
+            <head><title>Floor Map PDF</title></head>
+            <body style="margin:0;text-align:center;">
+                <h3>ADAMPUR CADASTRAL FLOOR MAP</h3>
+                <img src="${imgData}" style="width:95%;border:2px solid black;">
+                <div style="text-align:right;margin:10px;">
+                    GIS Officer<br>Signature: Auto Verified<br>Date: ${new Date().toLocaleDateString()}
+                </div>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+    });
 }
 </script>
 </body>
