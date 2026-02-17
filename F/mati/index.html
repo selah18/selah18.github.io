@@ -125,9 +125,9 @@ let adjacentIds = [];
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/light-v11',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
     center: [75.46, 29.26],
-    zoom: 14
+    zoom: 16
 });
 
 map.addControl(new mapboxgl.NavigationControl());
@@ -140,14 +140,29 @@ map.on('load', () => {
         url: 'mapbox://selahadinosma.39n1a9cd'
     });
 
+    // FIT MAP TO PARCEL BOUNDS AUTOMATICALLY
+    const bounds = new mapboxgl.LngLatBounds();
+
+    map.querySourceFeatures('parcels', {
+        sourceLayer: 'query-bo3cb9'
+    }).forEach(feature => {
+        feature.geometry.coordinates[0].forEach(coord => {
+            bounds.extend(coord);
+        });
+    });
+
+    if (!bounds.isEmpty()) {
+        map.fitBounds(bounds, { padding: 50 });
+    }
+
     map.addLayer({
         id: 'parcel-fill',
         type: 'fill',
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'fill-color': '#e6e6e6',
-            'fill-opacity': 0.85
+            'fill-color': '#f2f2f2',
+            'fill-opacity': 0.9
         }
     });
 
@@ -157,8 +172,8 @@ map.on('load', () => {
         source: 'parcels',
         'source-layer': 'query-bo3cb9',
         paint: {
-            'line-color': '#333',
-            'line-width': 1.2
+            'line-color': '#000',
+            'line-width': 2
         }
     });
 
@@ -169,11 +184,11 @@ map.on('load', () => {
         'source-layer': 'query-bo3cb9',
         layout: {
             'text-field': ['get','n_khas_no'],
-            'text-size': 12,
+            'text-size': 13,
             'text-font': ['Open Sans Bold']
         },
         paint: {
-            'text-color': '#111'
+            'text-color': '#000'
         }
     });
 
@@ -212,31 +227,14 @@ map.on('load', () => {
         .addTo(map);
     });
 
-    document.getElementById('searchInput')
-    .addEventListener('keyup', function() {
-        const val = this.value.toLowerCase();
-
-        map.setFilter('parcel-fill', [
-            'any',
-            ['in', val, ['downcase', ['get','n_khas_no']]],
-            ['in', val, ['downcase', ['get','mu_ki']]]
-        ]);
-
-        map.setFilter('parcel-outline', [
-            'any',
-            ['in', val, ['downcase', ['get','n_khas_no']]],
-            ['in', val, ['downcase', ['get','mu_ki']]]
-        ]);
-    });
-
 });
 
 function updateStyles() {
     map.setPaintProperty('parcel-fill', 'fill-color', [
         'case',
-        ['==', ['get','OBJECTID'], selectedParcelId], '#d7191c',
-        ['in', ['get','OBJECTID'], ['literal', adjacentIds]], '#fdae61',
-        '#e6e6e6'
+        ['==', ['get','OBJECTID'], selectedParcelId], '#ff0000',
+        ['in', ['get','OBJECTID'], ['literal', adjacentIds]], '#ffa500',
+        '#f2f2f2'
     ]);
 }
 
@@ -256,16 +254,6 @@ function isAdjacent(geom1, geom2) {
     }
     return false;
 }
-
-function generateSignature() {
-    const random = Math.random().toString(36).substring(2,10).toUpperCase();
-    const timestamp = Date.now().toString().slice(-6);
-    return "ADP-" + random + "-" + timestamp;
-}
-
-document.getElementById("sigID").innerText = generateSignature();
-document.getElementById("sigDate").innerText =
-    new Date().toLocaleString();
 
 </script>
 
