@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Question For You 💌</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #1a1a1a, #4a4a4a, #1a1a1a);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 24px;
+    padding: 30px 22px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid #000;
+  }
+  h1 {
+    font-size: 1.4rem;
+    color: #000;
+    margin-bottom: 6px;
+  }
+  p.sub {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+  .btn-row {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    min-height: 70px;
+  }
+  button {
+    border: none;
+    border-radius: 50px;
+    padding: 14px 28px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .yes-btn {
+    background: #000;
+    color: white;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+  }
+  .yes-btn:active { transform: scale(0.95); }
+  .no-btn {
+    background: #ddd;
+    color: #888;
+    position: absolute;
+    transition: top 0.25s ease, left 0.25s ease;
+  }
+  .emoji-big {
+    font-size: 3rem;
+    margin-bottom: 6px;
+  }
+  /* Step 2 - location picker */
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .option-card {
+    background: #f2f2f2;
+    border: 2px solid #ccc;
+    border-radius: 16px;
+    padding: 16px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #222;
+    transition: all 0.2s ease;
+  }
+  .option-card .icon {
+    font-size: 1.8rem;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .option-card.selected {
+    border-color: #000;
+    background: #e0e0e0;
+    transform: scale(1.04);
+  }
+  input[type="date"] {
+    margin-top: 16px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 2px solid #ccc;
+    font-size: 1rem;
+    width: 100%;
+  }
+  .confirm-btn {
+    margin-top: 22px;
+    background: #000;
+    color: white;
+    width: 100%;
+    padding: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+  }
+  .confirm-btn:disabled {
+    background: #bbb;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+  .hidden { display: none; }
+  .final-message {
+    font-size: 1.1rem;
+    color: #000;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .small-note {
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: #777;
+  }
+  .hearts {
+    position: fixed;
+    top: -10px;
+    font-size: 1.5rem;
+    color: #000;
+    animation: fall linear forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+
+  <!-- STEP 1: The Ask -->
+  <div id="step1">
+    <div class="emoji-big">🌹</div>
+    <h1>Will you go on a first date with me?</h1>
+    <p class="sub">No pressure... the "No" button is just a little shy 😏</p>
+    <div class="btn-row" id="btnRow">
+      <button class="yes-btn" id="yesBtn" onclick="goToStep2()">Yes 💕</button>
+      <button class="no-btn" id="noBtn">No</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Pick location + date -->
+  <div id="step2" class="hidden">
+    <div class="emoji-big">🎉</div>
+    <h1>Yay! Now pick our spot</h1>
+    <p class="sub">Where would you like to go?</p>
+    <div class="options">
+      <div class="option-card" data-loc="☕ Cozy Cafe">
+        <span class="icon">☕</span> Cozy Cafe
+      </div>
+      <div class="option-card" data-loc="🍝 Nice Dinner">
+        <span class="icon">🍝</span> Nice Dinner
+      </div>
+      <div class="option-card" data-loc="🌳 Park Walk">
+        <span class="icon">🌳</span> Park Walk
+      </div>
+      <div class="option-card" data-loc="🎬 Movie Night">
+        <span class="icon">🎬</span> Movie Night
+      </div>
+    </div>
+    <input type="date" id="dateInput">
+    <button class="confirm-btn" id="confirmBtn" disabled onclick="goToStep3()">Confirm Our Date 💌</button>
+  </div>
+
+  <!-- STEP 3: Final confirmation -->
+  <div id="step3" class="hidden">
+    <div class="emoji-big">🥳</div>
+    <p class="final-message" id="finalMsg"></p>
+    <p class="small-note">Can't wait to see you 💖</p>
+  </div>
+
+</div>
+
+<script>
+  const noBtn = document.getElementById('noBtn');
+  const btnRow = document.getElementById('btnRow');
+  const card = document.getElementById('card');
+
+  // Make "No" button dodge touches/clicks within the card
+  function moveNoButton() {
+    const cardRect = card.getBoundingClientRect();
+    const btnW = noBtn.offsetWidth || 90;
+    const btnH = noBtn.offsetHeight || 50;
+    const maxX = cardRect.width - btnW - 20;
+    const maxY = cardRect.height - btnH - 20;
+    const randX = Math.max(10, Math.random() * maxX);
+    const randY = Math.max(10, Math.random() * maxY);
+    noBtn.style.left = randX + 'px';
+    noBtn.style.top = randY + 'px';
+    noBtn.style.position = 'absolute';
+  }
+
+  // Make card position relative so absolute positioning works
+  card.style.position = 'relative';
+
+  // Trigger dodge on touch/click attempt and on hover proximity (mobile: touchstart)
+  ['touchstart', 'pointerdown', 'mouseover', 'click'].forEach(evt => {
+    noBtn.addEventListener(evt, function(e) {
+      e.preventDefault();
+      moveNoButton();
+    });
+  });
+
+  // Initial placement after layout
+  window.addEventListener('load', () => {
+    setTimeout(moveNoButton, 300);
+  });
+
+  function goToStep2() {
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    spawnHearts();
+  }
+
+  // Location selection
+  const optionCards = document.querySelectorAll('.option-card');
+  let selectedLocation = null;
+  optionCards.forEach(opt => {
+    opt.addEventListener('click', () => {
+      optionCards.forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedLocation = opt.dataset.loc;
+      checkReady();
+    });
+  });
+
+  const dateInput = document.getElementById('dateInput');
+  const confirmBtn = document.getElementById('confirmBtn');
+  dateInput.addEventListener('change', checkReady);
+
+  function checkReady() {
+    confirmBtn.disabled = !(selectedLocation && dateInput.value);
+  }
+
+  function goToStep3() {
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.remove('hidden');
+    const dateObj = new Date(dateInput.value + 'T00:00:00');
+    const formatted = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    document.getElementById('finalMsg').innerText =
+      `It's official! ${selectedLocation} on ${formatted}. 🎉`;
+    spawnHearts();
+    sendToFormspree(selectedLocation, formatted);
+  }
+
+  function sendToFormspree(location, formattedDate) {
+    fetch('https://formspree.io/f/mjgqvavw', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `She said YES! 🎉\nLocation: ${location}\nDate: ${formattedDate}`,
+        location: location,
+        date: formattedDate,
+        _subject: "She Said Yes! 💕 Date Details Inside"
+      })
+    }).catch(err => console.log('Form send error:', err));
+  }
+
+  function spawnHearts() {
+    for (let i = 0; i < 18; i++) {
+      const h = document.createElement('div');
+      h.className = 'hearts';
+      h.innerText = ['✦','★','✧','◆','●'][Math.floor(Math.random()*5)];
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.animationDuration = (2 + Math.random() * 2) + 's';
+      h.style.fontSize = (1 + Math.random()) + 'rem';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }
+  }
+</script>
+
+</body>
+</html>
