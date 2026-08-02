@@ -101,12 +101,19 @@
   }
 
   /* goat pilot illustration, signature element */
-  .goat-scene{
-    position:relative;
-    width:140px;
+.goat-scene{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     margin:20px auto 30px;
     transition:transform .4s ease;
-  }
+}
+.goat-img{
+    width:140px;
+    height:auto;
+    display:block;
+}
   .goat-scene.happy{
     animation:bounce .6s ease;
   }
