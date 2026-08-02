@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Flight Clearance // Request</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root{
+    --white:#ffffff;
+    --teal:#2596be;
+    --teal-dark:#1b7195;
+    --navy:#050f3c;
+    --card:#0a1747;
+    --ink:#050f3c;
+    --ink-dim:rgba(5,15,60,0.6);
+    --line:rgba(5,15,60,0.12);
+    --on-dark:#eef4f8;
+    --on-dark-dim:rgba(238,244,248,0.6);
+    --line-dark:rgba(255,255,255,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--white);
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:480px;
+    margin:0 auto;
+    padding:28px 20px 80px;
+  }
+
+  /* top strip like an instrument bar */
+  .instrument-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:11px;
+    letter-spacing:.12em;
+    color:var(--ink-dim);
+    border-bottom:1px solid var(--line);
+    padding-bottom:10px;
+    margin-bottom:26px;
+    text-transform:uppercase;
+  }
+  .instrument-bar .dot{
+    display:inline-block;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--teal);
+    margin-right:6px;
+    box-shadow:0 0 6px var(--teal);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:.4;}
+  }
+
+  /* HUD headline */
+  .hud{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .hud .eyebrow{
+    font-size:11px;
+    letter-spacing:.3em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .hud h1{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:clamp(30px,8vw,42px);
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    margin:0 0 6px;
+    line-height:1.05;
+    color:var(--navy);
+  }
+  .hud h1 span{
+    color:var(--teal);
+  }
+  .hud p.sub{
+    color:var(--ink-dim);
+    font-size:13px;
+    max-width:340px;
+    margin:0 auto;
+    line-height:1.6;
+  }
+
+  /* goat pilot illustration, signature element */
+  .goat-scene{
+    position:relative;
+    width:200px;
+    margin:20px auto 30px;
+    transition:transform .4s ease;
+  }
+  .goat-scene.happy{
+    animation:bounce .6s ease;
+  }
+  @keyframes bounce{
+    0%{transform:translateY(0) rotate(0deg);}
+    30%{transform:translateY(-14px) rotate(-4deg);}
+    55%{transform:translateY(0) rotate(3deg);}
+    75%{transform:translateY(-6px) rotate(-1deg);}
+    100%{transform:translateY(0) rotate(0deg);}
+  }
+  .goat-img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:10px;
+  }
+  .goat-sign{
+    position:absolute;
+    top:6px;
+    right:-38px;
+    transform:rotate(8deg);
+  }
+  .sign-stick{
+    width:3px;
+    height:26px;
+    background:var(--navy);
+    margin:0 auto;
+  }
+  .sign-board{
+    background:var(--white);
+    border:2.5px solid var(--navy);
+    border-radius:6px;
+    padding:8px 10px;
+    font-family:'Oswald', sans-serif;
+    font-size:11px;
+    font-weight:600;
+    line-height:1.3;
+    color:var(--navy);
+    text-align:center;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    box-shadow:3px 3px 0 var(--teal);
+    max-width:120px;
+  }
+
+  /* flight schedule card */
+  .board{
+    background:linear-gradient(180deg, var(--navy), var(--card));
+    border:1px solid var(--line-dark);
+    border-radius:14px;
+    padding:22px 18px;
+    box-shadow:0 20px 50px rgba(5,15,60,0.25);
+    color:var(--on-dark);
+  }
+  .board-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:14px;
+    border-bottom:1px dashed var(--line-dark);
+    padding-bottom:10px;
+  }
+  .board-head h2{
+    font-family:'Oswald', sans-serif;
+    font-size:15px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin:0;
+    color:var(--teal);
+  }
+  .board-head .code{
+    font-size:11px;
+    color:var(--on-dark-dim);
+  }
+
+  .legs{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:6px;
+  }
+
+  .leg{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:10px;
+    padding:14px 14px;
+    cursor:pointer;
+    transition:border-color .2s, background .2s, transform .15s;
+    position:relative;
+  }
+  .leg:hover{
+    border-color:rgba(37,150,190,0.55);
+    background:rgba(37,150,190,0.1);
+  }
+  .leg.selected{
+    border-color:var(--teal);
+    background:rgba(37,150,190,0.16);
+  }
+  .leg .radio{
+    width:16px;height:16px;
+    border-radius:50%;
+    border:2px solid rgba(238,244,248,0.4);
+    flex-shrink:0;
+    position:relative;
+  }
+  .leg.selected .radio{
+    border-color:var(--teal);
+  }
+  .leg.selected .radio::after{
+    content:"";
+    position:absolute;
+    inset:2px;
+    border-radius:50%;
+    background:var(--teal);
+  }
+  .leg .info{
+    flex:1;
+  }
+  .leg .row1{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Oswald', sans-serif;
+    font-size:16px;
+    font-weight:600;
+    letter-spacing:.02em;
+    color:var(--on-dark);
+  }
+  .leg .row2{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--on-dark-dim);
+    margin-top:3px;
+    letter-spacing:.05em;
+  }
+  .leg .status{
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+
+  .leg-wrap{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .show-details{
+    align-self:flex-start;
+    margin:6px 0 0 4px;
+    background:none;
+    border:none;
+    color:var(--teal);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    cursor:pointer;
+    padding:2px 0;
+  }
+  .show-details:active{
+    opacity:.7;
+  }
+
+  .leg-details{
+    display:none;
+    margin:8px 4px 4px;
+    padding:14px;
+    background:rgba(255,255,255,0.03);
+    border:1px dashed rgba(255,255,255,0.15);
+    border-radius:10px;
+    font-size:11px;
+    color:var(--on-dark-dim);
+  }
+  .leg-details.open{
+    display:block;
+    animation:rise .3s ease;
+  }
+
+  .dline{
+    display:flex;
+    justify-content:space-between;
+    color:var(--on-dark-dim);
+    padding:3px 0;
+    letter-spacing:.03em;
+  }
+  .dline span:last-child{
+    color:var(--on-dark);
+  }
+
+  .flight-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+    margin:10px 0;
+    padding:10px 0;
+    border-top:1px solid rgba(255,255,255,0.12);
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    font-size:11px;
+  }
+  .flight-row .fnum{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    letter-spacing:.05em;
+    color:var(--teal);
+  }
+  .flight-row span{
+    color:var(--on-dark-dim);
+  }
+
+  .crew-line{
+    font-size:11px;
+    color:var(--teal);
+    letter-spacing:.03em;
+    margin-bottom:10px;
+  }
+
+  .route-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .route-row .rcol{
+    display:flex;
+    flex-direction:column;
+  }
+  .route-row .rport{
+    font-family:'Oswald', sans-serif;
+    font-size:18px;
+    font-weight:600;
+    color:var(--on-dark);
+  }
+  .route-row .rtime{
+    font-size:11px;
+    color:var(--on-dark-dim);
+  }
+  .route-row .rarrow{
+    color:var(--teal);
+    font-size:18px;
+  }
+
+  .board-foot{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    color:var(--on-dark-dim);
+    letter-spacing:.08em;
+    margin-top:14px;
+    padding-top:10px;
+    border-top:1px dashed rgba(255,255,255,0.12);
+  }
+
+  /* action buttons */
+  .actions{
+    margin-top:26px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    position:relative;
+    min-height:120px;
+  }
+
+  .btn{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:15px;
+    padding:16px 40px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    width:100%;
+    max-width:300px;
+  }
+  .btn-confirm{
+    background:linear-gradient(180deg, var(--teal), var(--teal-dark));
+    color:#ffffff;
+    box-shadow:0 10px 30px rgba(37,150,190,0.35);
+    transition:transform .15s, box-shadow .15s, opacity .2s;
+  }
+  .btn-confirm:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+  .btn-confirm:not(:disabled):active{
+    transform:scale(.97);
+  }
+
+  .btn-decline{
+    background:var(--white);
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+    position:relative;
+    width:auto;
+    padding:10px 22px;
+    font-size:12px;
+    transition:left .18s ease, top .18s ease;
+  }
+
+  .decline-zone{
+    position:relative;
+    width:100%;
+    height:70px;
+  }
+  .btn-decline.dodge{
+    position:absolute;
+  }
+
+  /* confirmation panel */
+  .confirm-panel{
+    display:none;
+    margin-top:26px;
+    text-align:center;
+    background:linear-gradient(180deg, rgba(37,150,190,0.08), rgba(37,150,190,0.02));
+    border:1px solid rgba(37,150,190,0.35);
+    border-radius:14px;
+    padding:26px 18px;
+  }
+  .confirm-panel.show{
+    display:block;
+    animation:rise .5s ease;
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(12px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .confirm-panel .stamp{
+    font-family:'Oswald', sans-serif;
+    font-size:12px;
+    letter-spacing:.25em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .confirm-panel h3{
+    font-family:'Oswald', sans-serif;
+    font-size:24px;
+    margin:0 0 6px;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    color:var(--navy);
+  }
+  .confirm-panel p{
+    color:var(--ink-dim);
+    font-size:13px;
+    margin:0;
+  }
+
+  footer{
+    text-align:center;
+    font-size:10px;
+    letter-spacing:.15em;
+    color:var(--ink-dim);
+    margin-top:40px;
+    text-transform:uppercase;
+    opacity:.7;
+  }
+
+  #confetti-canvas{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    pointer-events:none;
+  }
+
+  /* pre-content overlays */
+  .overlay{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--navy);
+    padding:24px;
+  }
+  .overlay.hidden{
+    display:none;
+  }
+
+  .modal{
+    width:100%;
+    max-width:340px;
+    background:linear-gradient(180deg, var(--navy), var(--card));
+    border:1px solid var(--line-dark);
+    border-radius:14px;
+    padding:28px 22px;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    animation:rise .4s ease;
+  }
+  .modal .tag{
+    font-size:10px;
+    letter-spacing:.25em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .modal .tag .dot{
+    display:inline-block;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--teal);
+    margin-right:6px;
+    box-shadow:0 0 6px var(--teal);
+  }
+  .modal h2{
+    font-family:'Oswald', sans-serif;
+    font-size:22px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    margin:0 0 10px;
+    color:#ffffff;
+  }
+  .modal p{
+    color:var(--on-dark-dim);
+    font-size:13px;
+    line-height:1.6;
+    margin:0 0 22px;
+  }
+  .modal .btn-ack{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:14px;
+    padding:14px 0;
+    width:100%;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(180deg, var(--teal), var(--teal-dark));
+    color:#ffffff;
+    box-shadow:0 10px 30px rgba(37,150,190,0.35);
+  }
+  .modal .btn-ack:active{
+    transform:scale(.97);
+  }
+
+  .loading{
+    text-align:center;
+  }
+  .spinner{
+    width:56px;height:56px;
+    margin:0 auto 22px;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,0.15);
+    border-top-color:var(--teal);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{
+    to{transform:rotate(360deg);}
+  }
+  .loading h3{
+    font-family:'Oswald', sans-serif;
+    font-size:16px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    margin:0 0 6px;
+    color:#ffffff;
+  }
+  .loading p{
+    color:var(--on-dark-dim);
+    font-size:13px;
+    margin:0;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Step 1: Schedule Added modal -->
+<div class="overlay" id="scheduleOverlay">
+  <div class="modal">
+    <div class="tag"><span class="dot"></span>Notification</div>
+    <h2>Schedule Added</h2>
+    <p>A new item has been added to your schedule. Acknowledge to view the details.</p>
+    <button class="btn-ack" id="ackBtn">Acknowledge</button>
+  </div>
+</div>
+
+<!-- Step 2: buffering / loading -->
+<div class="overlay hidden" id="loadingOverlay">
+  <div class="loading">
+    <div class="spinner"></div>
+    <h3>One moment</h3>
+    <p>We are collecting your data...</p>
+  </div>
+</div>
+
+<div class="wrap" id="mainContent" style="display:none;">
+
+  <div class="instrument-bar">
+    <span><span class="dot"></span>CHANNEL OPEN</span>
+    <span id="clock">--:--</span>
+  </div>
+
+  <div class="hud">
+    <div class="eyebrow">Personal Clearance Request</div>
+    <h1>One <span>Full Day</span><br>Off The Roster</h1>
+    <p class="sub">Requesting a slot on your schedule — not for a flight, just for us. Pick your date below and confirm.</p>
+  </div>
+
+  <div class="goat-scene" id="goatScene">
+    <img class="goat-img" src="[source: 1]" alt="Pilot Scene" />
+    <div class="goat-sign">
+      <div class="sign-board">Approved!</div>
+      <div class="sign-stick"></div>
+    </div>
+  </div>
+
+  <!-- Flight Status Display / Board -->
+  <div class="board">
+    <div class="board-head">
+      <h2>Roster Update Available</h2>
+      <div class="code">REF // SH-2026</div>
+    </div>
+
+    <div class="legs">
+      
+      <!-- Option 1 -->
+      <div class="leg-wrap">
+        <div class="leg selected" data-date="Friday, August 7">
+          <div class="radio"></div>
+          <div class="info">
+            <div class="row1">
+              <span>FRI / 07 AUG</span>
+              <span class="status">OPTIMAL</span>
+            </div>
+            <div class="row2">
+              <span>ESTIMATED BLOCKS: 24.0 HR</span>
+              <span>00:00 - 23:59</span>
+            </div>
+          </div>
+        </div>
+        <button class="show-details">Toggle Route Specs</button>
+        <div class="leg-details open">
+          <div class="route-row">
+            <div class="rcol">
+              <span class="rport">HOME</span>
+              <span class="rtime">00:00 LT</span>
+            </div>
+            <span class="rarrow">➔</span>
+            <div class="rcol" style="text-align:right;">
+              <span>COUCH / BEACH</span>
+              <span class="rtime">23:59 LT</span>
+            </div>
+          </div>
+          <div class="crew-line">COMMANDER IN CHIEF: YOU</div>
+          <div class="dline"><span>FLIGHT TYPE</span><span>REST &amp; REC</span></div>
+          <div class="dline"><span>MEAL SERVICE</span><span>ALL YOU CAN EAT</span></div>
+        </div>
+      </div>
+
+      <!-- Option 2 -->
+      <div class="leg-wrap">
+        <div class="leg" data-date="Saturday, August 8">
+          <div class="radio"></div>
+          <div class="info">
+            <div class="row1">
+              <span>SAT / 08 AUG</span>
+              <span class="status" style="color:var(--on-dark-dim);">STANDBY</span>
+            </div>
+            <div class="row2">
+              <span>ESTIMATED BLOCKS: 24.0 HR</span>
+              <span>00:00 - 23:59</span>
+            </div>
+          </div>
+        </div>
+        <button class="show-details">Toggle Route Specs</button>
+        <div class="leg-details">
+          <div class="route-row">
+            <div class="rcol">
+              <span class="rport">HOME</span>
+              <span class="rtime">00:00 LT</span>
+            </div>
+            <span class="rarrow">➔</span>
+            <div class="rcol" style="text-align:right;">
+              <span>ANYWHERE</span>
+              <span class="rtime">23:59 LT</span>
+            </div>
+          </div>
+          <div class="crew-line">COMMANDER IN CHIEF: YOU</div>
+          <div class="dline"><span>FLIGHT TYPE</span><span>ADVENTURE OVERRIDE</span></div>
+          <div class="dline"><span>ALTITUDE</span><span>GROUND LEVEL ONLY</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="board-foot">
+      <span>SYSTEM: ACTIVE</span>
+      <span>SECURE LINK</span>
+    </div>
+  </div>
+
+  <!-- Interactive controls -->
+  <div class="actions">
+    <button class="btn btn-confirm" id="confirmBtn">Grant Clearance</button>
+    
+    <div class="decline-zone">
+      <button class="btn btn-decline" id="declineBtn">Decline Request</button>
+    </div>
+  </div>
+
+  <div class="confirm-panel" id="confirmPanel">
+    <div class="stamp">✓ APPROVED</div>
+    <h3>Roster Slot Blocked!</h3>
+    <p id="approvedMeta">Clearance issued successfully. See you on Friday, August 7.</p>
+  </div>
+
+  <footer>
+    Automated Flight Dispatch Services Ltd.
+  </footer>
+
+</div>
+
+<script>
+  // Simple clock initialization
+  function updateClock(){
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const clockEl = document.getElementById('clock');
+    if(clockEl) clockEl.textContent = `${h}:${m}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Multi-step overlay setup
+  const ackBtn = document.getElementById('ackBtn');
+  const scheduleOverlay = document.getElementById('scheduleOverlay');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  const mainContent = document.getElementById('mainContent');
+
+  ackBtn.addEventListener('click', () => {
+    scheduleOverlay.classList.add('hidden');
+    loadingOverlay.classList.remove('hidden');
+    
+    setTimeout(() => {
+      loadingOverlay.classList.add('hidden');
+      mainContent.style.display = 'block';
+    }, 1200);
+  });
+
+  // Leg selection logic
+  const legs = document.querySelectorAll('.leg');
+  let selectedDate = "Friday, August 7"; 
+
+  legs.forEach(leg => {
+    leg.addEventListener('click', function() {
+      legs.forEach(l => l.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedDate = this.getAttribute('data-date');
+    });
+  });
+
+  // Detail drawers handling
+  const detailButtons = document.querySelectorAll('.show-details');
+  detailButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const parent = this.parentElement;
+      const details = parent.querySelector('.leg-details');
+      if (details) {
+        details.classList.toggle('open');
+      }
+    });
+  });
+
+  // Ducking/dodging decline button logic
+  const declineBtn = document.getElementById('declineBtn');
+  let dodgeCount = 0;
+
+  declineBtn.addEventListener('mouseover', dodge);
+  declineBtn.addEventListener('click', dodge);
+
+  function dodge(e) {
+    e.preventDefault();
+    declineBtn.classList.add('dodge');
+    
+    // Pick arbitrary safe coordinate updates near the button arena
+    const randomX = Math.floor(Math.random() * 180) - 90; 
+    const randomY = Math.floor(Math.random() * 40) - 20;   
+    
+    declineBtn.style.left = `calc(50% - ${declineBtn.offsetWidth/2}px + ${randomX}px)`;
+    declineBtn.style.top = `${20 + randomY}px`;
+    
+    dodgeCount++;
+    if(dodgeCount === 4) {
+      declineBtn.textContent = "Error: Button Malfunction";
+    } else if(dodgeCount > 6) {
+      declineBtn.textContent = "Just say yes!";
+    }
+  }
+
+  // Confirmation handling & Confetti canvas drop
+  const confirmBtn = document.getElementById('confirmBtn');
+  const confirmPanel = document.getElementById('confirmPanel');
+  const approvedMeta = document.getElementById('approvedMeta');
+  const goatScene = document.getElementById('goatScene');
+
+  confirmBtn.addEventListener('click', () => {
+    confirmBtn.disabled = true;
+    declineBtn.style.display = 'none';
+    
+    approvedMeta.textContent = `Clearance issued successfully. Roster locked for ${selectedDate}!`;
+    confirmPanel.classList.add('show');
+    goatScene.classList.add('happy');
+
+    initConfetti();
+  });
+
+  // Procedural confetti background
+  function initConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    const colors = ['#2596be', '#1b7195', '#050f3c', '#eef4f8', '#ffcc00'];
+
+    for (let i = 0; i < 75; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * canvas.height,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.random() * 10 - 5,
+        tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+        tiltAngle: 0
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, idx) => {
+        p.tiltAngle += p.tiltAngleIncremental;
+        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+        p.x += Math.sin(p.tiltAngle);
+        p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
+
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+        ctx.stroke();
+      });
+
+      // Simple loop truncation check to prevent running forever
+      if(particles.some(p => p.y < canvas.height)) {
+        requestAnimationFrame(draw);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+    draw();
+  }
+</script>
+</body>
+</html>
