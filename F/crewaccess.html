@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Flight Clearance // Request</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght=400;500;600;700&family=JetBrains+Mono:wght=400;500;700&display=swap');
 
   :root{
     --white:#ffffff;
@@ -100,7 +100,7 @@
     line-height:1.6;
   }
 
-  /* goat pilot illustration, signature element */
+  /* pilot illustration, signature element */
   .goat-scene{
     position:relative;
     width:200px;
@@ -624,7 +624,8 @@
   </div>
 
   <div class="goat-scene" id="goatScene">
-    <img class="goat-img" src="[source: 1]" alt="Pilot Scene" />
+    <!-- Live online embedded image -->
+    <img class="goat-img" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400" alt="Pilot Scene" />
     <div class="goat-sign">
       <div class="sign-board">Approved!</div>
       <div class="sign-stick"></div>
@@ -800,7 +801,6 @@
     e.preventDefault();
     declineBtn.classList.add('dodge');
     
-    // Pick arbitrary safe coordinate updates near the button arena
     const randomX = Math.floor(Math.random() * 180) - 90; 
     const randomY = Math.floor(Math.random() * 40) - 20;   
     
@@ -871,7 +871,6 @@
         ctx.stroke();
       });
 
-      // Simple loop truncation check to prevent running forever
       if(particles.some(p => p.y < canvas.height)) {
         requestAnimationFrame(draw);
       } else {
