@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gate A28 — Learn Arabic</title>
+<style>
+  :root{
+    --bg: #0D111C;
+    --panel: #171D2C;
+    --panel-line: #262E42;
+    --card: #F4F0E4;
+    --card-shadow: #C9C2AC;
+    --amber: #E8A33D;
+    --amber-dim: #8A6425;
+    --text: #EDEEF2;
+    --muted: #8891A6;
+    --good: #4CAF7D;
+    --bad: #E2574C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background-color:#0D111C !important;
+    background:
+      radial-gradient(ellipse at top, #161C2B 0%, var(--bg) 55%);
+    color:var(--text) !important;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  .board-lines{
+    background-image: repeating-linear-gradient(180deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 26px);
+  }
+  header{
+    padding:28px 20px 20px;
+    text-align:center;
+    border-bottom:1px solid var(--panel-line);
+  }
+  .eyebrow{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    letter-spacing:0.25em;
+    font-size:11px;
+    color:var(--amber);
+    text-transform:uppercase;
+  }
+  h1{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-weight:700;
+    font-size:clamp(26px,7vw,40px);
+    margin:8px 0 4px;
+    letter-spacing:0.02em;
+  }
+  .sub{
+    color:var(--muted);
+    font-size:13px;
+    max-width:420px;
+    margin:0 auto;
+    line-height:1.5;
+  }
+  .langtoggle{
+    display:inline-flex;
+    margin-top:16px;
+    border:1px solid var(--panel-line);
+    border-radius:999px;
+    overflow:hidden;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:12px;
+  }
+  .langtoggle button{
+    background:none;
+    border:none;
+    color:var(--muted);
+    padding:8px 16px;
+    cursor:pointer;
+    letter-spacing:0.05em;
+  }
+  .langtoggle button.active{
+    background:var(--amber);
+    color:#241705;
+    font-weight:600;
+  }
+  .online-audio{margin:14px auto 0;max-width:420px;}
+  .audio-main{width:100%;background:#20180B;color:var(--amber);border:1px solid var(--amber);border-radius:8px;padding:10px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;font-size:12px;cursor:pointer;}
+  .audio-main.playing{background:var(--amber);color:#241705;}
+  .audio-note{margin-top:6px;color:var(--muted);font-size:10px;line-height:1.4;}
+  .setup-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px auto 0;max-width:520px;}
+  .setup-btn{background:var(--panel);color:var(--text);border:1px solid var(--panel-line);border-radius:8px;padding:9px 12px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;cursor:pointer;}
+  .setup-btn:hover{border-color:var(--amber);color:var(--amber);}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000;}
+  .modal-backdrop.open{display:flex;}
+  .modal{width:min(560px,100%);max-height:85vh;overflow:auto;background:var(--panel);border:1px solid var(--amber);border-radius:14px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.55);}
+  .modal h2{font:600 18px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--amber);margin:0 0 12px;}
+  .modal h3{font-size:14px;margin:18px 0 7px;color:var(--text);}
+  .modal p,.modal li{font-size:13px;line-height:1.6;color:var(--muted);}
+  .modal strong{color:var(--text);}
+  .modal-close{float:right;background:none;border:1px solid var(--panel-line);color:var(--text);border-radius:7px;padding:5px 9px;cursor:pointer;}
+  .status-pill{display:inline-block;margin-top:10px;padding:5px 8px;border-radius:999px;background:#20180B;border:1px solid var(--amber-dim);color:var(--amber);font:10px ui-monospace,SFMono-Regular,Menlo,monospace;}
+  nav.tabs{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    padding:16px 20px;
+    flex-wrap:wrap;
+  }
+  nav.tabs button{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    color:var(--text);
+    padding:10px 18px;
+    border-radius:8px;
+    font-size:13px;
+    letter-spacing:0.03em;
+    cursor:pointer;
+  }
+  nav.tabs button.active{
+    border-color:var(--amber);
+    color:var(--amber);
+    background:#20180B;
+  }
+  main{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 16px;
+  }
+  section.view{display:none;}
+  section.view.active{display:block;}
+
+
+
+  .groupwrap{
+    margin:28px 0;
+  }
+  .grouptitle{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    color:var(--amber);
+    font-size:13px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .grouptitle::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--panel-line);
+  }
+  .note{
+    font-size:12.5px;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:12px;
+    line-height:1.5;
+  }
+  .tilegrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+    gap:10px;
+  }
+  .tile{
+    perspective:800px;
+    height:130px;
+    cursor:pointer;
+  }
+  .tileinner{
+    position:relative;
+    width:100%;height:100%;
+    transition:transform 0.5s cubic-bezier(.4,.1,.3,1);
+    transform-style:preserve-3d;
+  }
+  .tile.flipped .tileinner{transform:rotateY(180deg);}
+  .tileface{
+    position:absolute;inset:0;
+    backface-visibility:hidden;
+    border-radius:10px;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:8px;
+    background:var(--card);
+    color:#20241E;
+    box-shadow:0 2px 0 var(--card-shadow), 0 6px 14px rgba(0,0,0,0.35);
+    background-image: repeating-linear-gradient(180deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 8px);
+  }
+  .tileface.back{
+    transform:rotateY(180deg);
+    background:#141A28;
+    color:var(--text);
+    border:1px solid var(--panel-line);
+    text-align:center;
+  }
+  .tile-ar{
+    font-family:'Geeza Pro','Noto Naskh Arabic','Times New Roman',serif;
+    font-size:44px;
+    line-height:1;
+  }
+  .tile-name{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:11.5px;
+    color:#4A4536;
+    margin-top:6px;
+    letter-spacing:0.04em;
+  }
+  .tile-sound{
+    font-size:12.5px;
+    line-height:1.4;
+    padding:0 6px;
+  }
+  .tile-speak{margin-top:8px;background:var(--amber);color:#241705;border:none;border-radius:6px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;padding:5px 10px;cursor:pointer;}
+  .tile-pron{margin-top:6px;color:var(--muted);font-size:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;}
+
+  /* Flashcards */
+  .fc-wrap{
+    display:flex;flex-direction:column;align-items:center;
+    padding:20px 0 30px;
+  }
+  .fc-progress{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:14px;
+  }
+  .fc-card{
+    perspective:1200px;
+    width:min(300px,80vw);
+    height:340px;
+    cursor:pointer;
+  }
+  .fc-inner{
+    position:relative;width:100%;height:100%;
+    transition:transform 0.55s cubic-bezier(.4,.1,.3,1);
+    transform-style:preserve-3d;
+  }
+  .fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;
+    backface-visibility:hidden;
+    border-radius:16px;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:10px;
+    background:var(--card);
+    color:#20241E;
+    box-shadow:0 4px 0 var(--card-shadow), 0 14px 30px rgba(0,0,0,0.4);
+    background-image: repeating-linear-gradient(180deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 10px);
+    padding:20px;
+  }
+  .fc-face.back{
+    transform:rotateY(180deg);
+    background:#141A28;
+    color:var(--text);
+    border:1px solid var(--panel-line);
+    text-align:center;
+  }
+  .fc-ar{font-family:'Geeza Pro','Noto Naskh Arabic','Times New Roman',serif;font-size:96px;line-height:1;}
+  .fc-name{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;font-size:14px;color:#4A4536;letter-spacing:0.05em;}
+  .fc-hint{font-size:11px;color:#8a8465;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;}
+  .fc-sound{font-size:16px;line-height:1.5;padding:0 10px;}
+  .fc-controls{
+    display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center;
+  }
+  .fc-controls button{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:12.5px;
+    padding:10px 16px;
+    border-radius:8px;
+    border:1px solid var(--panel-line);
+    background:var(--panel);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .fc-controls button.primary{border-color:var(--amber);color:var(--amber);}
+  .fc-controls button.know{border-color:var(--good);color:var(--good);}
+  .fc-controls button.learning{border-color:var(--bad);color:var(--bad);}
+  .fc-status{
+    margin-top:14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:11.5px;
+    color:var(--muted);
+    display:flex;gap:16px;
+  }
+
+  /* Quiz */
+  .quiz-wrap{padding:20px 0 40px;max-width:520px;margin:0 auto;}
+  .quiz-start{
+    text-align:center;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:14px;
+    padding:32px 20px;
+  }
+  .quiz-start button{
+    margin-top:16px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    background:var(--amber);
+    color:#241705;
+    border:none;
+    padding:12px 28px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .quiz-progress{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:12px;color:var(--muted);
+    text-align:center;margin-bottom:16px;
+  }
+  .quiz-q{
+    background:var(--card);
+    border-radius:14px;
+    padding:30px 20px;
+    text-align:center;
+    box-shadow:0 4px 0 var(--card-shadow), 0 14px 30px rgba(0,0,0,0.35);
+    color:#20241E;
+    background-image: repeating-linear-gradient(180deg, rgba(0,0,0,0.025) 0px, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 10px);
+  }
+  .quiz-q .fc-ar{font-size:80px;}
+  .quiz-options{
+    display:grid;gap:10px;margin-top:20px;
+  }
+  .quiz-options button{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    font-size:14px;
+    padding:13px 14px;
+    border-radius:9px;
+    border:1px solid var(--panel-line);
+    background:var(--panel);
+    color:var(--text);
+    cursor:pointer;
+    text-align:left;
+  }
+  .quiz-options button:disabled{cursor:default;}
+  .quiz-options button.correct{border-color:var(--good);background:#12251C;color:var(--good);}
+  .quiz-options button.incorrect{border-color:var(--bad);background:#2A1414;color:var(--bad);}
+  .quiz-result{
+    text-align:center;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:14px;
+    padding:34px 20px;
+  }
+  .quiz-score{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:42px;
+    color:var(--amber);
+    margin:10px 0;
+  }
+  .quiz-missed{
+    text-align:left;
+    margin-top:20px;
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.7;
+  }
+  .quiz-missed b{color:var(--text);font-family:'Geeza Pro','Noto Naskh Arabic','Times New Roman',serif;font-size:16px;}
+  .amtext{font-family:'Noto Sans Ethiopic','Abyssinica SIL','Segoe UI',sans-serif;}
+  footer{
+    text-align:center;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
+    font-size:11px;
+    color:var(--muted);
+    padding:30px 20px 10px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .tileinner,.fc-inner{transition:none;}
+  }
+</style>
+</head>
+<body class="board-lines">
+
+<header>
+  <div class="eyebrow">GATE A28 · NOW BOARDING</div>
+  <h1>LEARN ARABIC</h1>
+  <p class="sub" id="subtitle">28 letters, one flight's worth of practice. Tap a tile to flip it, then use Pronounce for the letter sound.</p>
+  <div class="langtoggle">
+    <button id="btn-en" class="active">EN</button>
+    <button id="btn-am">አማ</button>
+  </div>
+  <div class="online-audio">
+    <button id="alphabet-audio-btn" class="audio-main">🎧 Play Arabic alphabet — OFFLINE</button>
+    <div class="audio-note" id="audio-status">Uses your device's Arabic speech voice; once an Arabic voice is installed, playback works without internet.</div>
+  </div>
+  <div class="setup-actions">
+    <button id="install-btn" class="setup-btn">📲 Add to Home Screen</button>
+    <button id="voice-btn" class="setup-btn">🗣️ Install Arabic Voice</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tabbtn active" data-view="learn">Learn</button>
+  <button class="tabbtn" data-view="flash">Flashcards</button>
+  <button class="tabbtn" data-view="quiz">Quiz</button>
+</nav>
+
+<main>
+  <section class="view active" id="view-learn"></section>
+
+  <section class="view" id="view-flash">
+    <div class="fc-wrap">
+      <div class="fc-progress" id="fc-progress">Card 1 of 28</div>
+      <div class="fc-card" id="fc-card">
+        <div class="fc-inner">
+          <div class="fc-face front">
+            <div class="fc-ar" id="fc-ar">ا</div>
+            <div class="fc-name" id="fc-name">Alif</div>
+            <div class="fc-hint">tap to flip</div>
+          </div>
+          <div class="fc-face back">
+            <div class="fc-sound" id="fc-sound"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-controls">
+        <button id="fc-prev">&larr; Prev</button>
+        <button id="fc-speak" class="primary">🔊 Speak</button>
+        <button id="fc-next">Next &rarr;</button>
+      </div>
+      <div class="fc-controls">
+        <button id="fc-learning" class="learning">Still learning</button>
+        <button id="fc-know" class="know">I know this</button>
+        <button id="fc-shuffle">🔀 Shuffle</button>
+      </div>
+      <div class="fc-status" id="fc-status"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-quiz">
+    <div class="quiz-wrap" id="quiz-wrap"></div>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="setup-modal" role="dialog" aria-modal="true" aria-labelledby="setup-title">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <h2 id="setup-title">Set up Learn Arabic for offline use</h2>
+    <p id="setup-intro">Do these steps once while you are online.</p>
+
+    <h3>📲 Add to Home Screen on iPhone</h3>
+    <ol>
+      <li>Open this GitHub Pages link in <strong>Safari</strong>.</li>
+      <li>Tap the <strong>Share</strong> button.</li>
+      <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+      <li>Tap <strong>Add</strong>.</li>
+      <li>Open <strong>Learn Arabic</strong> from your Home Screen.</li>
+    </ol>
+
+    <h3>🗣️ Install the Arabic voice</h3>
+    <p><strong>Settings → Accessibility → Spoken Content → Voices → Arabic</strong></p>
+    <p>Download an Arabic voice. Then return to this app and press <strong>Play Arabic alphabet — OFFLINE</strong>.</p>
+    <p>The app uses the device's Arabic speech engine. The website itself does not need an internet connection after it has been cached.</p>
+
+    <h3>✈️ Test offline mode</h3>
+    <ol>
+      <li>While online, open the app once and use Learn, Flashcards and Quiz.</li>
+      <li>Add it to the Home Screen.</li>
+      <li>Turn on Airplane Mode.</li>
+      <li>Open the Home Screen app again.</li>
+    </ol>
+    <div class="status-pill" id="offline-status">Checking offline cache…</div>
+  </div>
+</div>
+
+<footer>A QUESTION FOR FERIHI · LEARN ARABIC EDITION</footer>
+
+<script>
+const LETTERS = [
+ {g:1, ar:'ا', speak:'اَ', name:'Alif', en:'"ah" like in "father"', am:'"አ" እንደ "አባት"'},
+ {g:1, ar:'ب', speak:'بَ', name:'Ba', en:'"b" as in "boy"', am:'"ብ" እንደ "ቤት"'},
+ {g:1, ar:'ت', speak:'تَ', name:'Ta', en:'"t" as in "top"', am:'"ት" እንደ "ትምህርት"'},
+ {g:1, ar:'ث', speak:'ثَ', name:'Tha', en:'"th" as in "think"', am:'ልስልስ "ስ" (ምላስ በጥርስ መካከል)'},
+ {g:1, ar:'ن', speak:'نَ', name:'Nun', en:'"n" as in "no"', am:'"ን" እንደ "ንግድ"'},
+ {g:2, ar:'ج', speak:'جَ', name:'Jeem', en:'"j" as in "jam"', am:'"ጅ" እንደ "ጅብ"'},
+ {g:2, ar:'ح', speak:'حَ', name:'Ha', en:'breathy "h" (fogging a mirror)', am:'ከጉሮሮ የሚወጣ ኃይለኛ "ህ"'},
+ {g:2, ar:'خ', speak:'خَ', name:'Kha', en:'rough "kh" (clearing your throat)', am:'ሻካራ "ኽ" (ጉሮሮ እንደማጽዳት)'},
+ {g:2, ar:'د', speak:'دَ', name:'Dal', en:'"d" as in "dog"', am:'"ድ" እንደ "ድመት"'},
+ {g:2, ar:'ذ', speak:'ذَ', name:'Thal', en:'"th" as in "this"', am:'ልስልስ "ዝ" (ምላስ በጥርስ መካከል)'},
+ {g:3, ar:'ر', speak:'رَ', name:'Ra', en:'rolled "r"', am:'የተንከባለለ "ር"'},
+ {g:3, ar:'ز', speak:'زَ', name:'Zay', en:'"z" as in "zoo"', am:'"ዝ" እንደ "ዝሆን"'},
+ {g:3, ar:'س', speak:'سَ', name:'Seen', en:'"s" as in "sun"', am:'"ስ" እንደ "ስም"'},
+ {g:3, ar:'ش', speak:'شَ', name:'Sheen', en:'"sh" as in "shoe"', am:'"ሽ" እንደ "ሽንኩርት"'},
+ {g:3, ar:'ص', speak:'صَ', name:'Sad', en:'heavy "s"', am:'ከባድ/ጥልቅ "ስ"'},
+ {g:4, ar:'ض', speak:'ضَ', name:'Dad', en:'heavy "d"', am:'ከባድ/ጥልቅ "ድ"'},
+ {g:4, ar:'ط', speak:'طَ', name:'Ta (heavy)', en:'heavy "t"', am:'ከባድ/ጥልቅ "ት"'},
+ {g:4, ar:'ظ', speak:'ظَ', name:'Za (heavy)', en:'heavy "th"', am:'ከባድ/ጥልቅ "ዝ"'},
+ {g:4, ar:'ع', speak:'عَ', name:'Ayn', en:'throat sound, no English match', am:'ከጉሮሮ ጥልቅ ድምፅ (ልዩ ልምምድ ይፈልጋል)'},
+ {g:4, ar:'غ', speak:'غَ', name:'Ghayn', en:'like a French "r"', am:'እንደ ፈረንሳይኛ "ር"'},
+ {g:5, ar:'ف', speak:'فَ', name:'Fa', en:'"f" as in "fun"', am:'"ፍ" እንደ "ፍየል"'},
+ {g:5, ar:'ق', speak:'قَ', name:'Qaf', en:'deep "k" from the throat', am:'ጥልቅ ከጉሮሮ የሚወጣ "ቅ"'},
+ {g:5, ar:'ك', speak:'كَ', name:'Kaf', en:'"k" as in "kite"', am:'"ክ" እንደ "ክብር"'},
+ {g:5, ar:'ل', speak:'لَ', name:'Lam', en:'"l" as in "love"', am:'"ል" እንደ "ልጅ"'},
+ {g:5, ar:'م', speak:'مَ', name:'Meem', en:'"m" as in "moon"', am:'"ም" እንደ "ምግብ"'},
+ {g:5, ar:'و', speak:'وَ', name:'Waw', en:'"w" or long "oo"', am:'"ው" ወይም ረዥም "ኡ"'},
+ {g:5, ar:'ي', speak:'يَ', name:'Ya', en:'"y" or long "ee"', am:'"ይ" ወይም ረዥም "ኢ"'},
+ {g:5, ar:'ه', speak:'هَ', name:'Ha (light)', en:'"h" as in "house"', am:'ልስልስ "ህ" እንደ "ሃገር"'},
+ {g:5, ar:'ء', speak:'ءَ', name:'Hamza', en:'quick stop (like "uh-oh")', am:'ድንገተኛ ማቆም'}
+];
+
+const GROUP_TITLES = {
+  1:{en:'Group 1 — Easy shapes', am:'ቡድን 1 — ቀላል ቅርፆች'},
+  2:{en:'Group 2 — Rounded letters', am:'ቡድን 2 — የተጠጋጉ ፊደላት'},
+  3:{en:'Group 3 — Curvy ones', am:'ቡድን 3 — ጥምዝ ፊደላት'},
+  4:{en:'Group 4 — More sounds', am:'ቡድን 4 — ተጨማሪ ድምፆች'},
+  5:{en:'Group 5 — Final stretch', am:'ቡድን 5 — የመጨረሻዎቹ'}
+};
+const GROUP1_NOTE = {
+  en:'ب ت ث look almost identical — dots make the difference: 1 dot below = ب, 2 dots above = ت, 3 dots above = ث',
+  am:'ب ت ث በጣም ተመሳሳይ ናቸው — ልዩነቱ በነጥቦች ብቻ ነው፦ 1 ነጥብ ከስር = ب, 2 ነጥብ ከላይ = ت, 3 ነጥብ ከላይ = ث'
+};
+
+let lang = 'en';
+
+function getArabicVoice(){
+  const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  return voices.find(v => /^ar(-|_)/i.test(v.lang) && /Saudi|Arabic|Maged|Tarik|Laila|Majed/i.test(v.name))
+      || voices.find(v => /^ar(-|_)/i.test(v.lang))
+      || null;
+}
+function speak(text, rate=0.68){
+  try{
+    if(!('speechSynthesis' in window)) return false;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ar-SA';
+    u.rate = rate;
+    u.pitch = 1;
+    const voice = getArabicVoice();
+    if(voice) u.voice = voice;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+    return true;
+  }catch(e){ return false; }
+}
+function pronounceLetter(letter){
+  return speak(letter.speak || letter.ar, 0.62);
+}
+
+/* ---------- LEARN VIEW ---------- */
+function renderLearn(){
+  const root = document.getElementById('view-learn');
+  root.innerHTML = '';
+  for(let g=1; g<=5; g++){
+    const wrap = document.createElement('div');
+    wrap.className = 'groupwrap';
+    const title = document.createElement('div');
+    title.className = 'grouptitle';
+    title.textContent = GROUP_TITLES[g][lang];
+    wrap.appendChild(title);
+    if(g===1){
+      const note = document.createElement('div');
+      note.className = 'note' + (lang==='am' ? ' amtext' : '');
+      note.textContent = GROUP1_NOTE[lang];
+      wrap.appendChild(note);
+    }
+    const grid = document.createElement('div');
+    grid.className = 'tilegrid';
+    LETTERS.filter(l=>l.g===g).forEach(l=>{
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.innerHTML = `
+        <div class="tileinner">
+          <div class="tileface front">
+            <div class="tile-ar">${l.ar}</div>
+            <div class="tile-name">${l.name}</div>
+          </div>
+          <div class="tileface back">
+            <div class="tile-sound ${lang==='am'?'amtext':''}">${l[lang]}</div>
+            <button class="tile-speak">🔊 Pronounce</button>
+            <div class="tile-pron">Hear: ${l.speak || l.ar}</div>
+          </div>
+        </div>`;
+      tile.addEventListener('click', (e)=>{
+        if(e.target.classList.contains('tile-speak')){
+          pronounceLetter(l);
+          e.stopPropagation();
+          return;
+        }
+        tile.classList.toggle('flipped');
+      });
+      grid.appendChild(tile);
+    });
+    wrap.appendChild(grid);
+    root.appendChild(wrap);
+  }
+}
+
+/* ---------- FLASHCARDS ---------- */
+let fcDeck = LETTERS.map((l,i)=>({...l, status:'unseen'}));
+let fcIndex = 0;
+
+function renderFlash(){
+  const l = fcDeck[fcIndex];
+  document.getElementById('fc-progress').textContent = `Card ${fcIndex+1} of ${fcDeck.length}`;
+  document.getElementById('fc-ar').textContent = l.ar;
+  document.getElementById('fc-name').textContent = l.name;
+  const soundEl = document.getElementById('fc-sound');
+  soundEl.textContent = l[lang];
+  soundEl.className = 'fc-sound' + (lang==='am' ? ' amtext' : '');
+  document.getElementById('fc-card').classList.remove('flipped');
+  const known = fcDeck.filter(x=>x.status==='know').length;
+  const learning = fcDeck.filter(x=>x.status==='learning').length;
+  document.getElementById('fc-status').innerHTML =
+    `<span style="color:var(--good)">Known: ${known}</span><span style="color:var(--bad)">Learning: ${learning}</span>`;
+}
+
+document.getElementById('fc-card').addEventListener('click', ()=>{
+  document.getElementById('fc-card').classList.toggle('flipped');
+});
+document.getElementById('fc-prev').addEventListener('click', ()=>{
+  fcIndex = (fcIndex - 1 + fcDeck.length) % fcDeck.length;
+  renderFlash();
+});
+document.getElementById('fc-next').addEventListener('click', ()=>{
+  fcIndex = (fcIndex + 1) % fcDeck.length;
+  renderFlash();
+});
+document.getElementById('fc-speak').addEventListener('click', ()=>{
+  const l = fcDeck[fcIndex];
+  pronounceLetter(l);
+});
+document.getElementById('fc-know').addEventListener('click', ()=>{
+  fcDeck[fcIndex].status = 'know';
+  fcIndex = (fcIndex + 1) % fcDeck.length;
+  renderFlash();
+});
+document.getElementById('fc-learning').addEventListener('click', ()=>{
+  fcDeck[fcIndex].status = 'learning';
+  fcIndex = (fcIndex + 1) % fcDeck.length;
+  renderFlash();
+});
+document.getElementById('fc-shuffle').addEventListener('click', ()=>{
+  for(let i=fcDeck.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [fcDeck[i],fcDeck[j]] = [fcDeck[j],fcDeck[i]];
+  }
+  fcIndex = 0;
+  renderFlash();
+});
+
+/* ---------- QUIZ ---------- */
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizMissed = [];
+
+function shuffledCopy(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function buildQuiz(){
+  const pool = shuffledCopy(LETTERS).slice(0,10);
+  quizQuestions = pool.map(correct=>{
+    const distractors = shuffledCopy(LETTERS.filter(l=>l.ar!==correct.ar)).slice(0,3);
+    const options = shuffledCopy([correct, ...distractors]);
+    return {correct, options};
+  });
+  quizIndex = 0;
+  quizScore = 0;
+  quizMissed = [];
+  renderQuizQuestion();
+}
+
+function renderQuizStart(){
+  const wrap = document.getElementById('quiz-wrap');
+  wrap.innerHTML = `
+    <div class="quiz-start">
+      <div class="eyebrow" style="margin-bottom:8px;">FINAL CALL</div>
+      <div style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;font-size:20px;">10-question quiz</div>
+      <p class="sub" style="margin-top:10px;">Match each letter to its sound. Score at the end tells you what to review.</p>
+      <button id="quiz-startbtn">Start quiz</button>
+    </div>`;
+  document.getElementById('quiz-startbtn').addEventListener('click', buildQuiz);
+}
+
+function renderQuizQuestion(){
+  const wrap = document.getElementById('quiz-wrap');
+  const q = quizQuestions[quizIndex];
+  wrap.innerHTML = `
+    <div class="quiz-progress">Question ${quizIndex+1} of ${quizQuestions.length} · Score ${quizScore}</div>
+    <div class="quiz-q">
+      <div class="fc-ar">${q.correct.ar}</div>
+      <div class="fc-name">${q.correct.name}</div>
+    </div>
+    <div class="quiz-options" id="quiz-options"></div>`;
+  const optWrap = document.getElementById('quiz-options');
+  q.options.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.textContent = opt[lang];
+    btn.className = lang==='am' ? 'amtext' : '';
+    btn.addEventListener('click', ()=>{
+      const buttons = optWrap.querySelectorAll('button');
+      buttons.forEach(b=>b.disabled = true);
+      if(opt.ar === q.correct.ar){
+        btn.classList.add('correct');
+        quizScore++;
+      }else{
+        btn.classList.add('incorrect');
+        quizMissed.push(q.correct);
+        buttons.forEach(b=>{
+          if(b.textContent === q.correct[lang]) b.classList.add('correct');
+        });
+      }
+      setTimeout(()=>{
+        quizIndex++;
+        if(quizIndex < quizQuestions.length){
+          renderQuizQuestion();
+        }else{
+          renderQuizResult();
+        }
+      }, 900);
+    });
+    optWrap.appendChild(btn);
+  });
+}
+
+function renderQuizResult(){
+  const wrap = document.getElementById('quiz-wrap');
+  const pct = Math.round((quizScore/quizQuestions.length)*100);
+  let missedHtml = '';
+  if(quizMissed.length){
+    missedHtml = '<div class="quiz-missed"><div style="color:var(--text);margin-bottom:6px;">Review these:</div>' +
+      quizMissed.map(m=>`<div><b>${m.ar}</b> ${m.name} — ${m[lang]}</div>`).join('') + '</div>';
+  }
+  wrap.innerHTML = `
+    <div class="quiz-result">
+      <div class="eyebrow">RESULT</div>
+      <div class="quiz-score">${quizScore}/${quizQuestions.length}</div>
+      <div style="color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace;font-size:12px;">${pct}% correct</div>
+      ${missedHtml}
+      <button id="quiz-retry" style="margin-top:20px;">Try again</button>
+    </div>`;
+  document.getElementById('quiz-retry').addEventListener('click', renderQuizStart);
+}
+
+/* ---------- TABS ---------- */
+document.querySelectorAll('.tabbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+  });
+});
+
+/* ---------- LANG TOGGLE ---------- */
+const SUBTITLES = {
+  en:'28 letters, one flight\'s worth of practice. Tap a tile to flip it, then use Pronounce. Letter sounds work offline with an installed Arabic voice.',
+  am:'28 ፊደላት፣ የአንድ በረራ ያክል ልምምድ። ካርዱን ይጫኑ፣ ከዚያ Pronounce በመጫን የፊደሉን ድምፅ ይስሙ።'
+};
+document.getElementById('btn-en').addEventListener('click', ()=>{
+  lang = 'en';
+  document.getElementById('btn-en').classList.add('active');
+  document.getElementById('btn-am').classList.remove('active');
+  document.getElementById('subtitle').textContent = SUBTITLES.en;
+  document.getElementById('subtitle').classList.remove('amtext');
+  renderLearn();
+  renderFlash();
+  renderQuizStart();
+});
+document.getElementById('btn-am').addEventListener('click', ()=>{
+  lang = 'am';
+  document.getElementById('btn-am').classList.add('active');
+  document.getElementById('btn-en').classList.remove('active');
+  document.getElementById('subtitle').textContent = SUBTITLES.am;
+  document.getElementById('subtitle').classList.add('amtext');
+  renderLearn();
+  renderFlash();
+  renderQuizStart();
+});
+
+/* ---------- OFFLINE ARABIC AUDIO ---------- */
+const alphabetAudioBtn = document.getElementById('alphabet-audio-btn');
+const audioStatus = document.getElementById('audio-status');
+
+function playAlphabetOffline(){
+  const text = 'ألف باء تاء ثاء جيم حاء خاء دال ذال راء زاي سين شين صاد ضاد طاء ظاء عين غين فاء قاف كاف لام ميم نون هاء واو ياء';
+  const ok = speak(text, 0.58);
+  if(!ok && audioStatus) audioStatus.textContent = 'Speech is unavailable in this preview. Open the HTML in Safari and install an Arabic voice in iPhone Settings > Accessibility > Spoken Content > Voices.';
+}
+
+alphabetAudioBtn.addEventListener('click', playAlphabetOffline);
+
+if('speechSynthesis' in window){
+  speechSynthesis.addEventListener('voiceschanged', ()=>{});
+}
+
+/* ---------- PWA / OFFLINE SETUP ---------- */
+let deferredInstallPrompt = null;
+const installBtn = document.getElementById('install-btn');
+const voiceBtn = document.getElementById('voice-btn');
+const setupModal = document.getElementById('setup-modal');
+const modalClose = document.getElementById('modal-close');
+const offlineStatus = document.getElementById('offline-status');
+
+function openSetupModal(){
+  setupModal.classList.add('open');
+  updateOfflineStatus();
+}
+function closeSetupModal(){ setupModal.classList.remove('open'); }
+installBtn.addEventListener('click', async ()=>{
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    try{ await deferredInstallPrompt.userChoice; }catch(e){}
+    deferredInstallPrompt=null;
+    installBtn.style.display='none';
+  }else{
+    openSetupModal();
+  }
+});
+voiceBtn.addEventListener('click', openSetupModal);
+modalClose.addEventListener('click', closeSetupModal);
+setupModal.addEventListener('click', e=>{ if(e.target===setupModal) closeSetupModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSetupModal(); });
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+});
+
+function updateOfflineStatus(){
+  const cached = 'serviceWorker' in navigator;
+  offlineStatus.textContent = cached ? '✓ Offline app shell enabled' : 'Open this page in Safari/Chrome over HTTPS for offline installation.';
+}
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').then(()=>updateOfflineStatus()).catch(()=>updateOfflineStatus());
+  });
+}
+
+/* ---------- INIT ---------- */
+renderLearn();
+renderFlash();
+renderQuizStart();
+updateOfflineStatus();
+</script>
+</body>
+</html>
