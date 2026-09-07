@@ -38,8 +38,8 @@ async function loadEditions(){
  const published=data.filter(x=>x.status!=="draft");
  $("#count").textContent=published.length+" published edition"+(published.length===1?"":"s");
  if(published[0]) $("#heroEdition").innerHTML=magazineMarkup(published[0],true);
- $("#grid").innerHTML=published.map(x=>{const cover=coverFallback(x);return `<article class="card"><div class="edition-visual"><div class="magazine">${cover?`<img loading="lazy" src="${esc(cover)}" alt="${esc(x.title||'Magazine')} cover">`:''}</div></div><div class="info"><div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}</div><h3>${esc(x.title||"EAL 737 Fleet Magazine")}</h3><p>${esc(x.subtitle||"Flight operations, safety and fleet knowledge.")}</p><button class="read" data-pdf="${esc(x.pdf)}" data-title="${esc(x.title||"Flipbook")}">Read edition&nbsp; →</button></div></article>`}).join("");
- document.querySelectorAll(".read").forEach(b=>b.onclick=()=>openFlip(b.dataset.pdf,b.dataset.title));
+ $("#grid").innerHTML=published.map(x=>{const cover=coverFallback(x);return `<article class="card"><div class="edition-visual"><div class="magazine">${cover?`<img loading="lazy" src="${esc(cover)}" alt="${esc(x.title||'Magazine')} cover">`:''}</div></div><div class="info"><div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}</div><h3>${esc(x.title||"EAL 737 Fleet Magazine")}</h3><p>${esc(x.subtitle||"Flight operations, safety and fleet knowledge.")}</p><button class="read" data-pdf="${esc(x.pdf)}" data-drive="${esc(x.driveUrl||"")}" data-title="${esc(x.title||"Flipbook")}">Read edition&nbsp; →</button></div></article>`}).join("");
+ document.querySelectorAll(".read").forEach(b=>b.onclick=()=>{const drive=b.dataset.drive;if(drive){window.open(drive,"_blank","noopener");}else{openFlip(b.dataset.pdf,b.dataset.title)}});
 }
 async function openFlip(url,title){
  currentPdfUrl=url;$("#mtitle").textContent=title||"Flipbook";$("#modal").classList.add("show");$("#book").innerHTML="";
