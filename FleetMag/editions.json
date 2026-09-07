@@ -6,9 +6,9 @@
     "volume": "Vol 01",
     "issue": "Issue 04",
     "title": "EAL 737 Fleet Magazine",
-    "subtitle": "Fleet News \u2022 Flight Operations \u2022 Safety \u2022 Systems",
+    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
     "pdf": "magazines/eal-737-fleet-magazine-march-2026.pdf",
-    "cover": "",
+    "cover": "magazines/covers/eal-737-fleet-magazine-march-2026.jpg",
     "status": "published"
   }
 ]
