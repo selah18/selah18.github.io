@@ -27,35 +27,88 @@ footer{padding:34px 0;color:#8491a1;font-size:13px;border-top:1px solid var(--li
 <footer><div class="wrap">EAL 737 Fleet Magazine • Digital archive • For informational use; approved company manuals and procedures remain the primary reference.</div></footer>
 <div class="modal" id="modal"><div class="bar"><div class="title" id="mtitle">Flipbook</div><div><button id="openPdf">Open PDF</button><button id="close" aria-label="Close">✕</button></div></div><div class="viewer"><div class="book" id="book"></div></div><div class="controls"><button id="prev">‹</button><span id="counter">1 / 1</span><button id="next">›</button><span class="hint">Swipe / drag pages</span></div></div>
 <script type="module">
-const pdfjsLib=await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs");
-pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
-const $=s=>document.querySelector(s);let flip=null,currentPdfUrl="";
-function coverFallback(x){if(x.cover)return x.cover;return (x.pdf||"").replace(/^magazines\//,"magazines/covers/").replace(/\.pdf$/i,".jpg")}
-function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function magazineMarkup(x,hero=false){const cover=coverFallback(x);return `<div class="${hero?'hero-book':'magazine'}">${cover?`<img src="${esc(cover)}" alt="${esc(x.title||'EAL 737 Fleet Magazine')} cover">`:''}<span class="book-shadow"></span></div>`}
-async function loadEditions(){
- const data=await fetch("editions.json?"+Date.now()).then(r=>{if(!r.ok)throw Error("Could not load editions.json");return r.json()});
- const published=data.filter(x=>x.status!=="draft");
- $("#count").textContent=published.length+" published edition"+(published.length===1?"":"s");
- if(published[0]) $("#heroEdition").innerHTML=magazineMarkup(published[0],true);
- $("#grid").innerHTML=published.map(x=>{const cover=coverFallback(x);return `<article class="card"><div class="edition-visual"><div class="magazine">${cover?`<img loading="lazy" src="${esc(cover)}" alt="${esc(x.title||'Magazine')} cover">`:''}</div></div><div class="info"><div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}</div><h3>${esc(x.title||"EAL 737 Fleet Magazine")}</h3><p>${esc(x.subtitle||"Flight operations, safety and fleet knowledge.")}</p><button class="read" data-pdf="${esc(x.pdf)}" data-drive="${esc(x.driveUrl||"")}" data-title="${esc(x.title||"Flipbook")}">Read edition&nbsp; →</button></div></article>`}).join("");
- document.querySelectorAll(".read").forEach(b=>b.onclick=()=>{const drive=b.dataset.drive;if(drive){window.open(drive,"_blank","noopener");}else{openFlip(b.dataset.pdf,b.dataset.title)}});
+const pdfjsLib = await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs");
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+
+const $ = s => document.querySelector(s);
+let flip = null, currentPdfUrl = "";
+
+function coverFallback(x) {
+  if (x.cover) return x.cover;
+  return (x.pdf || "").replace(/^magazines\//, "magazines/covers/").replace(/\.pdf$/i, ".jpg");
 }
+
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
+}
+
+function magazineMarkup(x, hero = false) {
+  const cover = coverFallback(x);
+  return `<div class="${hero ? 'hero-book' : 'magazine'}">${cover ? `<img src="${esc(cover)}" alt="${esc(x.title || 'EAL 737 Fleet Magazine')} cover">` : ''}<span class="book-shadow"></span></div>`;
+}
+
+// Convert Google Drive view/share links into raw viewable stream URLs for PDF.js
+function getPdfStreamUrl(url) {
+  if (url.includes("drive.google.com")) {
+    const match = url.match(/\/d\/([^\/]+)/) || url.match(/id=([^&]+)/);
+    if (match && match[1]) {
+      const driveId = match[1];
+      const rawDriveUrl = `https://drive.google.com/uc?export=download&id=${driveId}`;
+      return `https://corsproxy.io/?${encodeURIComponent(rawDriveUrl)}`;
+    }
+  }
+  return url;
+}
+
+async function loadEditions() {
+  const data = await fetch("editions.json?" + Date.now()).then(r => {
+    if (!r.ok) throw Error("Could not load editions.json");
+    return r.json();
+  });
+  
+  // Show all published editions
+  const published = data.filter(x => x.status === "published");
+  $("#count").textContent = published.length + " published edition" + (published.length === 1 ? "" : "s");
+  
+  if (published[0]) $("#heroEdition").innerHTML = magazineMarkup(published[0], true);
+  
+  $("#grid").innerHTML = published.map(x => {
+    const cover = coverFallback(x);
+    return `<article class="card">
+      <div class="edition-visual">
+        <div class="magazine">${cover ? `<img loading="lazy" src="${esc(cover)}" alt="${esc(x.title || 'Magazine')} cover">` : ''}</div>
+      </div>
+      <div class="info">
+        <div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}</div>
+        <h3>${esc(x.title || "EAL 737 Fleet Magazine")}</h3>
+        <p>${esc(x.subtitle || "Flight operations, safety and fleet knowledge.")}</p>
+        <button class="read" data-pdf="${esc(x.pdf)}" data-title="${esc(x.title || "Flipbook")}">Read edition &rarr;</button>
+      </div>
+    </article>`;
+  }).join("");
+
+  document.querySelectorAll(".read").forEach(b => {
+    b.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openFlip(b.dataset.pdf, b.dataset.title);
+    });
+  });
+}
+
 async function openFlip(url, title) {
   currentPdfUrl = url;
-  
-  // If external link (e.g. Google Drive), bypass PDF.js flipbook and open in new tab
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    window.open(url, "_blank");
-    return;
-  }
-
   $("#mtitle").textContent = title || "Flipbook";
   $("#modal").classList.add("show");
-  $("#book").innerHTML = "";
+  $("#book").innerHTML = '<div style="color:white;text-align:center;padding:40px">Loading magazine pages...</div>';
 
   try {
-    const pdf = await pdfjsLib.getDocument(url).promise;
+    const targetUrl = getPdfStreamUrl(url);
+    const pdf = await pdfjsLib.getDocument(targetUrl).promise;
+    $("#book").innerHTML = "";
+    
     const pages = [];
     for (let n = 1; n <= pdf.numPages; n++) {
       const p = await pdf.getPage(n);
@@ -64,17 +117,20 @@ async function openFlip(url, title) {
       c.width = v.width;
       c.height = v.height;
       await p.render({ canvasContext: c.getContext("2d"), viewport: v }).promise;
+      
       const d = document.createElement("div");
       d.className = "page";
       d.appendChild(c);
       pages.push(d);
     }
+
     const ratio = pages[0].querySelector("canvas").width / pages[0].querySelector("canvas").height;
     const isMobile = window.innerWidth <= 760;
     const availableHeight = Math.max(430, window.innerHeight - (isMobile ? 150 : 145));
     const maxWidth = Math.min(isMobile ? window.innerWidth * .92 : Math.min(900, window.innerWidth * .78), isMobile ? 720 : 900);
     const w = Math.max(280, Math.min(maxWidth, availableHeight * ratio));
     const h = Math.max(420, Math.min(1200, w / ratio));
+
     $("#book").style.width = w + "px";
     $("#book").style.height = h + "px";
 
@@ -91,21 +147,39 @@ async function openFlip(url, title) {
       swipeDistance: 30,
       clickEventForward: true
     });
+
     flip.loadFromHTML(pages);
     updateCounter();
     flip.on("flip", updateCounter);
+
   } catch (e) {
-    $("#book").innerHTML = '<div style="color:white;text-align:center;padding:40px">Unable to open this PDF.</div>';
+    console.error(e);
+    $("#book").innerHTML = `
+      <div style="color:white;text-align:center;padding:40px">
+        <p>Unable to load page flip viewer for Google Drive.</p>
+        <p style="font-size:13px;color:#aaa;">Google Drive restricts direct web embedding on large files.</p>
+        <button id="fallbackBtn" style="background:#d71920;color:white;border:0;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px;">Open PDF in Google Drive</button>
+      </div>`;
+    document.getElementById("fallbackBtn").onclick = () => window.open(url, "_blank");
   }
 }
 
-function updateCounter(){if(flip)$("#counter").textContent=(flip.getCurrentPageIndex()+1)+" / "+flip.getPageCount()}
-async function previewSelected(file){if(!file)return;const url=URL.createObjectURL(file);$("#drop").classList.add("has-preview");$("#dropTitle").textContent=file.name;$("#dropText").textContent="Tap the file area again to preview the magazine.";try{const pdf=await pdfjsLib.getDocument(url).promise;const p=await pdf.getPage(1);const v=p.getViewport({scale:.4});const tmp=document.createElement("canvas");tmp.width=v.width;tmp.height=v.height;await p.render({canvasContext:tmp.getContext("2d"),viewport:v}).promise;$("#dropPreview").src=tmp.toDataURL("image/jpeg",.88)}catch(e){}openFlip(url,file.name)}
-$("#prev").onclick=()=>flip?.flipPrev();$("#next").onclick=()=>flip?.flipNext();
-$("#close").onclick=()=>{$("#modal").classList.remove("show");if(currentPdfUrl.startsWith("blob:"))URL.revokeObjectURL(currentPdfUrl);flip=null};
-$("#openPdf").onclick=()=>window.open(currentPdfUrl,"_blank");
-$("#drop").onclick=e=>{if(e.target.id!=="file")$("#file").click()};$("#file").onchange=e=>previewSelected(e.target.files[0]);
-$("#drop").ondragover=e=>{e.preventDefault();$("#drop").style.borderColor="var(--red)"};$("#drop").ondragleave=()=>$("#drop").style.borderColor="";$("#drop").ondrop=e=>{e.preventDefault();$("#drop").style.borderColor="";const f=e.dataTransfer.files[0];if(f?.type==="application/pdf")previewSelected(f)};
-loadEditions().catch(e=>{$("#count").textContent="Unable to load editions"});
+function updateCounter() {
+  if (flip) $("#counter").textContent = (flip.getCurrentPageIndex() + 1) + " / " + flip.getPageCount();
+}
+
+$("#prev").onclick = () => flip?.flipPrev();
+$("#next").onclick = () => flip?.flipNext();
+$("#close").onclick = () => {
+  $("#modal").classList.remove("show");
+  if (currentPdfUrl.startsWith("blob:")) URL.revokeObjectURL(currentPdfUrl);
+  flip = null;
+};
+$("#openPdf").onclick = () => window.open(currentPdfUrl, "_blank");
+
+loadEditions().catch(e => {
+  $("#count").textContent = "Unable to load editions";
+});
 </script>
+
 </body></html>
