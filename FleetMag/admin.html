@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Publisher · EAL 737 Fleet Magazine</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#071426;--red:#d71920;--bg:#f5f7fa;--line:#dfe5ec;--muted:#667085}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#101828;font-family:"DM Sans",sans-serif}.wrap{max-width:850px;margin:auto;padding:30px 18px 70px}.top{background:var(--navy);color:#fff;padding:22px}.top a{color:#fff;text-decoration:none}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:18px}.title{font:800 30px Manrope;margin:0 0 8px}.muted{color:var(--muted)}label{display:block;font-weight:700;margin:16px 0 7px}input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;font:inherit}button{border:0;border-radius:9px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:var(--red);color:#fff}.dark{background:var(--navy);color:#fff}.danger{background:#fff0f0;color:#b42318}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status{margin-top:15px;padding:12px;border-radius:9px;background:#f2f4f7;white-space:pre-wrap}.edition{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}small{color:var(--muted)}@media(max-width:600px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="top"><div class="wrap" style="padding:0"><a href="index.html">← Back to magazine</a></div></div>
+<main class="wrap">
+<h1 class="title">Publisher dashboard</h1><p class="muted">Upload a monthly PDF and publish it directly to this GitHub repository. Your token is kept only in this browser tab and is never written into the site.</p>
+<div class="card">
+<h2>1. GitHub connection</h2>
+<div class="row"><div><label>Owner</label><input id="owner" value=""></div><div><label>Repository</label><input id="repo" value=""></div></div>
+<label>Fine-grained GitHub token</label><input id="token" type="password" autocomplete="off" placeholder="github_pat_...">
+<p class="muted">Use a fine-grained token limited to this repository with Contents: Read and write. Do not paste a token into your source code.</p>
+</div>
+<div class="card">
+<h2>2. New edition</h2>
+<div class="row"><div><label>Month</label><select id="month"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select></div><div><label>Year</label><input id="year" type="number"></div></div>
+<div class="row"><div><label>Volume</label><input id="volume" placeholder="Vol 01"></div><div><label>Issue</label><input id="issue" placeholder="Issue 05"></div></div>
+<label>Title</label><input id="etitle" value="EAL 737 Fleet Magazine">
+<label>Subtitle</label><input id="subtitle" value="Fleet News • Flight Operations • Safety • Systems">
+<label>Cover image (optional)</label><input id="cover" placeholder="e.g. covers/april-2026.jpg">
+<label>PDF magazine</label><input id="pdf" type="file" accept="application/pdf">
+<button class="primary" id="publish" style="margin-top:18px">Publish edition to GitHub</button>
+<div class="status" id="status">Ready.</div>
+</div>
+<div class="card"><h2>Published editions</h2><div id="list">Loading…</div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+$("#year").value=new Date().getFullYear();$("#month").value=months[new Date().getMonth()];
+function cfg(){return {owner:$("#owner").value.trim(),repo:$("#repo").value.trim(),token:$("#token").value.trim()}}
+async function gh(path,opts={}){const c=cfg();if(!c.owner||!c.repo||!c.token)throw Error("Enter GitHub owner, repository and token first.");const r=await fetch("https://api.github.com/repos/"+c.owner+"/"+c.repo+"/contents/"+path,{...opts,headers:{Authorization:"Bearer "+c.token,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(opts.headers||{})}});if(!r.ok)throw Error((await r.text()).slice(0,500));return r.json()}
+async function getFile(path){return gh(path)}
+async function putFile(path,content,message,sha){
+ const c=cfg(), body={message,content,...(sha?{sha}:{})};
+ return gh(path,{method:"PUT",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}})
+}
+function b64(buf){let s="";const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=0x8000)s+=String.fromCharCode(...a.subarray(i,i+0x8000));return btoa(s)}
+async function readManifest(){const f=await getFile("editions.json");return {data:JSON.parse(atob(f.content.replace(/\n/g,""))),sha:f.sha}}
+async function loadList(){try{const m=await readManifest();$("#list").innerHTML=m.data.map(x=>`<div class="edition"><div><b>${x.month} ${x.year}</b><br><small>${x.volume||""} ${x.issue||""} · ${x.title||""}</small></div><a href="${x.pdf}" target="_blank">PDF</a></div>`).join("")||"<p class=muted>No editions.</p>"}catch(e){$("#list").textContent="Connect to GitHub to load editions."}}
+$("#publish").onclick=async()=>{
+ const st=$("#status");try{
+  const f=$("#pdf").files[0];if(!f)throw Error("Choose a PDF.");if(f.type!=="application/pdf")throw Error("The selected file is not a PDF.");
+  if(f.size>20*1024*1024)throw Error("This simple browser publisher is limited to PDFs under 20 MB. For larger magazines, use Git LFS or a release/storage backend.");
+  st.textContent="Reading PDF…";
+  const month=$("#month").value,year=$("#year").value;
+  const slug=month.toLowerCase()+"-"+year;const pdfPath="magazines/eal-737-fleet-magazine-"+slug+".pdf";
+  const bytes=await f.arrayBuffer();st.textContent="Uploading PDF to GitHub…";
+  await putFile(pdfPath,b64(bytes),"Publish "+month+" "+year+" magazine");
+  const m=await readManifest();const id=year+"-"+String(months.indexOf(month)+1).padStart(2,"0");
+  const entry={id,month,year:Number(year),volume:$("#volume").value,issue:$("#issue").value,title:$("#etitle").value,subtitle:$("#subtitle").value,pdf:pdfPath,cover:$("#cover").value,status:"published"};
+  const filtered=m.data.filter(x=>x.id!==id);filtered.unshift(entry);filtered.sort((a,b)=>String(b.id).localeCompare(String(a.id)));
+  await putFile("editions.json",btoa(unescape(encodeURIComponent(JSON.stringify(filtered,null,2)+"\n"))),"Update editions manifest",m.sha);
+  st.textContent="Published successfully. GitHub Pages may take a few minutes to update.";
+  loadList();
+ }catch(e){st.textContent="Error: "+e.message}
+};
+loadList();
+</script>
+</body></html>
