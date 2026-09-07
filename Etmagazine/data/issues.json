@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "demo",
+    "title": "Line Checks & Long Hauls",
+    "issueNumber": 4,
+    "month": "September",
+    "year": 2026,
+    "pagesPath": "magazines/demo",
+    "cover": "page-001.svg",
+    "pages": ["page-001.svg", "page-002.svg", "page-003.svg", "page-004.svg"]
+  }
+]
