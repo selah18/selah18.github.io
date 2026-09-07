@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading — SQUAWK</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="reader-body">
+
+<div class="reader-top">
+  <a href="index.html">← library</a>
+  <span class="title mono" id="reader-title">loading…</span>
+  <a href="#" id="fullscreen-toggle">fullscreen ⤢</a>
+</div>
+
+<div class="stage">
+  <div class="book" id="book">
+    <div class="spine"></div>
+    <div class="leaf left" id="leaf-left"><img id="img-left" alt=""></div>
+    <div class="leaf right" id="leaf-right"><img id="img-right" alt=""></div>
+  </div>
+</div>
+
+<div class="reader-bottom">
+  <button id="prev" class="mono">‹ prev</button>
+  <span class="count mono" id="count">— / —</span>
+  <button id="next" class="mono">next ›</button>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/reader.js"></script>
+</body>
+</html>

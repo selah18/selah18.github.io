@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQUAWK — a monthly dispatch for the flight deck</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="mark" href="index.html">SQUAWK</a>
+  <a href="publish.html">+ publish an issue</a>
+</div>
+
+<div class="masthead">
+  <h1 id="site-title">SQUAWK</h1>
+  <p id="site-tagline">a monthly dispatch for the flight deck</p>
+</div>
+
+<div class="routemap" aria-hidden="true">
+  <svg viewBox="0 0 1000 90" xmlns="http://www.w3.org/2000/svg">
+    <line x1="30" y1="45" x2="970" y2="45" stroke="#C7CCD6" stroke-width="1.5" stroke-dasharray="1 8" stroke-linecap="round"/>
+    <circle cx="30" cy="45" r="4" fill="#0B1220"/>
+    <circle cx="970" cy="45" r="4" fill="#0B1220"/>
+    <g transform="translate(490,45) rotate(90)">
+      <path d="M0 -9 L6 8 L0 4 L-6 8 Z" fill="#D98F2B"/>
+    </g>
+  </svg>
+</div>
+
+<div id="editions" class="editions"></div>
+<div id="empty" class="empty" hidden>
+  No issues published yet. <a href="publish.html">Publish the first one →</a>
+</div>
+
+<footer class="foot">SQUAWK — built as a static site. No server, no database: every issue lives in this repo.</footer>
+
+<script src="js/config.js"></script>
+<script src="js/library.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publish an issue — SQUAWK</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← library</a>
+  <span class="mono">MONTHLY PUBLISHING</span>
+</div>
+
+<div class="publish-wrap">
+  <h1>Publish this month's issue</h1>
+  <p class="lede">
+    Everything below runs in your browser — your PDF is never uploaded anywhere.
+    This page turns it into a page-by-page image set, then hands you a package
+    to drop into the repo and push to GitHub.
+  </p>
+
+  <div class="step">
+    <span class="num mono">STEP 1</span>
+    <h2>Issue details</h2>
+    <div class="field">
+      <label for="f-title">Issue title</label>
+      <input id="f-title" type="text" placeholder="e.g. Line Checks &amp; Long Hauls">
+    </div>
+    <div style="display:flex; gap:14px;">
+      <div class="field" style="flex:1;">
+        <label for="f-number">Issue number</label>
+        <input id="f-number" type="number" min="1" placeholder="5">
+      </div>
+      <div class="field" style="flex:1;">
+        <label for="f-month">Month</label>
+        <input id="f-month" type="text" placeholder="September">
+      </div>
+      <div class="field" style="flex:1;">
+        <label for="f-year">Year</label>
+        <input id="f-year" type="number" placeholder="2026">
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-slug">Slug (folder name — auto-filled, edit if you like)</label>
+      <input id="f-slug" type="text" placeholder="september-2026">
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="num mono">STEP 2</span>
+    <h2>Drop in the PDF</h2>
+    <div class="dropzone" id="dropzone">
+      <p id="dz-label">Drag a PDF here, or click to choose a file</p>
+      <input id="file-input" type="file" accept="application/pdf">
+    </div>
+    <div class="progress" id="progress-wrap" hidden><div class="bar" id="progress-bar"></div></div>
+    <p class="hint" id="progress-label"></p>
+  </div>
+
+  <div class="step" id="preview-step" hidden>
+    <span class="num mono">STEP 3</span>
+    <h2>Preview</h2>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <div class="step" id="package-step" hidden>
+    <span class="num mono">STEP 4</span>
+    <h2>Download &amp; publish</h2>
+    <button class="btn" id="download-zip">Download issue package (.zip)</button>
+    <p class="hint">Unzip it into <code>magazines/&lt;slug&gt;/</code> in your repo.</p>
+
+    <h2 style="margin-top:28px;">Add this to <code>data/issues.json</code></h2>
+    <pre class="snippet" id="snippet"></pre>
+    <button class="btn secondary" id="copy-snippet">Copy snippet</button>
+
+    <h2 style="margin-top:28px;">Push it live</h2>
+    <pre class="snippet" id="gitcmds"></pre>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="js/publish.js"></script>
+</body>
+</html>
