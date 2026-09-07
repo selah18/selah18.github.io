@@ -4,123 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>EAL 737 Fleet Magazine</title>
-<meta name="description" content="Monthly EAL 737 Fleet Magazine flipbook library">
+<meta name="description" content="EAL 737 Fleet Magazine — monthly digital magazine library">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
 <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
 <style>
-:root{--navy:#071426;--navy2:#123457;--red:#d71920;--ink:#101828;--muted:#667085;--line:#e7ebf0;--bg:#f7f9fb;--white:#fff;--amber:#f4b83f}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}
-img,canvas{max-width:100%}
-button,a,input{font:inherit}
-.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 24px}
-header{background:var(--navy);color:#fff}
-.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand{min-width:0;display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.04em}
-.brand span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mark{width:38px;height:38px;flex:0 0 38px;border:1px solid #ffffff38;border-radius:10px;display:grid;place-items:center;font-size:14px}
-.admin{color:#fff;text-decoration:none;border:1px solid #ffffff35;padding:10px 15px;border-radius:10px;font-weight:700;white-space:nowrap}
-.hero{padding:82px 0 76px;background:linear-gradient(135deg,var(--navy),var(--navy2));position:relative;overflow:hidden}
-.hero:after{content:"737";position:absolute;right:-10px;bottom:-75px;font:800 300px/1 Manrope;color:#ffffff08;letter-spacing:-.08em;pointer-events:none}
-.hero .wrap{position:relative;z-index:1}
-.eyebrow{color:var(--amber);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
-.hero h1{font:800 clamp(42px,7vw,78px)/.98 Manrope;margin:15px 0;max-width:760px;letter-spacing:-.05em}
-.hero p{font-size:18px;color:#d4dfeb;max-width:650px;line-height:1.6;margin:0}
-.cta{display:inline-flex;margin-top:20px;background:#fff;color:var(--navy);padding:13px 18px;border-radius:11px;text-decoration:none;font-weight:800}
-.section{padding:54px 0}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}
-.section h2{font:800 clamp(28px,4vw,38px)/1.1 Manrope;margin:0;letter-spacing:-.03em}
-.count{color:var(--muted);margin-top:8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px}
-.card{min-width:0;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 12px 36px #07142610}
-.cover{aspect-ratio:4/5;height:auto;min-height:0;background:#0b1c30;position:relative;overflow:hidden}
-.cover img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center top}
-.cover:after{content:"";position:absolute;inset:auto 0 0;height:34%;background:linear-gradient(to top,rgba(0,0,0,.22),transparent);pointer-events:none}
-.cover-text{position:absolute;left:22px;right:22px;bottom:20px;z-index:2;color:#fff;text-shadow:0 2px 14px #0008}
-.cover-text small{font-weight:800;color:var(--amber)}
-.cover-text h3{font:800 26px/1.05 Manrope;margin:7px 0}
-.cover-text div{font-size:14px;line-height:1.35}
-.info{padding:20px}
-.meta{font-size:13px;color:var(--muted);font-weight:700}
-.info p{color:var(--muted);margin:9px 0 16px;line-height:1.5}
-.read{width:100%;border:0;background:var(--red);color:#fff;padding:14px;border-radius:11px;font-weight:800;cursor:pointer}
-.preview-title{margin:54px 0 15px!important;font-size:28px!important}
-.drop{width:100%;max-width:100%;min-height:180px;border:1.5px dashed #b8c2cf;background:#fff;border-radius:16px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted);cursor:pointer;overflow:hidden}
-.drop strong{display:block;color:var(--ink);margin-bottom:6px}
-.drop span{max-width:560px;line-height:1.45}
-.drop input{display:none}
-.drop-preview{display:none;width:min(180px,70vw);aspect-ratio:4/5;object-fit:cover;border-radius:10px;margin:0 auto 14px;box-shadow:0 8px 24px #07142618}
-.drop.has-preview .drop-preview{display:block}
-.drop.has-preview strong{margin-bottom:4px}
-.modal{position:fixed;inset:0;background:#020a14eb;z-index:50;display:none;flex-direction:column;overflow:hidden}
-.modal.show{display:flex}
-.bar{height:62px;flex:0 0 62px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;padding:0 18px}
-.bar .title{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar button{border:1px solid #ffffff35;background:#ffffff12;color:#fff;padding:9px 13px;border-radius:9px;cursor:pointer}
-.viewer{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px}
-.book{width:min(94vw,900px);height:min(78vh,820px);max-width:100%;max-height:100%}
-.page{background:#fff;overflow:hidden}
-.page canvas{width:100%;height:100%;display:block}
-.controls{height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff}
-.controls button{background:#fff;color:var(--navy);border:0;border-radius:9px;padding:9px 15px;font-weight:800;cursor:pointer}
-.hint{color:#aebdcc;font-size:12px}
-footer{padding:35px 0;color:#8491a1;font-size:13px;border-top:1px solid var(--line);line-height:1.6}
-@media(max-width:650px){
- .wrap{padding:0 16px}.nav{height:64px}.brand{font-size:13px;gap:8px}.mark{width:34px;height:34px;flex-basis:34px}.admin{padding:8px 10px;font-size:13px}
- .hero{padding:58px 0}.hero h1{font-size:clamp(40px,12vw,58px)}.hero p{font-size:16px}.section{padding:38px 0}
- .grid{grid-template-columns:1fr;gap:18px}.cover{aspect-ratio:4/5}.info{padding:18px}.preview-title{margin-top:40px!important}
- .drop{min-height:160px;padding:24px 16px}.bar{padding:0 10px}.bar button{padding:8px 10px}.book{width:96vw;height:72vh}.controls{height:58px;flex-basis:58px}.hint{display:none}
-}
+:root{--navy:#071426;--navy2:#153b60;--red:#d71920;--ink:#0d1829;--muted:#68768c;--line:#e4e9ef;--bg:#f5f7fa;--white:#fff;--amber:#f4b83f}
+*{box-sizing:border-box}html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden}body{background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}img,canvas{max-width:100%}button,a,input{font:inherit}.wrap{width:100%;max-width:1180px;margin:auto;padding:0 24px}
+header{background:var(--navy);color:#fff}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.055em;font-size:14px}.mark{width:39px;height:39px;border:1px solid #fff3;border-radius:11px;display:grid;place-items:center;font:800 14px Manrope}.admin{color:#fff;text-decoration:none;border:1px solid #fff3;padding:9px 14px;border-radius:10px;font-weight:700}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 78% 40%,#204e78 0,#123557 27%,var(--navy) 66%);color:#fff;padding:64px 0 74px}.hero:before{content:"737";position:absolute;right:-35px;bottom:-105px;font:800 330px/1 Manrope;color:#fff06;letter-spacing:-.09em}.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:55px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#f8c451;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.hero h1{font:800 clamp(42px,6vw,72px)/.98 Manrope;margin:14px 0 18px;letter-spacing:-.055em;max-width:720px}.hero p{font-size:18px;line-height:1.65;color:#d6e1ec;max-width:650px;margin:0}.cta{display:inline-flex;margin-top:24px;background:#fff;color:var(--navy);padding:13px 18px;border-radius:11px;text-decoration:none;font-weight:800;box-shadow:0 8px 25px #0003}
+.hero-edition{display:flex;justify-content:center;align-items:center;min-height:350px}.hero-book{position:relative;width:min(285px,72vw);filter:drop-shadow(0 24px 25px #0007);transform:rotate(-2.5deg);transition:transform .25s ease}.hero-book:hover{transform:rotate(0) translateY(-4px)}.hero-book:before{content:"";position:absolute;left:-7px;top:5px;bottom:5px;width:12px;border-radius:4px 0 0 4px;background:linear-gradient(90deg,#bfc7ce,#f8fafb,#b6bec5);box-shadow:-4px 4px 15px #0003}.hero-book img{display:block;width:100%;height:auto;border-radius:3px 5px 5px 3px;background:#fff}.book-shadow{position:absolute;left:10%;right:-8%;bottom:-18px;height:35px;background:#0006;filter:blur(18px);z-index:-1;border-radius:50%}
+.section{padding:52px 0}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}.section h2{font:800 34px/1.05 Manrope;margin:0;letter-spacing:-.04em}.count{margin-top:8px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:24px}.card{min-width:0;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 12px 35px #0714260d}.edition-visual{background:linear-gradient(145deg,#0b1c30,#1d4568);padding:28px 25px 24px;display:flex;justify-content:center;align-items:center;min-height:420px;position:relative;overflow:hidden}.edition-visual:before{content:"737";position:absolute;right:-38px;bottom:-55px;font:800 190px/1 Manrope;color:#fff08}.magazine{position:relative;z-index:1;width:min(260px,72%);filter:drop-shadow(0 18px 22px #0007);transform:rotate(-2deg);transition:.25s}.magazine:hover{transform:rotate(0) translateY(-4px)}.magazine img{display:block;width:100%;height:auto;border-radius:3px;background:#fff}.magazine:after{content:"";position:absolute;left:-5px;top:2px;bottom:2px;width:8px;border-radius:3px 0 0 3px;background:linear-gradient(90deg,#b9c1c8,#fff,#adb6bf)}.info{padding:20px 21px 21px}.meta{font-size:13px;color:var(--muted);font-weight:800}.info h3{font:800 23px Manrope;margin:9px 0 6px}.info p{color:var(--muted);line-height:1.5;margin:0 0 17px}.read{width:100%;border:0;background:var(--red);color:#fff;padding:14px;border-radius:11px;font-weight:800;cursor:pointer;box-shadow:0 7px 16px #d7192028}.read:active{transform:translateY(1px)}
+.preview-title{margin:54px 0 7px!important;font:800 30px Manrope!important;letter-spacing:-.04em}.preview-sub{margin:0 0 18px;color:var(--muted)}.drop{width:100%;min-height:175px;border:1.5px dashed #b7c3d1;background:#fff;border-radius:17px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted);cursor:pointer}.drop strong{color:var(--ink);margin:4px 0 5px}.drop input{display:none}.drop-preview{display:none;width:90px;max-height:115px;object-fit:cover;border-radius:5px;box-shadow:0 8px 18px #07142620}.drop.has-preview .drop-preview{display:block}.drop.has-preview{min-height:190px}
+footer{padding:34px 0;color:#8491a1;font-size:13px;border-top:1px solid var(--line);line-height:1.65}.modal{position:fixed;inset:0;background:#020a14ef;z-index:50;display:none;flex-direction:column;overflow:hidden}.modal.show{display:flex}.bar{height:62px;flex:0 0 62px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;padding:0 18px}.bar .title{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}.bar button{border:1px solid #fff3;background:#ffffff12;color:#fff;padding:9px 13px;border-radius:9px;cursor:pointer}.viewer{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px}.book{width:min(94vw,900px);height:min(78vh,820px);max-width:100%;max-height:100%}.page{background:#fff;overflow:hidden}.page canvas{width:100%;height:100%;display:block}.controls{height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff}.controls button{background:#fff;color:var(--navy);border:0;border-radius:9px;padding:9px 15px;font-weight:800;cursor:pointer}.hint{color:#aebdcc;font-size:12px}
+@media(max-width:760px){.wrap{padding:0 16px}.nav{height:64px}.brand{font-size:12px}.mark{width:34px;height:34px}.admin{padding:8px 10px;font-size:12px}.hero{padding:45px 0 42px}.hero-inner{grid-template-columns:1fr;gap:30px}.hero-copy{order:2}.hero-edition{order:1;min-height:0}.hero-book{width:min(230px,58vw)}.hero h1{font-size:clamp(39px,12vw,58px)}.hero p{font-size:16px}.hero:before{font-size:230px;bottom:-70px}.section{padding:39px 0}.section h2{font-size:29px}.grid{grid-template-columns:1fr;gap:18px}.edition-visual{min-height:390px;padding:25px}.magazine{width:min(235px,66%)}.info{padding:18px}.preview-title{margin-top:40px!important}.drop{min-height:155px}.bar{padding:0 10px}.bar button{padding:8px 10px}.book{width:96vw;height:72vh}.controls{height:58px;flex-basis:58px}.hint{display:none}}
 </style>
 </head>
 <body>
-<header><div class="wrap nav"><div class="brand"><span class="mark">737</span><span>EAL FLEET MAGAZINE</span></div><a class="admin" href="admin.html">Publisher</a></div></header>
-<section class="hero"><div class="wrap"><div class="eyebrow">Monthly • Flight Crew • Fleet</div><h1>Read the fleet.<br>Turn the page.</h1><p>A minimalist digital library for the EAL 737 Fleet Magazine — built for pilots, readable on phone, tablet and desktop.</p><a class="cta" href="#editions">Browse editions ↓</a></div></section>
-<main class="wrap section" id="editions">
- <div class="section-head"><div><h2>Monthly editions</h2><div class="count" id="count"></div></div></div>
- <div class="grid" id="grid"></div>
- <h2 class="preview-title">Preview a PDF</h2>
- <label class="drop" id="drop"><input type="file" id="file" accept="application/pdf"><img class="drop-preview" id="dropPreview" alt="PDF cover preview"><strong id="dropTitle">Drop a PDF here or tap to choose</strong><span id="dropText">Private browser preview — it is not published automatically.</span></label>
-</main>
+<header><div class="wrap nav"><div class="brand"><span class="mark">737</span><span>EAL 737 FLEET MAGAZINE</span></div><a class="admin" href="admin.html">Publisher</a></div></header>
+<section class="hero"><div class="wrap hero-inner"><div class="hero-copy"><div class="eyebrow">Monthly • Flight Crew • Fleet</div><h1>Read the fleet.<br>Turn the page.</h1><p>A premium digital library for the EAL 737 Fleet Magazine — designed for pilots and built to read beautifully on phone, tablet and desktop.</p><a class="cta" href="#editions">Browse editions ↓</a></div><div class="hero-edition" id="heroEdition"></div></div></section>
+<main class="wrap section" id="editions"><div class="section-head"><div><h2>Monthly editions</h2><div class="count" id="count"></div></div></div><div class="grid" id="grid"></div><h2 class="preview-title">Preview a PDF</h2><p class="preview-sub">View the first page before opening the full magazine.</p><label class="drop" id="drop"><input type="file" id="file" accept="application/pdf"><img class="drop-preview" id="dropPreview" alt="PDF first page preview"><strong id="dropTitle">Select a PDF file or drag and drop</strong><span id="dropText">Private browser preview — it is not published automatically.</span></label></main>
 <footer><div class="wrap">EAL 737 Fleet Magazine • Digital archive • For informational use; approved company manuals and procedures remain the primary reference.</div></footer>
-<div class="modal" id="modal"><div class="bar"><div class="title" id="mtitle">Flipbook</div><div><button id="openPdf">Open PDF</button> <button id="close" aria-label="Close">✕</button></div></div><div class="viewer"><div class="book" id="book"></div></div><div class="controls"><button id="prev">‹</button><span id="counter">1 / 1</span><button id="next">›</button><span class="hint">Swipe / drag pages</span></div></div>
+<div class="modal" id="modal"><div class="bar"><div class="title" id="mtitle">Flipbook</div><div><button id="openPdf">Open PDF</button><button id="close" aria-label="Close">✕</button></div></div><div class="viewer"><div class="book" id="book"></div></div><div class="controls"><button id="prev">‹</button><span id="counter">1 / 1</span><button id="next">›</button><span class="hint">Swipe / drag pages</span></div></div>
 <script type="module">
 const pdfjsLib=await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs");
 pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 const $=s=>document.querySelector(s);let flip=null,currentPdfUrl="";
-function coverFallback(x){if(x.cover)return x.cover;const p=x.pdf||"";return p.replace(/^magazines\//,"magazines/covers/").replace(/\.pdf$/i,".jpg")}
+function coverFallback(x){if(x.cover)return x.cover;return (x.pdf||"").replace(/^magazines\//,"magazines/covers/").replace(/\.pdf$/i,".jpg")}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function magazineMarkup(x,hero=false){const cover=coverFallback(x);return `<div class="${hero?'hero-book':'magazine'}">${cover?`<img src="${esc(cover)}" alt="${esc(x.title||'EAL 737 Fleet Magazine')} cover">`:''}<span class="book-shadow"></span></div>`}
 async function loadEditions(){
  const data=await fetch("editions.json?"+Date.now()).then(r=>{if(!r.ok)throw Error("Could not load editions.json");return r.json()});
- $("#count").textContent=data.length+" published edition"+(data.length===1?"":"s");
- $("#grid").innerHTML=data.filter(x=>x.status!=="draft").map(x=>{const cover=coverFallback(x);return `<article class="card"><div class="cover">${cover?`<img loading="lazy" src="${cover}" alt="${x.title||"Magazine"} cover">`:""}<div class="cover-text"><small>${String(x.month||"").toUpperCase()} ${x.year||""} • ${x.volume||""} ${x.issue||""}</small><h3>${x.title||"EAL 737 Fleet Magazine"}</h3><div>${x.subtitle||""}</div></div></div><div class="info"><div class="meta">${x.month||""} ${x.year||""} · ${x.volume||""} · ${x.issue||""}</div><p>${x.subtitle||"Flight operations, safety and fleet knowledge."}</p><button class="read" data-pdf="${x.pdf}" data-title="${x.title||"Flipbook"}">Read edition</button></div></article>`}).join("");
+ const published=data.filter(x=>x.status!=="draft");
+ $("#count").textContent=published.length+" published edition"+(published.length===1?"":"s");
+ if(published[0]) $("#heroEdition").innerHTML=magazineMarkup(published[0],true);
+ $("#grid").innerHTML=published.map(x=>{const cover=coverFallback(x);return `<article class="card"><div class="edition-visual"><div class="magazine">${cover?`<img loading="lazy" src="${esc(cover)}" alt="${esc(x.title||'Magazine')} cover">`:''}</div></div><div class="info"><div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}</div><h3>${esc(x.title||"EAL 737 Fleet Magazine")}</h3><p>${esc(x.subtitle||"Flight operations, safety and fleet knowledge.")}</p><button class="read" data-pdf="${esc(x.pdf)}" data-title="${esc(x.title||"Flipbook")}">Read edition&nbsp; →</button></div></article>`}).join("");
  document.querySelectorAll(".read").forEach(b=>b.onclick=()=>openFlip(b.dataset.pdf,b.dataset.title));
 }
 async function openFlip(url,title){
  currentPdfUrl=url;$("#mtitle").textContent=title||"Flipbook";$("#modal").classList.add("show");$("#book").innerHTML="";
- try{
-  const pdf=await pdfjsLib.getDocument(url).promise;const pages=[];
-  for(let n=1;n<=pdf.numPages;n++){const p=await pdf.getPage(n);const v=p.getViewport({scale:1.35});const c=document.createElement("canvas");c.width=v.width;c.height=v.height;await p.render({canvasContext:c.getContext("2d"),viewport:v}).promise;const d=document.createElement("div");d.className="page";d.appendChild(c);pages.push(d)}
-  const w=Math.min(900,Math.max(260,window.innerWidth*.46)),h=Math.min(820,Math.max(360,window.innerHeight*.78));
-  flip=new St.PageFlip($("#book"),{width:w,height:h,size:"stretch",minWidth:260,maxWidth:900,minHeight:360,maxHeight:820,showCover:true,useMouseEvents:true});
-  flip.loadFromHTML(pages);updateCounter();flip.on("flip",updateCounter);
- }catch(e){$("#book").innerHTML=`<div style="color:white;text-align:center;padding:40px">Unable to open this PDF.</div>`}
-}
+ try{const pdf=await pdfjsLib.getDocument(url).promise;const pages=[];for(let n=1;n<=pdf.numPages;n++){const p=await pdf.getPage(n);const v=p.getViewport({scale:1.35});const c=document.createElement("canvas");c.width=v.width;c.height=v.height;await p.render({canvasContext:c.getContext("2d"),viewport:v}).promise;const d=document.createElement("div");d.className="page";d.appendChild(c);pages.push(d)}const w=Math.min(900,Math.max(260,window.innerWidth*.46)),h=Math.min(820,Math.max(360,window.innerHeight*.78));flip=new St.PageFlip($("#book"),{width:w,height:h,size:"stretch",minWidth:260,maxWidth:900,minHeight:360,maxHeight:820,showCover:true,useMouseEvents:true});flip.loadFromHTML(pages);updateCounter();flip.on("flip",updateCounter)}catch(e){$("#book").innerHTML='<div style="color:white;text-align:center;padding:40px">Unable to open this PDF.</div>'}}
 function updateCounter(){if(flip)$("#counter").textContent=(flip.getCurrentPageIndex()+1)+" / "+flip.getPageCount()}
-async function previewSelected(file){
- if(!file)return;const url=URL.createObjectURL(file);$("#drop").classList.add("has-preview");$("#dropTitle").textContent=file.name;$("#dropText").textContent="Tap again to open the PDF in the flipbook preview.";
- try{const pdf=await pdfjsLib.getDocument(url).promise;const p=await pdf.getPage(1);const v=p.getViewport({scale:.35});const c=$("#dropPreview");c.width=v.width;c.height=v.height;await p.render({canvasContext:(()=>{const tmp=document.createElement("canvas");tmp.width=v.width;tmp.height=v.height;return tmp.getContext("2d")})(),viewport:v}).promise;const tmp=document.createElement("canvas");tmp.width=v.width;tmp.height=v.height;await p.render({canvasContext:tmp.getContext("2d"),viewport:v}).promise;c.src=tmp.toDataURL("image/jpeg",.86);c.style.display="block";}catch(e){}openFlip(url,file.name);
-}
+async function previewSelected(file){if(!file)return;const url=URL.createObjectURL(file);$("#drop").classList.add("has-preview");$("#dropTitle").textContent=file.name;$("#dropText").textContent="Tap the file area again to preview the magazine.";try{const pdf=await pdfjsLib.getDocument(url).promise;const p=await pdf.getPage(1);const v=p.getViewport({scale:.4});const tmp=document.createElement("canvas");tmp.width=v.width;tmp.height=v.height;await p.render({canvasContext:tmp.getContext("2d"),viewport:v}).promise;$("#dropPreview").src=tmp.toDataURL("image/jpeg",.88)}catch(e){}openFlip(url,file.name)}
 $("#prev").onclick=()=>flip?.flipPrev();$("#next").onclick=()=>flip?.flipNext();
 $("#close").onclick=()=>{$("#modal").classList.remove("show");if(currentPdfUrl.startsWith("blob:"))URL.revokeObjectURL(currentPdfUrl);flip=null};
 $("#openPdf").onclick=()=>window.open(currentPdfUrl,"_blank");
-$("#drop").onclick=e=>{if(e.target.id!=="file")$("#file").click()};
-$("#file").onchange=e=>previewSelected(e.target.files[0]);
-$("#drop").ondragover=e=>{e.preventDefault();$("#drop").style.borderColor="#d71920"};
-$("#drop").ondragleave=()=>$("#drop").style.borderColor="";
-$("#drop").ondrop=e=>{e.preventDefault();$("#drop").style.borderColor="";const f=e.dataTransfer.files[0];if(f?.type==="application/pdf")previewSelected(f)};
-loadEditions().catch(e=>{$("#count").textContent="Unable to load editions";$ ("#grid").innerHTML=""});
+$("#drop").onclick=e=>{if(e.target.id!=="file")$("#file").click()};$("#file").onchange=e=>previewSelected(e.target.files[0]);
+$("#drop").ondragover=e=>{e.preventDefault();$("#drop").style.borderColor="var(--red)"};$("#drop").ondragleave=()=>$("#drop").style.borderColor="";$("#drop").ondrop=e=>{e.preventDefault();$("#drop").style.borderColor="";const f=e.dataTransfer.files[0];if(f?.type==="application/pdf")previewSelected(f)};
+loadEditions().catch(e=>{$("#count").textContent="Unable to load editions"});
 </script>
 </body></html>
