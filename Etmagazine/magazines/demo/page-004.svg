@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 1100">
+  <rect width="850" height="1100" fill="#0B1220"/>
+  <text x="425" y="480" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-style="italic" font-weight="500" font-size="34" fill="#F3F5F9">"Fly the airplane</text>
+  <text x="425" y="530" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-style="italic" font-weight="500" font-size="34" fill="#F3F5F9">as far into the crash</text>
+  <text x="425" y="580" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-style="italic" font-weight="500" font-size="34" fill="#F3F5F9">as possible."</text>
+  <text x="425" y="625" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#D98F2B">— ATTRIBUTED, WIDELY</text>
+
+  <text x="425" y="1010" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="#8C97AC" letter-spacing="2">SQUAWK · SEE YOU NEXT MONTH</text>
+</svg>

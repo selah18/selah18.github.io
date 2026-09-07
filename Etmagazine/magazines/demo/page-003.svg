@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 1100">
+  <rect width="850" height="1100" fill="#F3F5F9"/>
+  <text x="60" y="90" font-family="IBM Plex Mono, monospace" font-size="13" fill="#14418C" letter-spacing="2">FEATURE — PAGE 03</text>
+  <text x="60" y="160" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="44" fill="#0B1220">The Hold Nobody</text>
+  <text x="60" y="210" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="44" fill="#0B1220">Talks About</text>
+  <line x1="60" y1="240" x2="330" y2="240" stroke="#D98F2B" stroke-width="3"/>
+
+  <g font-family="Inter, sans-serif" font-size="16" fill="#0B1220">
+    <text x="60" y="300">Every pilot has one story about a hold that ran long</text>
+    <text x="60" y="325">enough to change the arrival briefing twice. This is</text>
+    <text x="60" y="350">about the quieter ones — the fifteen-minute holds</text>
+    <text x="60" y="375">that never make the debrief, but still eat into the</text>
+    <text x="60" y="400">fuel plan you built two hours earlier on the ground.</text>
+
+    <text x="60" y="450">We talked to three captains about how they keep</text>
+    <text x="60" y="475">the arithmetic honest when ATC starts stacking</text>
+    <text x="60" y="500">traffic — and why the boring answer is usually</text>
+    <text x="60" y="525">the right one: brief it early, brief it twice.</text>
+  </g>
+
+  <rect x="520" y="290" width="270" height="330" fill="#F5F6F8" stroke="#E3E6EC"/>
+  <text x="545" y="330" font-family="IBM Plex Mono, monospace" font-size="12" fill="#14418C">HOLDING FUEL, AT A GLANCE</text>
+  <g font-family="IBM Plex Mono, monospace" font-size="13" fill="#0B1220">
+    <text x="545" y="370">STANDARD PATTERN</text>
+    <text x="545" y="392" fill="#5B6472">1 MIN LEGS · 3° BANK</text>
+    <text x="545" y="440">FUEL BURN / TURN</text>
+    <text x="545" y="462" fill="#5B6472">~ 2 MIN, GEAR UP</text>
+    <text x="545" y="510">DIVERT TRIGGER</text>
+    <text x="545" y="532" fill="#5B6472">SET BEFORE ENTRY</text>
+  </g>
+
+  <text x="60" y="1040" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9AA2AF">03</text>
+</svg>

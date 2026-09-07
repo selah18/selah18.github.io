@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 1100">
+  <rect width="850" height="1100" fill="#0B1220"/>
+  <g opacity="0.5" stroke="#4A5F94" stroke-width="1">
+    <line x1="0" y1="150" x2="850" y2="150"/>
+    <line x1="0" y1="950" x2="850" y2="950"/>
+    <circle cx="425" cy="620" r="230" fill="none"/>
+    <circle cx="425" cy="620" r="150" fill="none"/>
+    <line x1="425" y1="390" x2="425" y2="850" />
+    <line x1="195" y1="620" x2="655" y2="620" />
+  </g>
+  <text x="60" y="120" font-family="IBM Plex Mono, monospace" font-size="15" fill="#D98F2B" letter-spacing="2">NO. 04 — SEPTEMBER 2026</text>
+  <text x="55" y="330" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="150" fill="#F3F5F9">SQUAWK</text>
+  <text x="60" y="380" font-family="Inter, sans-serif" font-size="24" fill="#8C97AC">a monthly dispatch for the flight deck</text>
+  <text x="60" y="1000" font-family="Space Grotesk, sans-serif" font-weight="500" font-size="28" fill="#F3F5F9">Line checks, long hauls,</text>
+  <text x="60" y="1035" font-family="Space Grotesk, sans-serif" font-weight="500" font-size="28" fill="#F3F5F9">and the crews who keep them boring</text>
+  <text x="60" y="1075" font-family="IBM Plex Mono, monospace" font-size="13" fill="#5B9BFF">DEMO ISSUE — replace via publish.html</text>
+</svg>

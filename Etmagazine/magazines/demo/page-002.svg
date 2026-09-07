@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 1100">
+  <rect width="850" height="1100" fill="#F3F5F9"/>
+  <text x="60" y="110" font-family="IBM Plex Mono, monospace" font-size="14" fill="#14418C" letter-spacing="2">IN THIS ISSUE</text>
+  <text x="60" y="175" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="56" fill="#0B1220">Contents</text>
+  <line x1="60" y1="205" x2="790" y2="205" stroke="#E3E6EC"/>
+
+  <g font-family="Inter, sans-serif" fill="#0B1220">
+    <text x="60" y="280" font-size="15" fill="#D98F2B" font-family="IBM Plex Mono, monospace">03</text>
+    <text x="110" y="282" font-size="26" font-family="Space Grotesk, sans-serif" font-weight="600">The Hold Nobody Talks About</text>
+    <text x="110" y="312" font-size="15" fill="#5B6472">Waiting fixes, fuel math, and staying ahead of the delay.</text>
+
+    <text x="60" y="400" font-size="15" fill="#D98F2B" font-family="IBM Plex Mono, monospace">07</text>
+    <text x="110" y="402" font-size="26" font-family="Space Grotesk, sans-serif" font-weight="600">Notes from a Rome Layover</text>
+    <text x="110" y="432" font-size="15" fill="#5B6472">A first officer's log from AA-RM, three years in.</text>
+
+    <text x="60" y="520" font-size="15" fill="#D98F2B" font-family="IBM Plex Mono, monospace">12</text>
+    <text x="110" y="522" font-size="26" font-family="Space Grotesk, sans-serif" font-weight="600">Reading the Sectional Again</text>
+    <text x="110" y="552" font-size="15" fill="#5B6472">Why the old charts still teach the new ones something.</text>
+
+    <text x="60" y="640" font-size="15" fill="#D98F2B" font-family="IBM Plex Mono, monospace">18</text>
+    <text x="110" y="642" font-size="26" font-family="Space Grotesk, sans-serif" font-weight="600">Mailbag</text>
+    <text x="110" y="672" font-size="15" fill="#5B6472">Questions from readers, answered by check airmen.</text>
+  </g>
+
+  <text x="60" y="1040" font-family="IBM Plex Mono, monospace" font-size="12" fill="#9AA2AF">02</text>
+</svg>
