@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>EAL 737 Fleet Magazine</title>
-<meta name="description" content="EAL 737 Fleet Magazine — monthly digital magazine library">
+<meta name="description" content="EAL 737 Fleet Magazine — Monthly Digital Magazine Library">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
@@ -126,7 +126,7 @@ footer{padding:34px 0;color:#8491a1;font-size:13px;border-top:1px solid var(--li
 
 
 	
-<header><div class="wrap nav"><div class="brand"><span class="mark">737</span><span>EAL 737 FLEET MAGAZINE</span></div><div class="links-wrap" id="linksWrap"><button class="links-btn" id="linksBtn" type="button" aria-expanded="false" aria-controls="linksMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Important Links</span><svg class="links-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="links-menu" id="linksMenu" role="menu">
+<header><div class="wrap nav"><div class="brand"><span class="mark">737</span><span>EAL FLEET MAGAZINE</span></div><div class="links-wrap" id="linksWrap"><button class="links-btn" id="linksBtn" type="button" aria-expanded="false" aria-controls="linksMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Important Links</span><svg class="links-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="links-menu" id="linksMenu" role="menu">
 <a class="links-item" href="#737-news" role="menuitem"><span class="links-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M7 9h10M7 13h7M7 16h4"/><path d="M18 3v4"/></svg></span><span class="links-label">737 Breaking News<small>Latest Boeing 737 news</small></span></a>
 <div class="links-divider"></div>
 <a class="links-item" href="https://play.google.com/store/apps/details?id=com.konettech.crewloghelper" target="_blank" rel="noopener" role="menuitem"><span class="links-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.7 2.9 13.9 13 3.7 23.1c-.4-.3-.7-.8-.7-1.5V4.4c0-.7.3-1.2.7-1.5Zm11.6 11.5 2.9 2.9-10.5 5.9 7.6-8.8Zm0-2.8L7.7 2.1l10.5 5.9-2.9 2.9ZM19.4 9.1l2.2 1.2c.7.4.7 1.4 0 1.8l-2.2 1.2-3.1-3.1 3.1-3.1Z"/></svg></span><span class="links-label">CrewLog Helper App<small>Google Play</small></span></a>
@@ -451,17 +451,11 @@ function newsCard(a) {
   
   const imgMatch = (a.description || "").match(/<img[^>]+src="([^"]+)"/i);
   
-  // Render image if available; otherwise, render the fallback SVG icon container
+  const redNewspaperSvg = `<svg class="news-icon" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M416 130V48C416 21.5 394.5 0 368 0H48C21.5 0 0 21.5 0 48v368c0 26.5 21.5 48 48 48h352c35.3 0 64-28.7 64-64V162c0-17.7-14.3-32-32-32h-16zm-32 302H48c-8.8 0-16-7.2-16-16V48c0-8.8 7.2-16 16-16h320c8.8 0 16 7.2 16 16v384zm80-32c0 17.7-14.3 32-32 32v-272h16c8.8 0 16 7.2 16 16v224z" fill="var(--red, #d71920)"/><text x="100" y="130" font-family="\'Manrope\', sans-serif" font-weight="800" font-size="52" fill="var(--red, #d71920)" letter-spacing="3">LATEST</text><text x="65" y="240" font-family="\'Manrope\', sans-serif" font-weight="900" font-size="105" fill="var(--red, #d71920)" letter-spacing="1">NEWS</text><rect x="68" y="290" width="128" height="20" rx="10" fill="var(--red, #d71920)"/><rect x="224" y="290" width="136" height="20" rx="10" fill="var(--red, #d71920)"/><rect x="68" y="344" width="128" height="20" rx="10" fill="var(--red, #d71920)"/><rect x="224" y="344" width="136" height="20" rx="10" fill="var(--red, #d71920)"/><rect x="68" y="398" width="128" height="20" rx="10" fill="var(--red, #d71920)"/><rect x="224" y="398" width="136" height="20" rx="10" fill="var(--red, #d71920)"/></svg>`;
+
   const visualElement = imgMatch 
-    ? `<img class="news-image" loading="lazy" src="${esc(imgMatch[1])}" alt="" onerror="this.outerHTML='<div class=\\'news-image-favicon\\'><svg class=\\'news-icon\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\' stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\'><path d=\\'M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2\\'/><path d=\\'M18 14h-8\\'/><path d=\\'M15 18h-5\\'/><path d=\\'M10 6h8v4h-8V6Z\\'/></svg></div>';">`
-    : `<div class="news-image-favicon">
-        <svg class="news-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
-          <path d="M18 14h-8"/>
-          <path d="M15 18h-5"/>
-          <path d="M10 6h8v4h-8V6Z"/>
-        </svg>
-       </div>`;
+    ? `<img class="news-image" loading="lazy" src="${esc(imgMatch[1])}" alt="" onerror="this.outerHTML='<div class=\\'news-image-favicon\\'>${redNewspaperSvg}</div>';">`
+    : `<div class="news-image-favicon">${redNewspaperSvg}</div>`;
 
   return `<a class="news-card${!imgMatch ? ' no-image' : ''}" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">
     ${visualElement}
