@@ -208,27 +208,38 @@ async function loadEditions() {
     return r.json();
   });
   
-  const published = data.filter(x => x.status === "published");
-  $("#count").textContent = published.length + " published edition" + (published.length === 1 ? "" : "s");
+  const published = data.filter(x => String(x.status || "published").toLowerCase() === "published");
+  const visible = data.filter(x => {
+    const status = String(x.status || "published").toLowerCase();
+    return status === "published" || status === "draft";
+  });
+
+  const publishedLabel = published.length + " published edition" + (published.length === 1 ? "" : "s");
+  const draftCount = visible.filter(x => String(x.status || "").toLowerCase() === "draft").length;
+  $("#count").textContent = publishedLabel + (draftCount ? " · " + draftCount + " coming soon" : "");
   
   if (published[0]) $("#heroEdition").innerHTML = magazineMarkup(published[0], true);
   
-  $("#grid").innerHTML = published.map(x => {
+  $("#grid").innerHTML = visible.map(x => {
     const cover = coverFallback(x);
+    const status = String(x.status || "published").toLowerCase();
+    const isDraft = status === "draft";
     return `<article class="card">
       <div class="edition-visual">
         <div class="magazine">${cover ? `<img loading="lazy" src="${esc(cover)}" alt="${esc(x.title || 'Magazine')} cover">` : ''}</div>
       </div>
       <div class="info">
-        <div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}</div>
+        <div class="meta">${esc(x.month)} ${esc(x.year)} · ${esc(x.volume)} · ${esc(x.issue)}${isDraft ? ' · Coming Soon' : ''}</div>
         <h3>${esc(x.title || "EAL 737 Fleet Magazine")}</h3>
         <p>${esc(x.subtitle || "Flight operations, safety and fleet knowledge.")}</p>
-        <button class="read" data-pdf="${esc(x.pdf)}" data-title="${esc(x.title || "Flipbook")}">Read edition &rarr;</button>
+        ${isDraft
+          ? `<button class="read" type="button" disabled style="cursor:default;opacity:.78;background:var(--navy2);box-shadow:none">Coming soon</button>`
+          : `<button class="read" data-pdf="${esc(x.pdf)}" data-title="${esc(x.title || "Flipbook")}">Read edition &rarr;</button>`}
       </div>
     </article>`;
   }).join("");
 
-  document.querySelectorAll(".read").forEach(b => {
+  document.querySelectorAll(".read:not([disabled])").forEach(b => {
     b.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
