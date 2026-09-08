@@ -1,50 +1,14 @@
 [
   {
-    "id": "2025-06",
-    "month": "June",
-    "year": 2025,
-    "volume": "Vol 01",
-    "issue": "Issue 01",
-    "title": "EAL B737 Fleet Magazine",
-    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
-    "pdf": "magazines/EAL Fleet Magazine_260908_092818.pdf",
-    "cover": "magazines/covers/EAL Fleet Magazine_260908_092818.jpg",
-    "status": "published"
-  },
-  {
-    "id": "2025-09",
-    "month": "September",
-    "year": 2025,
-    "volume": "Vol 01",
-    "issue": "Issue 02",
-    "title": "EAL B737 Fleet Magazine",
-    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
-    "pdf": "magazines/EAL B737 Fleet Magazine SEPT2025_260908_092851.pdf",
-    "cover": "magazines/covers/EAL B737 Fleet Magazine SEPT2025_260908_092851.jpg",
-    "status": "published"
-  },
-  {
-    "id": "2025-12",
-    "month": "December",
-    "year": 2025,
-    "volume": "Vol 01",
-    "issue": "Issue 03",
-    "title": "EAL B737 Fleet Magazine",
-    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
-    "pdf": "magazines/EAL B737 FLEET MAGAZINE ED03 Compressed _260908_092924.pdf",
-    "cover": "magazines/covers/EAL B737 FLEET MAGAZINE ED03 Compressed _260908_092924.jpg",
-    "status": "published"
-  },
-  {
-    "id": "2026-03",
-    "month": "March",
+    "id": "2026-09",
+    "month": "October",
     "year": 2026,
     "volume": "Vol 01",
-    "issue": "Issue 04",
-    "title": "EAL 737 Fleet Magazine",
+    "issue": "Issue 06",
+    "title": "EAL B737 Fleet Magazine",
     "subtitle": "Fleet News • Flight Operations • Safety • Systems",
-    "pdf": "magazines/eal-737-fleet-magazine-march-2026.pdf",
-    "cover": "magazines/covers/eal-737-fleet-magazine-march-2026.jpg",
+    "pdf": "https://drive.google.com/file/d/1TzUEJpFsy4HISXKn6hfhM6AYYghenzBR/view?usp=drivesdk",
+    "cover": "magazines/covers/September Edition Draft one fleet magazine.jpg",
     "status": "published"
   },
   {
@@ -60,15 +24,51 @@
     "status": "published"
   },
   {
-    "id": "2026-09",
-    "month": "October",
+    "id": "2026-03",
+    "month": "March",
     "year": 2026,
     "volume": "Vol 01",
-    "issue": "Issue 06",
+    "issue": "Issue 04",
+    "title": "EAL 737 Fleet Magazine",
+    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
+    "pdf": "magazines/eal-737-fleet-magazine-march-2026.pdf",
+    "cover": "magazines/covers/eal-737-fleet-magazine-march-2026.jpg",
+    "status": "published"
+  },
+  {
+    "id": "2025-12",
+    "month": "December",
+    "year": 2025,
+    "volume": "Vol 01",
+    "issue": "Issue 03",
     "title": "EAL B737 Fleet Magazine",
     "subtitle": "Fleet News • Flight Operations • Safety • Systems",
-    "pdf": "https://drive.google.com/file/d/1TzUEJpFsy4HISXKn6hfhM6AYYghenzBR/view?usp=drivesdk",
-    "cover": "magazines/covers/September Edition Draft one fleet magazine.jpg",
+    "pdf": "magazines/EAL B737 FLEET MAGAZINE ED03 Compressed _260908_092924.pdf",
+    "cover": "magazines/covers/EAL B737 FLEET MAGAZINE ED03 Compressed _260908_092924.jpg",
+    "status": "published"
+  },
+  {
+    "id": "2025-09",
+    "month": "September",
+    "year": 2025,
+    "volume": "Vol 01",
+    "issue": "Issue 02",
+    "title": "EAL B737 Fleet Magazine",
+    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
+    "pdf": "magazines/EAL B737 Fleet Magazine SEPT2025_260908_092851.pdf",
+    "cover": "magazines/covers/EAL B737 Fleet Magazine SEPT2025_260908_092851.jpg",
+    "status": "published"
+  },
+  {
+    "id": "2025-06",
+    "month": "June",
+    "year": 2025,
+    "volume": "Vol 01",
+    "issue": "Issue 01",
+    "title": "EAL B737 Fleet Magazine",
+    "subtitle": "Fleet News • Flight Operations • Safety • Systems",
+    "pdf": "magazines/EAL Fleet Magazine_260908_092818.pdf",
+    "cover": "magazines/covers/EAL Fleet Magazine_260908_092818.jpg",
     "status": "published"
   }
 ]
