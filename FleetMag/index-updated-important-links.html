@@ -448,10 +448,32 @@ function newsCard(a) {
   const parts = (a.title || "").split(" - ");
   const source = a.author || (parts.length > 1 ? parts.pop() : "News source");
   const title = parts.join(" - ") || "Boeing 737 news";
+  
   const imgMatch = (a.description || "").match(/<img[^>]+src="([^"]+)"/i);
-  const image = imgMatch ? `<img class="news-image" loading="lazy" src="${esc(imgMatch[1])}" alt="" onerror="this.style.display='none'">` : `<div class="news-image"></div>`;
-  return `<a class="news-card" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">${image}<div><div class="news-source">${esc(source)}</div><h3>${esc(title)}</h3><div class="news-date">${esc(newsTime(a.pubDate))}</div><span class="news-more">Read story →</span></div></a>`;
+  
+  // Render image if available; otherwise, render the fallback SVG icon container
+  const visualElement = imgMatch 
+    ? `<img class="news-image" loading="lazy" src="${esc(imgMatch[1])}" alt="" onerror="this.outerHTML='<div class=\\'news-image-favicon\\'><svg class=\\'news-icon\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\' stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\'><path d=\\'M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2\\'/><path d=\\'M18 14h-8\\'/><path d=\\'M15 18h-5\\'/><path d=\\'M10 6h8v4h-8V6Z\\'/></svg></div>';">`
+    : `<div class="news-image-favicon">
+        <svg class="news-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+          <path d="M18 14h-8"/>
+          <path d="M15 18h-5"/>
+          <path d="M10 6h8v4h-8V6Z"/>
+        </svg>
+       </div>`;
+
+  return `<a class="news-card${!imgMatch ? ' no-image' : ''}" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">
+    ${visualElement}
+    <div>
+      <div class="news-source">${esc(source)}</div>
+      <h3>${esc(title)}</h3>
+      <div class="news-date">${esc(newsTime(a.pubDate))}</div>
+      <span class="news-more">Read story →</span>
+    </div>
+  </a>`;
 }
+
 
 async function load737News() {
   const grid = $("#newsGrid");
