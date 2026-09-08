@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>EAL 737 Fleet Magazine</title>
-<meta name="description" content="EAL 737 Fleet Magazine — monthly digital magazine library">
+<meta name="description" content="EAL 737 Fleet Magazine — Monthly Digital Magazine Library">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
@@ -126,7 +126,7 @@ footer{padding:34px 0;color:#8491a1;font-size:13px;border-top:1px solid var(--li
 
 
 	
-<header><div class="wrap nav"><div class="brand"><span class="mark">737</span><span>EAL 737 FLEET MAGAZINE</span></div><div class="links-wrap" id="linksWrap"><button class="links-btn" id="linksBtn" type="button" aria-expanded="false" aria-controls="linksMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Important Links</span><svg class="links-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="links-menu" id="linksMenu" role="menu">
+<header><div class="wrap nav"><div class="brand"><span class="mark">737</span><span>EAL FLEET MAGAZINE</span></div><div class="links-wrap" id="linksWrap"><button class="links-btn" id="linksBtn" type="button" aria-expanded="false" aria-controls="linksMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Important Links</span><svg class="links-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="links-menu" id="linksMenu" role="menu">
 <a class="links-item" href="#737-news" role="menuitem"><span class="links-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M7 9h10M7 13h7M7 16h4"/><path d="M18 3v4"/></svg></span><span class="links-label">737 Breaking News<small>Latest Boeing 737 news</small></span></a>
 <div class="links-divider"></div>
 <a class="links-item" href="https://play.google.com/store/apps/details?id=com.konettech.crewloghelper" target="_blank" rel="noopener" role="menuitem"><span class="links-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.7 2.9 13.9 13 3.7 23.1c-.4-.3-.7-.8-.7-1.5V4.4c0-.7.3-1.2.7-1.5Zm11.6 11.5 2.9 2.9-10.5 5.9 7.6-8.8Zm0-2.8L7.7 2.1l10.5 5.9-2.9 2.9ZM19.4 9.1l2.2 1.2c.7.4.7 1.4 0 1.8l-2.2 1.2-3.1-3.1 3.1-3.1Z"/></svg></span><span class="links-label">CrewLog Helper App<small>Google Play</small></span></a>
@@ -142,7 +142,7 @@ footer{padding:34px 0;color:#8491a1;font-size:13px;border-top:1px solid var(--li
 <a class="links-item" href="https://www.ethiopianairlines.com/et/services/help-and-contact/all-area-manager-contacts" target="_blank" rel="noopener" role="menuitem"><span class="links-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h4l2 5-2.5 1.5a16 16 0 0 0 5 5L16 12l5 2v4c0 1.1-.9 2-2 2C10.7 20 4 13.3 4 5c0-1.1.9-2 2-2Z"/></svg></span><span class="links-label">Station Manager Numbers<small>Area Manager Contacts</small></span></a>
 </div></div></div></header>
 <section class="hero"><div class="wrap hero-inner"><div class="hero-copy"><div class="eyebrow">Monthly • Flight Crew • Fleet</div><h1>Read the Fleet.<br>Update Yourself.</h1><p>A premium digital library for the EAL 737 Fleet Magazine — designed for pilots and built to read beautifully on phone, tablet and desktop.</p><a class="cta" href="#editions">Browse editions ↓</a></div><div class="hero-edition" id="heroEdition"></div></div></section>
-<main class="wrap section" id="editions"><div class="section-head"><div><h2>Monthly Editions</h2><div class="count" id="count"></div></div></div><div class="grid" id="grid"></div>
+<main class="wrap section" id="editions"><div class="section-head"><div><h2>  Monthly Editions</h2><div class="count" id="count"></div></div></div><div class="grid" id="grid"></div>
 <section class="section news-section" id="737-news"><div class="section-head"><div><h2>737 Breaking News</h2><div class="count">Latest Boeing 737 stories from NewsAPI</div></div></div><div class="news-wrap"><div class="news-head"><div class="news-title"><span class="news-live">Live</span></div><div class="news-updated" id="newsUpdated">Updating…</div></div><div class="news-grid" id="newsGrid"><div class="news-status">Loading Boeing 737 news…</div></div></div></section>
 <h2 class="preview-title">Preview a PDF</h2>
 <p class="preview-sub">View the first page before opening the full magazine.</p>
@@ -432,7 +432,7 @@ dropZone.addEventListener("drop", (e) => {
 
 
 // --- Boeing 737 Breaking News (NewsAPI) ---
-const NEWS_API_KEY = "YOUR_NEWSAPI_KEY";
+const NEWS_API_KEY = "2160932bd41b48ae978e76740b050d27";
 const NEWS_REFRESH_MS = 10 * 60 * 1000;
 const NEWS_QUERY = '("Boeing 737" OR "737 MAX" OR "737 MAX 8" OR "737 MAX 9" OR "737 MAX 10" OR "737-800" OR "737-900")';
 
