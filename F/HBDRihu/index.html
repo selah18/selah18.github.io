@@ -60,6 +60,51 @@
     a { color: inherit; text-decoration: none; }
     button { font: inherit; }
 
+    /* Loader Overlay */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .panda-loader {
+      text-align: center;
+    }
+    .panda-icon {
+      font-size: 5.5rem;
+      animation: bouncePanda 1.2s infinite ease-in-out alternate;
+    }
+    .cake-icon {
+      font-size: 3.5rem;
+      margin-top: -20px;
+      animation: floatCake 1.2s infinite ease-in-out alternate-reverse;
+    }
+    .loader-text {
+      margin-top: 20px;
+      font-family: "Playfair Display", serif;
+      font-size: 1.4rem;
+      color: var(--pink);
+      letter-spacing: 1px;
+    }
+
+    @keyframes bouncePanda {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-15px); }
+    }
+    @keyframes floatCake {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.05); }
+    }
+
     .progress {
       position: fixed;
       top: 0; left: 0;
@@ -104,6 +149,8 @@
       transition: .25s ease;
     }
     .navlinks a:hover { background: rgba(255,255,255,.08); color: white; }
+
+    .nav-actions { display: flex; gap: 8px; align-items: center; }
 
     .mini-btn {
       border: 1px solid var(--border);
@@ -259,6 +306,170 @@
       border-radius: var(--radius);
       backdrop-filter: blur(18px);
     }
+
+    /* Animated Cake Section */
+    .cake-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .interactive-cake {
+      position: relative;
+      width: 280px;
+      height: 220px;
+      margin: 30px auto;
+    }
+    .plate {
+      width: 290px;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      position: absolute;
+      bottom: 0;
+      left: -5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .layer {
+      position: absolute;
+      width: 240px;
+      border-radius: 14px 14px 8px 8px;
+      left: 20px;
+    }
+    .layer-bottom {
+      height: 70px;
+      bottom: 16px;
+      background: linear-gradient(90deg, #ff8da1, #ff5388);
+    }
+    .layer-middle {
+      height: 60px;
+      width: 200px;
+      bottom: 86px;
+      left: 40px;
+      background: linear-gradient(90deg, #fce38a, #f38181);
+    }
+    .layer-top {
+      height: 50px;
+      width: 160px;
+      bottom: 146px;
+      left: 60px;
+      background: linear-gradient(90deg, #eaffd0, #95e1d3);
+    }
+    .icing {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 15px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 14px 14px 5px 5px;
+    }
+    .candles-wrap {
+      position: absolute;
+      top: 10px;
+      left: 70px;
+      width: 140px;
+      display: flex;
+      justify-content: space-around;
+      z-index: 10;
+    }
+    .candle {
+      width: 12px;
+      height: 38px;
+      background: linear-gradient(to bottom, #9c7bff, #ff6f9f);
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .candle:hover { transform: scale(1.1); }
+    .flame {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 18px;
+      background: #ffc107;
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 12px #ff9800, 0 0 20px #ff5722;
+      animation: flicker 0.6s infinite alternate;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .flame.blown-out {
+      opacity: 0;
+      transform: translateX(-50%) scale(0);
+      pointer-events: none;
+    }
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+      100% { transform: translateX(-50%) scale(1.15) rotate(2deg); }
+    }
+
+    /* Mini-Games Section */
+    .games-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 20px;
+    }
+    .game-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .balloon-game-area {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 50px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      cursor: pointer;
+      animation: floatUp 4s linear forwards;
+    }
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 10px;
+      background: rgba(255,255,255,0.5);
+    }
+    @keyframes floatUp {
+      0% { bottom: -60px; opacity: 1; }
+      100% { bottom: 260px; opacity: 0.9; }
+    }
+
+    /* Quiz Game */
+    .quiz-area {
+      width: 100%;
+      text-align: left;
+      margin: 15px 0;
+    }
+    .quiz-option {
+      width: 100%;
+      padding: 10px 14px;
+      margin: 6px 0;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s ease;
+    }
+    .quiz-option:hover { background: rgba(255,255,255,0.12); }
 
     /* Countdown */
     .countdown-card {
@@ -641,7 +852,7 @@
     }
 
     @media (max-width: 900px) {
-      .hero-grid, .letter-layout, .picker-layout, .fun-grid { grid-template-columns: 1fr; }
+      .hero-grid, .letter-layout, .picker-layout, .fun-grid, .games-grid { grid-template-columns: 1fr; }
       .hero { padding-top: 125px; }
       .portrait-wrap { min-height: auto; }
       .portrait { width: min(90%, 460px); }
@@ -666,17 +877,34 @@
 </head>
 
 <body>
+  <!-- Loading Screen Overlay (4 Seconds) -->
+  <div id="loader">
+    <div class="panda-loader">
+      <div class="panda-icon">🐼</div>
+      <div class="cake-icon">🎂</div>
+      <div class="loader-text">Preparing Rihuye's Birthday Corner... ❤️</div>
+    </div>
+  </div>
+
+  <!-- Background Music (YouTube Embed) -->
+  <div id="youtube-player" style="position: absolute; width: 0; height: 0; opacity: 0; overflow: hidden; pointer-events: none;"></div>
+
   <div class="progress" id="progress"></div>
 
   <nav>
     <a class="brand" href="#top"><span class="heart">♥</span> My Rihuye</a>
     <div class="navlinks">
+      <a href="#cake">Birthday Cake</a>
+      <a href="#games">Mini-Games</a>
       <a href="#countdown">Countdown</a>
       <a href="#letter">Letter</a>
       <a href="#memories">Memories</a>
       <a href="#future">Future</a>
     </div>
-    <button class="mini-btn" id="surpriseBtn">Surprise ✨</button>
+    <div class="nav-actions">
+      <button class="mini-btn" id="musicToggleBtn">🎵 Play Music</button>
+      <button class="mini-btn" id="surpriseBtn">Surprise ✨</button>
+    </div>
   </nav>
 
   <main id="top">
@@ -693,7 +921,7 @@
 
           <div class="hero-actions">
             <button class="btn primary" id="openLetterHero">Open your letter 💌</button>
-            <a class="btn" href="#countdown">See our countdown ⏳</a>
+            <a class="btn" href="#cake">Blow out the candles 🎂</a>
           </div>
 
           <div class="hero-note">
@@ -713,6 +941,67 @@
             <small>Flight plan</small>
             <b>Us → forever ✈️</b>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Animated Birthday Cake Section -->
+    <section id="cake">
+      <div class="section-head">
+        <div class="kicker">Make a Wish!</div>
+        <h2>Your Birthday Cake 🎂</h2>
+        <p>Click on each candle to blow it out and make your secret birthday wish!</p>
+      </div>
+
+      <div class="glass cake-container">
+        <div class="interactive-cake">
+          <div class="candles-wrap">
+            <div class="candle" data-index="0"><div class="flame"></div></div>
+            <div class="candle" data-index="1"><div class="flame"></div></div>
+            <div class="candle" data-index="2"><div class="flame"></div></div>
+            <div class="candle" data-index="3"><div class="flame"></div></div>
+            <div class="candle" data-index="4"><div class="flame"></div></div>
+          </div>
+          <div class="layer layer-top"><div class="icing"></div></div>
+          <div class="layer layer-middle"><div class="icing"></div></div>
+          <div class="layer layer-bottom"><div class="icing"></div></div>
+          <div class="plate"></div>
+        </div>
+
+        <div id="cakeStatus" style="font-weight: 600; color: var(--pink); margin-bottom: 12px;">5 candles left to blow out!</div>
+        <button class="btn" id="relightBtn" style="display: none;">Relight Candles 🔥</button>
+      </div>
+    </section>
+
+    <!-- Mini-Games Section -->
+    <section id="games">
+      <div class="section-head">
+        <div class="kicker">Fun & Games</div>
+        <h2>Birthday Mini-Games 🎮</h2>
+        <p>A little celebratory playtime while you enjoy your day.</p>
+      </div>
+
+      <div class="games-grid">
+        <!-- Game 1: Pop the Balloons -->
+        <div class="glass game-card">
+          <h3 style="margin-top:0;">Pop the Birthday Balloons 🎈</h3>
+          <p style="color:var(--muted); font-size:0.9rem;">Pop as many balloons as you can before they float away!</p>
+          <div class="balloon-game-area" id="balloonArea"></div>
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span>Score: <strong id="balloonScore">0</strong></span>
+            <button class="btn primary" id="startBalloonBtn">Start Game</button>
+          </div>
+        </div>
+
+        <!-- Game 2: Love Quiz -->
+        <div class="glass game-card">
+          <h3 style="margin-top:0;">The Rihuye & Pilot Quiz 🧠❤️</h3>
+          <p style="color:var(--muted); font-size:0.9rem;">Test how well you know our story!</p>
+          <div class="quiz-area" id="quizContainer">
+            <div id="quizQuestion" style="font-weight:600; margin-bottom:12px;"></div>
+            <div id="quizOptions"></div>
+          </div>
+          <div id="quizFeedback" style="font-size:0.9rem; font-weight:bold; color:var(--pink); min-height:24px;"></div>
         </div>
       </div>
     </section>
@@ -935,7 +1224,194 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
   <script>
+    // -----------------------------
+    // Loader Simulation (4 Seconds)
+    // -----------------------------
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        const loader = document.getElementById("loader");
+        loader.classList.add("hidden");
+      }, 4000);
+    });
+
+    // -----------------------------
+    // Background Music (YouTube API)
+    // -----------------------------
+    let player;
+    let isPlaying = false;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("youtube-player", {
+        videoId: "ks0kdXWo9Qc",
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: "ks0kdXWo9Qc"
+        },
+        events: {
+          onReady: (e) => {
+            // Player ready
+          }
+        }
+      });
+    }
+
+    const musicBtn = document.getElementById("musicToggleBtn");
+    musicBtn.addEventListener("click", () => {
+      if (!player) return;
+      if (isPlaying) {
+        player.pauseVideo();
+        musicBtn.textContent = "🎵 Play Music";
+        isPlaying = false;
+      } else {
+        player.playVideo();
+        musicBtn.textContent = "⏸️ Mute Music";
+        isPlaying = true;
+      }
+    });
+
+    // -----------------------------
+    // Interactive Birthday Cake
+    // -----------------------------
+    let unlitCandles = 5;
+    const flames = document.querySelectorAll(".flame");
+    const statusText = document.getElementById("cakeStatus");
+    const relightBtn = document.getElementById("relightBtn");
+
+    document.querySelectorAll(".candle").forEach((candle) => {
+      candle.addEventListener("click", () => {
+        const flame = candle.querySelector(".flame");
+        if (!flame.classList.contains("blown-out")) {
+          flame.classList.add("blown-out");
+          unlitCandles--;
+          burstHearts();
+
+          if (unlitCandles > 0) {
+            statusText.textContent = `${unlitCandles} candle${unlitCandles > 1 ? 's' : ''} left to blow out!`;
+          } else {
+            statusText.textContent = "🎉 Wish Granted! Happy Birthday Rihuye! ❤️🎂";
+            relightBtn.style.display = "inline-block";
+            burstHearts();
+            showToast("Make a sweet wish! ✨❤️");
+          }
+        }
+      });
+    });
+
+    relightBtn.addEventListener("click", () => {
+      flames.forEach(f => f.classList.remove("blown-out"));
+      unlitCandles = 5;
+      statusText.textContent = "5 candles left to blow out!";
+      relightBtn.style.display = "none";
+    });
+
+    // -----------------------------
+    // Game 1: Pop the Balloons
+    // -----------------------------
+    let balloonScore = 0;
+    let balloonInterval;
+    const balloonArea = document.getElementById("balloonArea");
+    const balloonScoreEl = document.getElementById("balloonScore");
+    const startBalloonBtn = document.getElementById("startBalloonBtn");
+
+    const balloonColors = ["#ff6f9f", "#9c7bff", "#6ed8ff", "#f6cf78", "#ff9cbc"];
+
+    function createBalloon() {
+      const balloon = document.createElement("div");
+      balloon.className = "balloon";
+      const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+      balloon.style.backgroundColor = color;
+      balloon.style.left = Math.random() * (balloonArea.clientWidth - 40) + "px";
+
+      balloon.addEventListener("click", () => {
+        balloonScore += 10;
+        balloonScoreEl.textContent = balloonScore;
+        balloon.remove();
+        burstHearts();
+      });
+
+      balloonArea.appendChild(balloon);
+
+      setTimeout(() => {
+        if (balloon.parentNode) balloon.remove();
+      }, 4000);
+    }
+
+    startBalloonBtn.addEventListener("click", () => {
+      balloonScore = 0;
+      balloonScoreEl.textContent = balloonScore;
+      balloonArea.innerHTML = "";
+      clearInterval(balloonInterval);
+
+      balloonInterval = setInterval(createBalloon, 800);
+      setTimeout(() => {
+        clearInterval(balloonInterval);
+        showToast(`Game over! Score: ${balloonScore} pts 🎉`);
+      }, 15000);
+    });
+
+    // -----------------------------
+    // Game 2: Love Quiz
+    // -----------------------------
+    const quizData = [
+      {
+        q: "Who is the world's absolute best surgeon?",
+        options: ["Rihuye ❤️", "Rihuye ✨", "Definitely Rihuye 🩺", "All of the above!"],
+        answer: 3
+      },
+      {
+        q: "Where is her pilot currently heading for work?",
+        options: ["Kenya", "Uganda ✈️", "Tanzania", "Ethiopia"],
+        answer: 1
+      },
+      {
+        q: "What is her favorite treat to indulge in?",
+        options: ["Chocolate & Ice Cream 🍦🍫", "Salad", "Coffee only", "Chips"],
+        answer: 0
+      }
+    ];
+
+    let currentQuizIndex = 0;
+
+    function renderQuiz() {
+      const qData = quizData[currentQuizIndex];
+      document.getElementById("quizQuestion").textContent = `${currentQuizIndex + 1}. ${qData.q}`;
+      const optionsHolder = document.getElementById("quizOptions");
+      optionsHolder.innerHTML = "";
+
+      qData.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "quiz-option";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => selectQuizAnswer(i));
+        optionsHolder.appendChild(btn);
+      });
+    }
+
+    function selectQuizAnswer(idx) {
+      const qData = quizData[currentQuizIndex];
+      const feedback = document.getElementById("quizFeedback");
+      if (idx === qData.answer) {
+        feedback.textContent = "Correct! You know us so well! ❤️";
+        burstHearts();
+      } else {
+        feedback.textContent = "Close, but you know the real answer! 😉";
+      }
+
+      setTimeout(() => {
+        feedback.textContent = "";
+        currentQuizIndex = (currentQuizIndex + 1) % quizData.length;
+        renderQuiz();
+      }, 1500);
+    }
+
+    renderQuiz();
+
     // -----------------------------
     // Countdown: November 28, 2026
     // -----------------------------
