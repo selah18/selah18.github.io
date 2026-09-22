@@ -644,56 +644,6 @@
     .wish h3 { font-size: 1.25rem; margin: 14px 0 8px; }
     .wish p { color: var(--muted); line-height: 1.65; margin: 0; font-size: .92rem; }
 
-    /* Picker */
-    .picker-layout {
-      display: grid;
-      grid-template-columns: .9fr 1.1fr;
-      gap: 18px;
-    }
-    .picker-panel, .name-card { padding: 28px; }
-    .picker-result {
-      min-height: 220px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      border-radius: 20px;
-      border: 1px dashed rgba(255,255,255,.16);
-      background: rgba(0,0,0,.14);
-      margin: 18px 0;
-      padding: 20px;
-    }
-    .picked-name {
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: clamp(2.4rem, 6vw, 4.3rem);
-      color: #ffd6e3;
-      line-height: 1;
-    }
-    .meaning { color: #bcb0ba; margin-top: 10px; }
-    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-    .chip {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      color: #ddd4dd;
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: .78rem;
-      cursor: pointer;
-    }
-    .chip.active { background: rgba(255,111,159,.14); border-color: rgba(255,111,159,.32); color: #ffd5e2; }
-
-    .name-list { display: grid; gap: 10px; max-height: 350px; overflow: auto; padding-right: 4px; }
-    .name-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 13px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.07);
-    }
-    .name-row b { color: white; }
-    .name-row span { color: #a9a0aa; text-align: right; font-size: .8rem; }
-
     /* Love meter / reasons */
     .fun-grid {
       display: grid;
@@ -852,7 +802,7 @@
     }
 
     @media (max-width: 900px) {
-      .hero-grid, .letter-layout, .picker-layout, .fun-grid, .games-grid { grid-template-columns: 1fr; }
+      .hero-grid, .letter-layout, .fun-grid, .games-grid { grid-template-columns: 1fr; }
       .hero { padding-top: 125px; }
       .portrait-wrap { min-height: auto; }
       .portrait { width: min(90%, 460px); }
@@ -871,7 +821,7 @@
       .floating-card.two { right: -2%; top: 5%; }
       h1 { font-size: clamp(3.3rem, 18vw, 5.5rem); }
       section { padding: 70px 0; }
-      .letter-preview, .picker-panel, .name-card, .fun-card { padding: 22px; }
+      .letter-preview, .fun-card { padding: 22px; }
     }
   </style>
 </head>
@@ -1109,9 +1059,8 @@
         <div class="timeline-item glass"><div class="timeline-icon">✈️</div><div><h3>Reunions after long flights</h3><p>That first hug after being apart — the kind that makes the airport disappear.</p></div></div>
         <div class="timeline-item glass"><div class="timeline-icon">🍽️</div><div><h3>More tiny dates</h3><p>Walks, meals, museums, movies, random coffee stops and absolutely unnecessary adventures.</p></div></div>
         <div class="timeline-item glass"><div class="timeline-icon">🏠</div><div><h3>Building our home</h3><p>A peaceful little world where both of us can come back from our demanding jobs and breathe.</p></div></div>
-        <div class="timeline-item glass"><div class="timeline-icon">👶</div><div><h3>Maybe… little us?</h3><p>Which brings us to the most dangerous widget on this website: the future-kids name picker.</p></div></div>
       </div>
-   
+    </section>
 
     <section id="fun">
       <div class="section-head">
@@ -1439,91 +1388,6 @@
     });
 
     // -----------------------------
-    // Muslim name picker
-    // -----------------------------
-    const names = [
-      { name:"Ayaan", meaning:"Gift of God / blessing", gender:"girl" },
-      { name:"Aisha", meaning:"Alive, prosperous", gender:"girl" },
-      { name:"Amira", meaning:"Princess, leader", gender:"girl" },
-      { name:"Maryam", meaning:"A revered Qur'anic name", gender:"girl" },
-      { name:"Inaya", meaning:"Care, concern, protection", gender:"girl" },
-      { name:"Hana", meaning:"Happiness, bliss", gender:"girl" },
-      { name:"Zahra", meaning:"Radiant, blooming flower", gender:"girl" },
-      { name:"Safiya", meaning:"Pure, sincere friend", gender:"girl" },
-      { name:"Yasmin", meaning:"Jasmine flower", gender:"girl" },
-      { name:"Lina", meaning:"Tender, delicate", gender:"girl" },
-      { name:"Iman", meaning:"Faith", gender:"girl" },
-      { name:"Noor", meaning:"Light", gender:"girl" },
-      { name:"Yusuf", meaning:"A revered prophetic name", gender:"boy" },
-      { name:"Ibrahim", meaning:"A revered prophetic name", gender:"boy" },
-      { name:"Rayyan", meaning:"A gate of Paradise; well-watered", gender:"boy" },
-      { name:"Zayn", meaning:"Beauty, grace", gender:"boy" },
-      { name:"Adam", meaning:"A revered prophetic name", gender:"boy" },
-      { name:"Omar", meaning:"Long-lived, flourishing", gender:"boy" },
-      { name:"Hamza", meaning:"Strong, steadfast", gender:"boy" },
-      { name:"Idris", meaning:"A revered prophetic name", gender:"boy" },
-      { name:"Ilyas", meaning:"A revered prophetic name", gender:"boy" },
-      { name:"Amin", meaning:"Trustworthy, faithful", gender:"boy" },
-      { name:"Rayan", meaning:"A variant spelling of Rayyan", gender:"boy" },
-      { name:"Mikael", meaning:"A revered angelic name", gender:"boy" }
-    ];
-
-    let activeGender = "all";
-    let currentName = null;
-
-    function filteredNames() {
-      return activeGender === "all" ? names : names.filter(n => n.gender === activeGender);
-    }
-
-    function renderNames() {
-      const list = document.getElementById("nameList");
-      list.innerHTML = filteredNames().map(n =>
-        `<div class="name-row"><b>${n.name}</b><span>${n.meaning}</span></div>`
-      ).join("");
-    }
-
-    document.querySelectorAll("#genderChips .chip").forEach(chip => {
-      chip.addEventListener("click", () => {
-        document.querySelectorAll("#genderChips .chip").forEach(c => c.classList.remove("active"));
-        chip.classList.add("active");
-        activeGender = chip.dataset.gender;
-        renderNames();
-      });
-    });
-
-    function pickName() {
-      const pool = filteredNames();
-      currentName = pool[Math.floor(Math.random() * pool.length)];
-      document.getElementById("pickedName").textContent = currentName.name;
-      document.getElementById("pickedMeaning").textContent = currentName.meaning;
-      burstHearts();
-    }
-
-    document.getElementById("pickName").addEventListener("click", pickName);
-
-    document.getElementById("saveName").addEventListener("click", () => {
-      if (!currentName) {
-        showToast("Pick a name first ❤️");
-        return;
-      }
-      const saved = JSON.parse(localStorage.getItem("rihuyeSavedNames") || "[]");
-      if (!saved.some(n => n.name === currentName.name)) saved.push(currentName);
-      localStorage.setItem("rihuyeSavedNames", JSON.stringify(saved));
-      renderSaved();
-      showToast(`${currentName.name} saved ❤️`);
-    });
-
-    function renderSaved() {
-      const saved = JSON.parse(localStorage.getItem("rihuyeSavedNames") || "[]");
-      document.getElementById("savedNames").innerHTML = saved.length
-        ? saved.map(n => `<span class="chip active">${n.name}</span>`).join("")
-        : "";
-    }
-
-    renderNames();
-    renderSaved();
-
-    // -----------------------------
     // Reasons
     // -----------------------------
     const reasons = [
@@ -1539,9 +1403,17 @@
       "Because I still get that little feeling of 'wow, that's my girl.' ❤️"
     ];
 
-    document.getElementById("reasonBtn").addEventListener("click", () => {
-      const reason = reasons[Math.floor(Math.random() * reasons.length)];
-      document.getElementById("reasonBox").textContent = reason;
+    document.addEventListener("DOMContentLoaded", () => {
+      const reasonBtn = document.getElementById("reasonBtn");
+      const reasonBox = document.getElementById("reasonBox");
+      
+      if (reasonBtn && reasonBox) {
+        reasonBtn.addEventListener("click", () => {
+          const randomIndex = Math.floor(Math.random() * reasons.length);
+          reasonBox.textContent = reasons[randomIndex];
+          burstHearts();
+        });
+      }
     });
 
     // -----------------------------
