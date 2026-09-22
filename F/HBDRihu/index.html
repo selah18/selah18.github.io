@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#120d20" />
+  <meta name="description" content="A birthday love letter and little future-in-the-making corner for Rihuye ❤️" />
+  <title>For My Rihuye ❤️ — Happy Birthday</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #09070e;
+      --bg2: #120d20;
+      --card: rgba(255,255,255,.075);
+      --card2: rgba(255,255,255,.11);
+      --text: #fff9fb;
+      --muted: #cfc5cf;
+      --pink: #ff6f9f;
+      --rose: #ff9cbc;
+      --gold: #f6cf78;
+      --violet: #9c7bff;
+      --cyan: #6ed8ff;
+      --border: rgba(255,255,255,.13);
+      --shadow: 0 30px 80px rgba(0,0,0,.35);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,111,159,.16), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(156,123,255,.13), transparent 25%),
+        radial-gradient(circle at 50% 80%, rgba(110,216,255,.08), transparent 25%),
+        var(--bg);
+      font-family: "DM Sans", system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .2;
+      background-image:
+        radial-gradient(rgba(255,255,255,.7) 1px, transparent 1px),
+        radial-gradient(rgba(255,255,255,.45) 1px, transparent 1px);
+      background-size: 90px 90px, 130px 130px;
+      background-position: 0 0, 40px 60px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0; height: 3px;
+      z-index: 100;
+      background: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+      box-shadow: 0 0 18px rgba(255,111,159,.7);
+    }
+
+    nav {
+      position: fixed;
+      z-index: 50;
+      top: 18px; left: 50%;
+      transform: translateX(-50%);
+      width: min(1120px, calc(100% - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px 11px 18px;
+      background: rgba(10,7,15,.62);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      border-radius: 999px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: -.03em;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+    }
+    .brand .heart { color: var(--pink); filter: drop-shadow(0 0 10px rgba(255,111,159,.65)); }
+
+    .navlinks { display: flex; gap: 4px; }
+    .navlinks a {
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: .85rem;
+      transition: .25s ease;
+    }
+    .navlinks a:hover { background: rgba(255,255,255,.08); color: white; }
+
+    .mini-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.08);
+      color: white;
+      border-radius: 999px;
+      padding: 9px 13px;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .mini-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.13); }
+
+    main { width: min(1120px, calc(100% - 28px)); margin: auto; }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 120px 0 70px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 44px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,111,159,.25);
+      background: rgba(255,111,159,.08);
+      color: #ffd6e3;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    h1, h2, h3 { font-family: "Playfair Display", Georgia, serif; }
+    h1 {
+      font-size: clamp(3.5rem, 8vw, 7.2rem);
+      line-height: .92;
+      letter-spacing: -.055em;
+      margin: 20px 0;
+    }
+    h1 span {
+      color: var(--pink);
+      text-shadow: 0 0 35px rgba(255,111,159,.22);
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.8;
+    }
+
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+    .btn {
+      border: 1px solid var(--border);
+      color: white;
+      background: rgba(255,255,255,.08);
+      padding: 13px 17px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .25s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+    .btn:hover { transform: translateY(-3px); background: rgba(255,255,255,.13); }
+    .btn.primary {
+      background: linear-gradient(135deg, #ff6f9f, #c96cff);
+      border: 0;
+      box-shadow: 0 14px 38px rgba(255,111,159,.25);
+    }
+
+    .hero-note {
+      margin-top: 24px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: #bdb1bd;
+      font-size: .86rem;
+    }
+    .hero-note strong { color: white; }
+
+    .portrait-wrap {
+      position: relative;
+      min-height: 570px;
+      display: grid;
+      place-items: center;
+    }
+
+    .portrait {
+      width: min(100%, 470px);
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 42px;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: var(--shadow);
+      transform: rotate(2deg);
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    .floating-card {
+      position: absolute;
+      background: rgba(16,11,23,.76);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 14px 16px;
+      animation: float 4.5s ease-in-out infinite;
+    }
+    .floating-card.one { left: 1%; bottom: 15%; }
+    .floating-card.two { right: -1%; top: 17%; animation-delay: -1.7s; }
+    .floating-card small { color: #aaa0ab; display: block; margin-bottom: 3px; }
+    .floating-card b { font-size: .92rem; }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+
+    section { padding: 92px 0; }
+    .section-head { max-width: 700px; margin-bottom: 32px; }
+    .kicker {
+      color: var(--pink);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+    }
+    h2 {
+      font-size: clamp(2.5rem, 5vw, 4.4rem);
+      line-height: 1;
+      letter-spacing: -.045em;
+      margin: 10px 0 15px;
+    }
+    .section-head p { color: var(--muted); line-height: 1.75; }
+
+    .glass {
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, rgba(255,255,255,.095), rgba(255,255,255,.035));
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(18px);
+    }
+
+    /* Countdown */
+    .countdown-card {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .countdown-card::after {
+      content: "✈";
+      position: absolute;
+      right: 30px;
+      top: -20px;
+      font-size: 9rem;
+      opacity: .035;
+      transform: rotate(-12deg);
+    }
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .time-box {
+      padding: 22px 10px;
+      border-radius: 18px;
+      text-align: center;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .time-box strong { display: block; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1; }
+    .time-box span { color: #a99eaa; font-size: .75rem; text-transform: uppercase; letter-spacing: .13em; }
+
+    .date-pill {
+      display: inline-flex;
+      margin-top: 18px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(110,216,255,.08);
+      border: 1px solid rgba(110,216,255,.18);
+      color: #bfeeff;
+      font-size: .82rem;
+    }
+
+    /* Letter */
+    .letter-layout {
+      display: grid;
+      grid-template-columns: .75fr 1.25fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+    .envelope-card {
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .envelope {
+      width: min(100%, 360px);
+      aspect-ratio: 1.45;
+      position: relative;
+      cursor: pointer;
+      filter: drop-shadow(0 25px 35px rgba(0,0,0,.28));
+      transition: transform .35s ease;
+    }
+    .envelope:hover { transform: translateY(-7px) rotate(-1deg); }
+    .env-body {
+      position: absolute; inset: 18% 0 0;
+      background: linear-gradient(145deg, #eaa1b8, #9e527c);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .env-body::before, .env-body::after {
+      content: "";
+      position: absolute;
+      width: 72%; height: 100%;
+      background: rgba(255,255,255,.11);
+      transform: skewX(-32deg);
+    }
+    .env-body::before { left: -40%; }
+    .env-body::after { right: -40%; }
+    .flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      border-left: 50% solid transparent;
+      border-right: 50% solid transparent;
+      border-top: 48% solid #f0b6c8;
+      z-index: 3;
+      transform-origin: top center;
+      transition: transform .65s cubic-bezier(.2,.8,.2,1);
+    }
+    .seal {
+      position: absolute;
+      z-index: 5;
+      left: 50%; top: 55%;
+      transform: translate(-50%,-50%);
+      width: 66px; height: 66px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffcadb, #c94372);
+      border: 4px solid rgba(255,255,255,.35);
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+      font-size: 1.6rem;
+      transition: .5s ease;
+    }
+    .envelope.open .flap { transform: rotateX(180deg); }
+    .envelope.open .seal { transform: translate(-50%,-50%) scale(.7); opacity: 0; }
+    .letter-hint { margin-top: 22px; color: #d9cdd5; line-height: 1.6; }
+
+    .letter-preview {
+      padding: 32px;
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .letter-preview .quote {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      line-height: 1.3;
+      margin-bottom: 18px;
+    }
+    .letter-preview p { color: var(--muted); line-height: 1.8; }
+
+    /* Photos */
+    .gallery {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+    }
+    .photo-card {
+      overflow: hidden;
+      position: relative;
+      min-height: 450px;
+    }
+    .photo-card img {
+      width: 100%; height: 100%;
+      min-height: 450px;
+      object-fit: cover;
+      display: block;
+      transition: transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+    .photo-card:hover img { transform: scale(1.045); }
+    .photo-caption {
+      position: absolute;
+      left: 16px; right: 16px; bottom: 16px;
+      padding: 15px 17px;
+      background: rgba(8,5,12,.64);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(15px);
+      border-radius: 17px;
+    }
+    .photo-caption b { display: block; margin-bottom: 3px; }
+    .photo-caption span { color: #c6bcc4; font-size: .85rem; }
+
+    /* Wishes */
+    .wish-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    .wish {
+      padding: 22px;
+      min-height: 190px;
+      transition: .3s ease;
+    }
+    .wish:hover { transform: translateY(-6px); background: rgba(255,255,255,.11); }
+    .wish .icon { font-size: 1.5rem; }
+    .wish h3 { font-size: 1.25rem; margin: 14px 0 8px; }
+    .wish p { color: var(--muted); line-height: 1.65; margin: 0; font-size: .92rem; }
+
+    /* Picker */
+    .picker-layout {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+    }
+    .picker-panel, .name-card { padding: 28px; }
+    .picker-result {
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 20px;
+      border: 1px dashed rgba(255,255,255,.16);
+      background: rgba(0,0,0,.14);
+      margin: 18px 0;
+      padding: 20px;
+    }
+    .picked-name {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2.4rem, 6vw, 4.3rem);
+      color: #ffd6e3;
+      line-height: 1;
+    }
+    .meaning { color: #bcb0ba; margin-top: 10px; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .chip {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: #ddd4dd;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: .78rem;
+      cursor: pointer;
+    }
+    .chip.active { background: rgba(255,111,159,.14); border-color: rgba(255,111,159,.32); color: #ffd5e2; }
+
+    .name-list { display: grid; gap: 10px; max-height: 350px; overflow: auto; padding-right: 4px; }
+    .name-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+    .name-row b { color: white; }
+    .name-row span { color: #a9a0aa; text-align: right; font-size: .8rem; }
+
+    /* Love meter / reasons */
+    .fun-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .fun-card { padding: 28px; }
+    .meter {
+      height: 15px;
+      background: rgba(255,255,255,.07);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 22px 0 10px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .meter-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--pink), #ffcd7a, var(--violet));
+      border-radius: inherit;
+      animation: pulseBar 2s ease-in-out infinite;
+    }
+    @keyframes pulseBar { 50% { filter: brightness(1.25); } }
+    .meter-label { color: #aaa0ab; font-size: .8rem; display: flex; justify-content: space-between; }
+
+    .reason-box {
+      min-height: 155px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.08);
+      margin: 17px 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.5rem;
+    }
+
+    /* Future timeline */
+    .timeline { display: grid; gap: 12px; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 15px;
+      align-items: start;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.045);
+    }
+    .timeline-icon {
+      width: 58px; height: 58px;
+      border-radius: 16px;
+      display: grid; place-items: center;
+      background: rgba(255,111,159,.09);
+      border: 1px solid rgba(255,111,159,.16);
+      font-size: 1.4rem;
+    }
+    .timeline-item h3 { margin: 2px 0 5px; font-size: 1.2rem; }
+    .timeline-item p { margin: 0; color: #b6acb6; line-height: 1.6; font-size: .9rem; }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(2,1,5,.78);
+      backdrop-filter: blur(14px);
+    }
+    .modal.show { display: grid; }
+    .modal-card {
+      width: min(850px, 100%);
+      max-height: 88vh;
+      overflow: auto;
+      padding: clamp(24px, 5vw, 46px);
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.07);
+      color: white;
+      cursor: pointer;
+    }
+    .modal-card h2 { margin-top: 0; }
+    .love-letter {
+      color: #d9cfd7;
+      line-height: 1.95;
+      font-size: 1.02rem;
+    }
+    .love-letter p { margin: 0 0 18px; }
+    .signature {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.4rem;
+      color: #ffd6e3;
+      margin-top: 28px;
+    }
+
+    footer {
+      padding: 60px 0 90px;
+      text-align: center;
+      color: #8f858f;
+    }
+    footer .big-heart {
+      color: var(--pink);
+      font-size: 2rem;
+      display: block;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      20% { transform: scale(1.18); }
+      40% { transform: scale(1); }
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 300;
+      left: 50%;
+      bottom: 24px;
+      transform: translate(-50%, 30px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(20,14,26,.9);
+      border: 1px solid var(--border);
+      color: white;
+      backdrop-filter: blur(14px);
+      transition: .35s ease;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+      max-width: calc(100% - 30px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .spark {
+      position: fixed;
+      pointer-events: none;
+      z-index: 250;
+      animation: spark .9s ease-out forwards;
+      font-size: 18px;
+    }
+    @keyframes spark {
+      0% { transform: translate(0,0) scale(.7) rotate(0); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.3) rotate(180deg); opacity: 0; }
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .letter-layout, .picker-layout, .fun-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 125px; }
+      .portrait-wrap { min-height: auto; }
+      .portrait { width: min(90%, 460px); }
+      .wish-grid { grid-template-columns: 1fr 1fr; }
+      .gallery { grid-template-columns: 1fr; }
+      .photo-card, .photo-card img { min-height: 360px; }
+      .navlinks { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      main { width: min(100% - 20px, 1120px); }
+      nav { width: calc(100% - 18px); }
+      .countdown-grid { grid-template-columns: repeat(2,1fr); }
+      .wish-grid { grid-template-columns: 1fr; }
+      .floating-card.one { left: -1%; bottom: 5%; }
+      .floating-card.two { right: -2%; top: 5%; }
+      h1 { font-size: clamp(3.3rem, 18vw, 5.5rem); }
+      section { padding: 70px 0; }
+      .letter-preview, .picker-panel, .name-card, .fun-card { padding: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" id="progress"></div>
+
+  <nav>
+    <a class="brand" href="#top"><span class="heart">♥</span> My Rihuye</a>
+    <div class="navlinks">
+      <a href="#countdown">Countdown</a>
+      <a href="#letter">Letter</a>
+      <a href="#memories">Memories</a>
+      <a href="#future">Future</a>
+    </div>
+    <button class="mini-btn" id="surpriseBtn">Surprise ✨</button>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">For the surgeon I love ❤️</div>
+          <h1>Happy Birthday,<br><span>My Rihuye.</span></h1>
+          <p class="hero-copy">
+            To my beautiful girl, my peace, my favorite person, and hopefully my forever.
+            This little corner of the internet is yours — made by your pilot, your biggest fan,
+            and the man who plans on annoying you for a very, very long time. 😂✈️❤️
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn primary" id="openLetterHero">Open your letter 💌</button>
+            <a class="btn" href="#countdown">See our countdown ⏳</a>
+          </div>
+
+          <div class="hero-note">
+            <span>🩺 <strong>Her:</strong> surgeon</span>
+            <span>✈️ <strong>Him:</strong> pilot</span>
+            <span>💍 <strong>Us:</strong> hopefully forever</span>
+          </div>
+        </div>
+
+        <div class="portrait-wrap">
+          <img class="portrait" src="assets/rihuye-rooftop.jpeg" alt="Rihuye and her favorite pilot" />
+          <div class="floating-card one">
+            <small>Current status</small>
+            <b>Hopelessly in love ❤️</b>
+          </div>
+          <div class="floating-card two">
+            <small>Flight plan</small>
+            <b>Us → forever ✈️</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="countdown">
+      <div class="section-head">
+        <div class="kicker">Until the next chapter</div>
+        <h2>Until November 28, 2026.</h2>
+        <p>
+          Because work may take me to Uganda, but it doesn't get to take my heart with it.
+          Every second is just another second closer to being together again.
+        </p>
+      </div>
+
+      <div class="glass countdown-card">
+        <div class="countdown-grid">
+          <div class="time-box"><strong id="days">--</strong><span>Days</span></div>
+          <div class="time-box"><strong id="hours">--</strong><span>Hours</span></div>
+          <div class="time-box"><strong id="minutes">--</strong><span>Minutes</span></div>
+          <div class="time-box"><strong id="seconds">--</strong><span>Seconds</span></div>
+        </div>
+        <div class="date-pill">✈️ Target: 28 November 2026 · 00:00</div>
+      </div>
+    </section>
+
+    <section id="letter">
+      <div class="section-head">
+        <div class="kicker">A letter, sealed with love</div>
+        <h2>I wrote this one for you.</h2>
+        <p>Tap the envelope. The seal is only pretending to keep the words inside.</p>
+      </div>
+
+      <div class="letter-layout">
+        <div class="glass envelope-card">
+          <div>
+            <div class="envelope" id="envelope" title="Open my love letter">
+              <div class="env-body"></div>
+              <div class="flap"></div>
+              <div class="seal">❤️</div>
+            </div>
+            <div class="letter-hint">Tap the letter box to open it 💌</div>
+          </div>
+        </div>
+
+        <div class="glass letter-preview">
+          <div class="quote">“You are one of the places my heart feels at home.”</div>
+          <p>
+            A whole page can hold the words, but it still can't hold everything I feel.
+            So I tried anyway. Open the envelope when you're ready.
+          </p>
+          <button class="btn primary" id="openLetter">Read the full love letter →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="memories">
+      <div class="section-head">
+        <div class="kicker">A tiny memory gallery</div>
+        <h2>Us, in two little moments.</h2>
+        <p>Two photos. One story. And hopefully a ridiculous number of future chapters.</p>
+      </div>
+
+      <div class="gallery">
+        <div class="glass photo-card">
+          <img src="assets/rihuye-aquarium.jpeg" alt="A sweet moment together at the aquarium" loading="lazy" />
+          <div class="photo-caption">
+            <b>One of those “just us” moments. 🐠❤️</b>
+            <span>Some places are beautiful. Some people make them beautiful.</span>
+          </div>
+        </div>
+        <div class="glass photo-card">
+          <img src="assets/rihuye-rooftop.jpeg" alt="Rihuye and her pilot together outdoors" loading="lazy" />
+          <div class="photo-caption">
+            <b>My favorite view. 🌄</b>
+            <span>Plot twist: it isn't the scenery.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="wishes">
+      <div class="section-head">
+        <div class="kicker">Birthday wishes</div>
+        <h2>Things I wish for you.</h2>
+      </div>
+
+      <div class="wish-grid">
+        <article class="glass wish"><div class="icon">🩺</div><h3>Dreams that come true</h3><p>May every step of your medical journey bring you closer to the incredible surgeon and woman you're becoming.</p></article>
+        <article class="glass wish"><div class="icon">🌍</div><h3>Beautiful places</h3><p>Travel, discover, eat, laugh, take too many photos — and let us collect stories everywhere we go.</p></article>
+        <article class="glass wish"><div class="icon">😂</div><h3>Unlimited laughter</h3><p>May your life be filled with the kind of laughter that makes your stomach hurt and your cheeks ache.</p></article>
+        <article class="glass wish"><div class="icon">🍫</div><h3>Chocolate & ice cream</h3><p>As much as your heart desires. I am officially not responsible for stopping you. 😂❤️</p></article>
+        <article class="glass wish"><div class="icon">🏡</div><h3>A peaceful home</h3><p>A place where tired days become softer, meals taste better, and there is always someone waiting for you.</p></article>
+        <article class="glass wish"><div class="icon">💍</div><h3>A beautiful future</h3><p>More birthdays, more dates, more memories — and, Insha'Allah, a lifetime of choosing each other.</p></article>
+      </div>
+    </section>
+
+    <section id="future">
+      <div class="section-head">
+        <div class="kicker">Future us</div>
+        <h2>Just a few things to look forward to.</h2>
+        <p>No pressure. Just a little daydreaming about the chapters we haven't lived yet.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item glass"><div class="timeline-icon">✈️</div><div><h3>Reunions after long flights</h3><p>That first hug after being apart — the kind that makes the airport disappear.</p></div></div>
+        <div class="timeline-item glass"><div class="timeline-icon">🍽️</div><div><h3>More tiny dates</h3><p>Walks, meals, museums, movies, random coffee stops and absolutely unnecessary adventures.</p></div></div>
+        <div class="timeline-item glass"><div class="timeline-icon">🏠</div><div><h3>Building our home</h3><p>A peaceful little world where both of us can come back from our demanding jobs and breathe.</p></div></div>
+        <div class="timeline-item glass"><div class="timeline-icon">👶</div><div><h3>Maybe… little us?</h3><p>Which brings us to the most dangerous widget on this website: the future-kids name picker.</p></div></div>
+      </div>
+    </section>
+
+    <section id="names">
+      <div class="section-head">
+        <div class="kicker">The dangerously cute widget</div>
+        <h2>Future kids name picker.</h2>
+        <p>Just for fun — a little collection of Muslim names and meanings for the two pilots/surgeons of tomorrow. 😭❤️</p>
+      </div>
+
+      <div class="picker-layout">
+        <div class="glass picker-panel">
+          <div class="chips" id="genderChips">
+            <button class="chip active" data-gender="all">All</button>
+            <button class="chip" data-gender="boy">Boys</button>
+            <button class="chip" data-gender="girl">Girls</button>
+          </div>
+
+          <div class="picker-result">
+            <div>
+              <div class="picked-name" id="pickedName">Bismillah ❤️</div>
+              <div class="meaning" id="pickedMeaning">Press the button and let fate choose.</div>
+            </div>
+          </div>
+
+          <button class="btn primary" id="pickName" style="width:100%">Pick a name ✨</button>
+          <button class="btn" id="saveName" style="width:100%;margin-top:9px">Save this one ❤️</button>
+          <div id="savedNames" class="chips"></div>
+        </div>
+
+        <div class="glass name-card">
+          <h3 style="margin-top:0">Name ideas</h3>
+          <p style="color:var(--muted);line-height:1.65;font-size:.9rem">A starter list. You two can argue about the final shortlist later. 😂</p>
+          <div class="name-list" id="nameList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fun">
+      <div class="section-head">
+        <div class="kicker">Scientific research</div>
+        <h2>Extremely serious relationship metrics.</h2>
+        <p>Peer-reviewed by absolutely nobody.</p>
+      </div>
+
+      <div class="fun-grid">
+        <div class="glass fun-card">
+          <h3 style="font-size:1.45rem">Love level</h3>
+          <div class="meter"><div class="meter-fill"></div></div>
+          <div class="meter-label"><span>Me</span><strong>∞ / 100</strong><span>Rihuye</span></div>
+          <p style="color:var(--muted);line-height:1.7;margin-bottom:0">Result: dangerously high. Further testing is unnecessary. ❤️</p>
+        </div>
+
+        <div class="glass fun-card">
+          <h3 style="font-size:1.45rem">Random reason I love you</h3>
+          <div class="reason-box" id="reasonBox">Click below. ❤️</div>
+          <button class="btn" id="reasonBtn" style="width:100%">Give me another reason</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span class="big-heart">♥</span>
+      <p>Made with love, slightly too much HTML, and one pilot who really loves his Rihuye.</p>
+      <small>Happy Birthday, Rihuye. ❤️✈️🩺</small>
+    </footer>
+  </main>
+
+  <div class="modal" id="letterModal" aria-hidden="true">
+    <div class="glass modal-card">
+      <button class="close" id="closeLetter" aria-label="Close letter">×</button>
+      <div class="kicker">For my Rihuye ❤️</div>
+      <h2>Happy birthday, my Rihuye.</h2>
+
+      <div class="love-letter">
+        <p>Today is about celebrating you, but somehow I feel like I’m the lucky one because your birthday gave the world the person who became such a beautiful part of my life.</p>
+
+        <p>I still think about how unexpectedly we met, how one simple hello turned into conversations, dates, laughs, hugs, kisses, and somehow… into us. ❤️ Looking back, it feels almost impossible that something so beautiful could start from such a small moment. And now, having you in my life, I honestly can’t imagine my days without your smile, your little expressions, your beautiful heart, and the peace you bring me.</p>
+
+        <p>You have this way of making ordinary moments feel special. A walk, a meal together, sitting somewhere and talking, watching a movie, going to a museum, or even just being next to each other doing absolutely nothing — with you, I never feel like I need anything more.</p>
+
+        <p>I love your genuineness. I love the way you care. I love your smile and those adorable cheeks that I can never resist. 😭❤️ I love the way you make me feel understood, loved, and at peace. And more than anything, I love the person I get to be when I’m with you.</p>
+
+        <p>You once told me that I feel like peace to you. I hope you know that you are that for me too. In a life that can sometimes be busy, exhausting, and unpredictable, you are one of the places my heart feels at home.</p>
+
+        <p>I know I’m not perfect. Sometimes my work gets in the way, sometimes I have to leave, sometimes I can’t give you as much time as I wish I could. But one thing I never want you to question is how much you mean to me. Distance, busy schedules, flights, long days — none of those things change what I feel for you.</p>
+
+        <p>On your birthday, I don’t just wish you happiness for today. I wish you a life filled with everything your heart deserves. I want to see you achieve your dreams, become even more of the incredible woman you are, laugh until your stomach hurts, travel, discover beautiful places, eat all the chocolate and ice cream you want 😂❤️, and have countless moments that make you genuinely happy.</p>
+
+        <p>And selfishly, I hope I get to be there for many of them.</p>
+
+        <p>I want more birthdays with you. More dates. More random walks. More museum days. More movies. More hugs that last longer than they should. More kisses. More inside jokes. More little arguments that we laugh about later. More memories that one day we’ll look back on and say, “Remember when…”</p>
+
+        <p>And hopefully, one day, we’ll look back at this birthday and realize it was just one of the many birthdays we celebrated together.</p>
+
+        <p>Rihuye, thank you for coming into my life and making it softer, happier, and more beautiful. Thank you for loving me, for understanding me, for believing in us, and simply for being you.</p>
+
+        <p>I don’t know exactly what every chapter of our future will look like, but I know who I want beside me while I discover it.</p>
+
+        <p>Happy birthday, my beautiful girl. ❤️</p>
+
+        <p>May this new year of your life bring you closer to everything you’ve ever dreamed of. And may I have the privilege of being beside you through as much of it as possible.</p>
+
+        <p>I love you more than I can properly put into words.</p>
+
+        <p>Happy birthday, Rihuye. ❤️🎂</p>
+
+        <div class="signature">Your boyfriend, your pilot, your biggest fan…<br>and hopefully the person who gets to annoy you for a very, very long time. 😂❤️✈️</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // -----------------------------
+    // Countdown: November 28, 2026
+    // -----------------------------
+    const target = new Date("2026-11-28T00:00:00");
+
+    function updateCountdown() {
+      const now = new Date();
+      let diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById("days").textContent = "0";
+        document.getElementById("hours").textContent = "0";
+        document.getElementById("minutes").textContent = "0";
+        document.getElementById("seconds").textContent = "0";
+        return;
+      }
+
+      const days = Math.floor(diff / 86400000);
+      diff %= 86400000;
+      const hours = Math.floor(diff / 3600000);
+      diff %= 3600000;
+      const minutes = Math.floor(diff / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // -----------------------------
+    // Letter / envelope
+    // -----------------------------
+    const envelope = document.getElementById("envelope");
+    const letterModal = document.getElementById("letterModal");
+
+    function openLetter() {
+      envelope.classList.add("open");
+      letterModal.classList.add("show");
+      letterModal.setAttribute("aria-hidden", "false");
+      burstHearts();
+    }
+
+    function closeLetter() {
+      letterModal.classList.remove("show");
+      letterModal.setAttribute("aria-hidden", "true");
+    }
+
+    envelope.addEventListener("click", openLetter);
+    document.getElementById("openLetter").addEventListener("click", openLetter);
+    document.getElementById("openLetterHero").addEventListener("click", openLetter);
+    document.getElementById("closeLetter").addEventListener("click", closeLetter);
+    letterModal.addEventListener("click", e => {
+      if (e.target === letterModal) closeLetter();
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeLetter();
+    });
+
+    // -----------------------------
+    // Muslim name picker
+    // -----------------------------
+    const names = [
+      { name:"Ayaan", meaning:"Gift of God / blessing", gender:"girl" },
+      { name:"Aisha", meaning:"Alive, prosperous", gender:"girl" },
+      { name:"Amira", meaning:"Princess, leader", gender:"girl" },
+      { name:"Maryam", meaning:"A revered Qur'anic name", gender:"girl" },
+      { name:"Inaya", meaning:"Care, concern, protection", gender:"girl" },
+      { name:"Hana", meaning:"Happiness, bliss", gender:"girl" },
+      { name:"Zahra", meaning:"Radiant, blooming flower", gender:"girl" },
+      { name:"Safiya", meaning:"Pure, sincere friend", gender:"girl" },
+      { name:"Yasmin", meaning:"Jasmine flower", gender:"girl" },
+      { name:"Lina", meaning:"Tender, delicate", gender:"girl" },
+      { name:"Iman", meaning:"Faith", gender:"girl" },
+      { name:"Noor", meaning:"Light", gender:"girl" },
+      { name:"Yusuf", meaning:"A revered prophetic name", gender:"boy" },
+      { name:"Ibrahim", meaning:"A revered prophetic name", gender:"boy" },
+      { name:"Rayyan", meaning:"A gate of Paradise; well-watered", gender:"boy" },
+      { name:"Zayn", meaning:"Beauty, grace", gender:"boy" },
+      { name:"Adam", meaning:"A revered prophetic name", gender:"boy" },
+      { name:"Omar", meaning:"Long-lived, flourishing", gender:"boy" },
+      { name:"Hamza", meaning:"Strong, steadfast", gender:"boy" },
+      { name:"Idris", meaning:"A revered prophetic name", gender:"boy" },
+      { name:"Ilyas", meaning:"A revered prophetic name", gender:"boy" },
+      { name:"Amin", meaning:"Trustworthy, faithful", gender:"boy" },
+      { name:"Rayan", meaning:"A variant spelling of Rayyan", gender:"boy" },
+      { name:"Mikael", meaning:"A revered angelic name", gender:"boy" }
+    ];
+
+    let activeGender = "all";
+    let currentName = null;
+
+    function filteredNames() {
+      return activeGender === "all" ? names : names.filter(n => n.gender === activeGender);
+    }
+
+    function renderNames() {
+      const list = document.getElementById("nameList");
+      list.innerHTML = filteredNames().map(n =>
+        `<div class="name-row"><b>${n.name}</b><span>${n.meaning}</span></div>`
+      ).join("");
+    }
+
+    document.querySelectorAll("#genderChips .chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll("#genderChips .chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        activeGender = chip.dataset.gender;
+        renderNames();
+      });
+    });
+
+    function pickName() {
+      const pool = filteredNames();
+      currentName = pool[Math.floor(Math.random() * pool.length)];
+      document.getElementById("pickedName").textContent = currentName.name;
+      document.getElementById("pickedMeaning").textContent = currentName.meaning;
+      burstHearts();
+    }
+
+    document.getElementById("pickName").addEventListener("click", pickName);
+
+    document.getElementById("saveName").addEventListener("click", () => {
+      if (!currentName) {
+        showToast("Pick a name first ❤️");
+        return;
+      }
+      const saved = JSON.parse(localStorage.getItem("rihuyeSavedNames") || "[]");
+      if (!saved.some(n => n.name === currentName.name)) saved.push(currentName);
+      localStorage.setItem("rihuyeSavedNames", JSON.stringify(saved));
+      renderSaved();
+      showToast(`${currentName.name} saved ❤️`);
+    });
+
+    function renderSaved() {
+      const saved = JSON.parse(localStorage.getItem("rihuyeSavedNames") || "[]");
+      document.getElementById("savedNames").innerHTML = saved.length
+        ? saved.map(n => `<span class="chip active">${n.name}</span>`).join("")
+        : "";
+    }
+
+    renderNames();
+    renderSaved();
+
+    // -----------------------------
+    // Reasons
+    // -----------------------------
+    const reasons = [
+      "Because your smile can change the entire mood of my day. ❤️",
+      "Because your cheeks are unfairly adorable. 😭",
+      "Because you make ordinary moments feel like memories.",
+      "Because you feel like peace to me.",
+      "Because you care deeply, even when nobody is watching.",
+      "Because I love who I become when I'm around you.",
+      "Because somehow you make me want to be a better man.",
+      "Because I can imagine both adventure and quiet with you.",
+      "Because your laugh is one of my favorite sounds.",
+      "Because I still get that little feeling of 'wow, that's my girl.' ❤️"
+    ];
+
+    document.getElementById("reasonBtn").addEventListener("click", () => {
+      const reason = reasons[Math.floor(Math.random() * reasons.length)];
+      document.getElementById("reasonBox").textContent = reason;
+    });
+
+    // -----------------------------
+    // Surprise / hearts
+    // -----------------------------
+    function burstHearts() {
+      const symbols = ["❤️","💗","💖","✨","💕"];
+      for (let i = 0; i < 18; i++) {
+        const s = document.createElement("div");
+        s.className = "spark";
+        s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        s.style.left = (45 + Math.random() * 10) + "vw";
+        s.style.top = (45 + Math.random() * 10) + "vh";
+        s.style.setProperty("--dx", ((Math.random() - .5) * 360) + "px");
+        s.style.setProperty("--dy", (-80 - Math.random() * 280) + "px");
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 950);
+      }
+    }
+
+    document.getElementById("surpriseBtn").addEventListener("click", () => {
+      burstHearts();
+      showToast("Surprise: your pilot loves you an unreasonable amount. ❤️✈️");
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    // -----------------------------
+    // Scroll progress
+    // -----------------------------
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = height > 0 ? (scrollTop / height) * 100 : 0;
+      document.getElementById("progress").style.width = pct + "%";
+    });
+
+    // Double-click / double-tap anywhere for a tiny surprise.
+    let lastTap = 0;
+    document.addEventListener("click", e => {
+      const now = Date.now();
+      if (now - lastTap < 320 && !e.target.closest("button,a,.envelope")) burstHearts();
+      lastTap = now;
+    });
+  </script>
+</body>
+</html>
