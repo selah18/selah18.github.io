@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Magazine Maker & PDF Converter</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:wght@300;400;600;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- html2canvas & jsPDF for export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#8B1E1E',
+                        brandRedDark: '#6B1414',
+                        paperBg: '#F9F8F6',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        bodoni: ['Bodoni Moda', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for editorial layouts */
+        .page-shadow {
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.25), 0 0 10px rgba(0,0,0,0.05);
+        }
+        .text-justified {
+            text-align: justify;
+            hyphens: auto;
+        }
+        /* Custom scrollbar for thumbnails */
+        .thumb-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .thumb-scrollbar::-webkit-scrollbar-track {
+            background: #2a2a2a;
+        }
+        .thumb-scrollbar::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+        /* Dynamic CSS variables for accent color */
+        :root {
+            --accent-color: #8B1E1E;
+        }
+        .bg-accent { background-color: var(--accent-color) !important; }
+        .text-accent { color: var(--accent-color) !important; }
+        .border-accent { border-color: var(--accent-color) !important; }
+
+        /* Magazine A4 Proportions */
+        .magazine-page {
+            width: 595px;
+            height: 842px;
+            position: relative;
+            background: #ffffff;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Skewed banner cuts */
+        .clip-polygon-left {
+            clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
+        }
+        .clip-polygon-right {
+            clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
+        }
+        .clip-arch {
+            border-top-left-radius: 200px;
+            border-top-right-radius: 200px;
+        }
+
+        /* Editable inline elements highlighting */
+        [contenteditable="true"]:hover {
+            outline: 1px dashed rgba(139, 30, 30, 0.4);
+            cursor: text;
+        }
+        [contenteditable="true"]:focus {
+            outline: 2px solid var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body class="bg-zinc-900 text-zinc-100 font-sans antialiased h-screen flex flex-col overflow-hidden">
+
+    <!-- Navigation Header -->
+    <header class="h-14 bg-zinc-950 border-b border-zinc-800 px-4 flex items-center justify-between z-30 shrink-0">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-accent rounded flex items-center justify-center font-bold font-serif text-xl text-white">M</div>
+            <span class="font-extrabold tracking-wider text-lg text-white">MAGAZINE<span class="text-zinc-400 font-light">STUDIO</span></span>
+            <span class="bg-zinc-800 text-zinc-400 text-xs px-2 py-0.5 rounded font-mono">v2.4</span>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <!-- Upload PDF Button -->
+            <label class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold px-3 py-2 rounded cursor-pointer transition flex items-center space-x-2 border border-zinc-700">
+                <i class="fa-solid fa-file-pdf text-red-500 text-sm"></i>
+                <span>Convert PDF to Magazine</span>
+                <input type="file" id="pdfFileInput" accept="application/pdf,image/*" class="hidden" onchange="handleFileUpload(event)">
+            </label>
+
+            <!-- Accent Color Selector -->
+            <div class="flex items-center space-x-1.5 bg-zinc-900 border border-zinc-800 rounded px-2 py-1">
+                <span class="text-xs text-zinc-400 mr-1">Accent:</span>
+                <button onclick="setAccentColor('#8B1E1E')" class="w-5 h-5 rounded-full bg-[#8B1E1E] border border-white/20 hover:scale-110 transition" title="Crimson"></button>
+                <button onclick="setAccentColor('#1C4E38')" class="w-5 h-5 rounded-full bg-[#1C4E38] border border-white/20 hover:scale-110 transition" title="Emerald"></button>
+                <button onclick="setAccentColor('#1A365D')" class="w-5 h-5 rounded-full bg-[#1A365D] border border-white/20 hover:scale-110 transition" title="Navy"></button>
+                <button onclick="setAccentColor('#C05621')" class="w-5 h-5 rounded-full bg-[#C05621] border border-white/20 hover:scale-110 transition" title="Terracotta"></button>
+                <input type="color" id="customColorPicker" value="#8B1E1E" onchange="setAccentColor(this.value)" class="w-5 h-5 rounded cursor-pointer opacity-80 hover:opacity-100 bg-transparent border-0 p-0">
+            </div>
+
+            <!-- View Mode Switch -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded p-1 flex space-x-1">
+                <button id="viewEditBtn" onclick="switchViewMode('edit')" class="px-3 py-1 text-xs rounded bg-zinc-800 text-white font-medium">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> Editor
+                </button>
+                <button id="viewReaderBtn" onclick="switchViewMode('reader')" class="px-3 py-1 text-xs rounded text-zinc-400 hover:text-white font-medium">
+                    <i class="fa-solid fa-book-open mr-1"></i> Reader
+                </button>
+            </div>
+
+            <!-- Export Buttons -->
+            <button onclick="exportToPDF()" class="bg-accent hover:opacity-90 text-white text-xs font-semibold px-3 py-2 rounded transition flex items-center space-x-1.5 shadow">
+                <i class="fa-solid fa-download"></i>
+                <span>Export PDF</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Studio Workspace -->
+    <div class="flex-1 flex overflow-hidden relative">
+
+        <!-- Sidebar / Tools Controls -->
+        <aside id="sidebarControls" class="w-80 bg-zinc-950 border-r border-zinc-800 flex flex-col z-20 shrink-0 transition-all">
+            <div class="p-4 border-b border-zinc-800 flex items-center justify-between">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Page Properties</h2>
+                <span id="currentPageIndicator" class="text-xs text-accent font-bold">Page 1 of 4</span>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-6 text-xs text-zinc-300">
+                <!-- Template Selection -->
+                <div>
+                    <label class="block font-semibold mb-2 text-zinc-200">Layout Template Style</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="applyTemplateToCurrentPage(1)" class="p-2 border border-zinc-800 hover:border-accent bg-zinc-900 rounded text-left transition group">
+                            <div class="h-12 bg-zinc-800 mb-1 rounded flex flex-col p-1 justify-between">
+                                <div class="w-full h-1 bg-red-700"></div>
+                                <div class="w-full h-2 bg-red-800 my-1"></div>
+                                <div class="w-2/3 h-2 bg-zinc-700"></div>
+                            </div>
+                            <span class="text-[10px] font-medium text-zinc-400 group-hover:text-white">1. Tech/Aviation</span>
+                        </button>
+                        <button onclick="applyTemplateToCurrentPage(2)" class="p-2 border border-zinc-800 hover:border-accent bg-zinc-900 rounded text-left transition group">
+                            <div class="h-12 bg-zinc-800 mb-1 rounded flex p-1 justify-between items-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-red-900/40"></div>
+                                <div class="w-1/2 h-full bg-red-800 z-10"></div>
+                            </div>
+                            <span class="text-[10px] font-medium text-zinc-400 group-hover:text-white">2. High Fashion</span>
+                        </button>
+                        <button onclick="applyTemplateToCurrentPage(3)" class="p-2 border border-zinc-800 hover:border-accent bg-zinc-900 rounded text-left transition group">
+                            <div class="h-12 bg-zinc-800 mb-1 rounded flex p-1 justify-between">
+                                <div class="w-1/2 space-y-1">
+                                    <div class="h-1 bg-zinc-600"></div>
+                                    <div class="h-3 bg-zinc-700"></div>
+                                </div>
+                                <div class="w-1/3 bg-red-800 h-full"></div>
+                            </div>
+                            <span class="text-[10px] font-medium text-zinc-400 group-hover:text-white">3. Street Style</span>
+                        </button>
+                        <button onclick="applyTemplateToCurrentPage(4)" class="p-2 border border-zinc-800 hover:border-accent bg-zinc-900 rounded text-left transition group">
+                            <div class="h-12 bg-zinc-800 mb-1 rounded p-1 relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1/2 bg-red-800 rounded-r-full"></div>
+                                <div class="absolute right-1 top-2 w-5 h-7 bg-white transform rotate-6 border border-zinc-400"></div>
+                            </div>
+                            <span class="text-[10px] font-medium text-zinc-400 group-hover:text-white">4. Polaroid Spread</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Page Action Controls -->
+                <div class="space-y-2 pt-2 border-t border-zinc-800">
+                    <button onclick="addNewPage()" class="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 py-2 px-3 rounded border border-zinc-800 flex items-center justify-center space-x-2 transition">
+                        <i class="fa-solid fa-plus text-accent"></i>
+                        <span>Add Blank Magazine Page</span>
+                    </button>
+                    <button onclick="duplicateCurrentPage()" class="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 py-2 px-3 rounded border border-zinc-800 flex items-center justify-center space-x-2 transition">
+                        <i class="fa-solid fa-copy text-zinc-400"></i>
+                        <span>Duplicate Current Page</span>
+                    </button>
+                    <button onclick="deleteCurrentPage()" class="w-full bg-red-950/40 hover:bg-red-900/60 text-red-300 py-2 px-3 rounded border border-red-900/50 flex items-center justify-center space-x-2 transition">
+                        <i class="fa-solid fa-trash"></i>
+                        <span>Delete Current Page</span>
+                    </button>
+                </div>
+
+                <!-- Replace Images Quick Tool -->
+                <div class="pt-2 border-t border-zinc-800">
+                    <label class="block font-semibold mb-2 text-zinc-200">Image Asset Helper</label>
+                    <p class="text-[11px] text-zinc-400 mb-3">Click any image inside the canvas to edit or paste custom image URLs below:</p>
+                    <div class="space-y-2">
+                        <input type="text" id="imageUrlInput" placeholder="https://images.unsplash.com/..." class="w-full bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-accent">
+                        <button onclick="applyImageToSelected()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white py-1.5 rounded transition">Apply Image to Selected Box</button>
+                    </div>
+                </div>
+
+                <!-- Quick Help Tip -->
+                <div class="bg-zinc-900/80 p-3 rounded border border-zinc-800 text-[11px] text-zinc-400 space-y-1">
+                    <p class="font-semibold text-accent"><i class="fa-solid fa-circle-info mr-1"></i> Quick Tip:</p>
+                    <p>All headline texts, category labels, body content, and page numbers are directly click-to-edit on the magazine canvas!</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Canvas Viewport -->
+        <main class="flex-1 bg-zinc-900 flex flex-col overflow-hidden relative">
+            
+            <!-- Zoom & Page Toolbar -->
+            <div class="h-10 bg-zinc-950/80 backdrop-blur border-b border-zinc-800 px-4 flex items-center justify-between text-xs text-zinc-400 z-10">
+                <div class="flex items-center space-x-2">
+                    <button onclick="changeZoom(-0.1)" class="p-1 hover:text-white"><i class="fa-solid fa-minus"></i></button>
+                    <span id="zoomLevelText">100%</span>
+                    <button onclick="changeZoom(0.1)" class="p-1 hover:text-white"><i class="fa-solid fa-plus"></i></button>
+                    <button onclick="resetZoom()" class="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 rounded text-[10px] text-zinc-300 ml-2">Fit Screen</button>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="navigatePage(-1)" class="p-1 hover:text-white disabled:opacity-30"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                    <span class="font-mono text-zinc-300" id="pageNumberDisplay">1 / 4</span>
+                    <button onclick="navigatePage(1)" class="p-1 hover:text-white disabled:opacity-30">Next <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-[11px] text-zinc-400">Auto-Saved</span>
+                </div>
+            </div>
+
+            <!-- Page Presentation Canvas Scroll Area -->
+            <div id="canvasViewport" class="flex-1 overflow-auto p-8 flex justify-center items-start">
+                <!-- Magazine Container Dynamic Pages Wrapper -->
+                <div id="pagesContainer" class="flex flex-col items-center space-y-12 transition-transform origin-top">
+                    <!-- Pages will be dynamically injected here -->
+                </div>
+            </div>
+
+            <!-- Bottom Thumbnail Reader Bar (Canva/Editorial Style) -->
+            <div class="h-28 bg-zinc-950 border-t border-zinc-800 px-4 flex items-center shrink-0 z-20">
+                <div class="text-xs text-zinc-400 font-bold uppercase tracking-wider mr-4 flex flex-col items-center">
+                    <i class="fa-solid fa-layer-group text-base mb-1 text-accent"></i>
+                    <span>Spreads</span>
+                </div>
+                <div id="thumbnailBar" class="flex-1 flex items-center space-x-3 overflow-x-auto py-2 thumb-scrollbar">
+                    <!-- Thumbnails generated dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Processing PDF Modal Overlay -->
+    <div id="pdfProcessingModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <div class="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <h3 class="text-lg font-bold text-white">Converting Document...</h3>
+            <p class="text-xs text-zinc-400">Parsing layout structure, extract text elements, and composing editorial pages.</p>
+            <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                <div id="pdfProgressBar" class="bg-accent h-full w-1/3 transition-all duration-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global App State
+        let currentPageIndex = 0;
+        let zoomScale = 0.85;
+        let activeAccentColor = '#8B1E1E';
+        let selectedImageElement = null;
+
+        // Sample initial pages data modeled after user provided editorial reference images
+        let pagesData = [
+            {
+                id: 'page_1',
+                templateId: 1,
+                pageNumber: 'Page 19',
+                category: 'New Article',
+                headline: 'FROM THE ORIGINAL 737 TO THE 737 MAX',
+                subheadline: 'ONE FAMILY • FOUR GENERATIONS • SIX DECADES OF INNOVATION',
+                body1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ligula libero, finibus et dictum in, ornare in arcu. Sed eu diam ac lacus maximus tincidunt. Phasellus elementum metus quis metus placerat, non interdum sem condimentum.',
+                body2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ligula libero, finibus et dictum in, ornare in arcu. Sed eu diam ac lacus maximus tincidunt. Phasellus elementum metus quis.',
+                body3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ligula libero, finibus et dictum in, ornare in arcu. Sed eu diam ac lacus maximus tincidunt. Phasellus elementum metus quis.',
+                images: [
+                    'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1000&q=80',
+                    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            {
+                id: 'page_2',
+                templateId: 2,
+                pageNumber: 'Page 20',
+                category: 'New Article',
+                headline: 'FASHION TODAY IS MORE THAN TRENDS',
+                subheadline: 'www.reallygreatsite.com',
+                body1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel justo velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin faucibus egestas. Nullam malesuada, elit nec laoreet faucibus, mi augue porttitor felis, lacinia ullamcorper nisi leo quis tortor.',
+                body2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel justo velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin faucibus egestas. Nullam malesuada, elit nec laoreet faucibus, mi augue porttitor felis, lacinia ullamcorper nisi leo quis tortor. Vestibulum egestas, diam vitae ornare lobortis, ipsum nisi tincidunt nibh.',
+                body3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel justo velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin faucibus egestas.',
+                images: [
+                    'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80',
+                    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            {
+                id: 'page_3',
+                templateId: 3,
+                pageNumber: 'Page 21',
+                category: 'New Article',
+                headline: 'CASUAL OUTFITS THAT WOW!',
+                subheadline: 'FROM STREET TO CHIC',
+                body1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus nec justo tincidunt placerat. Vestibulum pulvinar enim sit amet massa consequat vestibulum. Nulla facilisi. Proin ac odio pulvinar, porta nibh et, laoreet nibh. In vehicula scelerisque sapien nec imperdiet.',
+                body2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus nec justo tincidunt placerat. Vestibulum pulvinar enim sit amet massa consequat vestibulum. Nulla facilisi. Proin ac odio pulvinar, porta nibh et, laoreet nibh.',
+                body3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus nec justo tincidunt placerat. Vestibulum pulvinar enim sit amet massa consequat vestibulum. Nulla facilisi. Proin ac odio pulvinar, porta nibh et, laoreet nibh. In vehicula scelerisque sapien nec imperdiet.',
+                images: [
+                    'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            {
+                id: 'page_4',
+                templateId: 4,
+                pageNumber: 'Page 22',
+                category: 'Style Edit',
+                headline: 'WEAR THE MOMENT',
+                subheadline: 'Own the present, move fearless, leave echoes everywhere you step.',
+                body1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis urna metus. In sed blandit urna, nec tincidunt augue. Nulla eget felis eget metus iaculis luctus. Morbi varius dolor quis tempor hendrerit. Donec rhoncus lacinia orci.',
+                body2: 'Cras sit amet magna interdum, gravida erat efficitur, dictum odio. Morbi vitae tempor ante. Suspendisse bibendum turpis magna, ornare vestibulum neque finibus vel.',
+                body3: 'Integer in ipsum turpis. Vestibulum et risus urna. Integer commodo efficitur neque, et lobortis quam euismod sit amet.',
+                images: [
+                    'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80'
+                ]
+            }
+        ];
+
+
+        // Render Page Layout HTML Template 1 (Aviation / Horizontal cut blocks style)
+        function renderTemplate1(p) {
+            return `
+                <div class="magazine-page p-10 flex flex-col justify-between text-zinc-900 page-shadow">
+                    <!-- Top Editorial Header -->
+                    <div>
+                        <div class="flex justify-between items-center border-b border-zinc-900 pb-1 mb-6 text-xs font-serif tracking-widest text-zinc-700">
+                            <span contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'pageNumber', this.innerText)">${p.pageNumber}</span>
+                            <span contenteditable="true" class="italic" onblur="updatePageData(${currentPageIndex}, 'category', this.innerText)">${p.category}</span>
+                        </div>
+
+                        <!-- Headlines -->
+                        <div class="text-center my-6 space-y-2">
+                            <h1 contenteditable="true" class="text-2xl font-black uppercase tracking-tight leading-tight font-sans text-zinc-900" onblur="updatePageData(${currentPageIndex}, 'headline', this.innerText)">
+                                ${p.headline}
+                            </h1>
+                            <h2 contenteditable="true" class="text-sm font-bold tracking-widest text-zinc-800 uppercase font-sans mt-2" onblur="updatePageData(${currentPageIndex}, 'subheadline', this.innerText)">
+                                ${p.subheadline}
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Red Accent Stripes with Cut Images -->
+                    <div class="space-y-4 my-auto">
+                        <!-- Strip 1 -->
+                        <div class="h-28 bg-accent relative flex items-center overflow-hidden shadow-sm">
+                            <div class="w-1/2 p-4 text-[9px] leading-tight text-white/90 text-justified font-sans" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body1', this.innerText)">
+                                ${p.body1}
+                            </div>
+                            <div class="w-1/2 h-full absolute right-0 top-0 bottom-0">
+                                <img src="${p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)" alt="Feature Image 1">
+                            </div>
+                        </div>
+
+                        <!-- Strip 2 -->
+                        <div class="h-28 bg-accent relative flex items-center overflow-hidden shadow-sm">
+                            <div class="w-1/2 p-4 text-[9px] leading-tight text-white/90 text-justified font-sans" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body2', this.innerText)">
+                                ${p.body2}
+                            </div>
+                            <div class="w-1/2 h-full absolute right-0 top-0 bottom-0 clip-polygon-right">
+                                <img src="${p.images[1]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)" alt="Feature Image 2">
+                            </div>
+                        </div>
+
+                        <!-- Strip 3 -->
+                        <div class="h-28 bg-accent relative flex items-center overflow-hidden shadow-sm">
+                            <div class="w-1/2 h-full absolute left-0 top-0 bottom-0 clip-polygon-left z-10">
+                                <img src="${p.images[2]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)" alt="Feature Image 3">
+                            </div>
+                            <div class="w-1/2 p-4 text-[9px] leading-tight text-white/90 text-justified font-sans ml-auto" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body3', this.innerText)">
+                                ${p.body3}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer line -->
+                    <div class="border-t border-zinc-300 pt-2 text-[10px] text-zinc-400 flex justify-between font-sans">
+                        <span>EDITORIAL STUDIO EXCLUSIVE</span>
+                        <span>PAGE ${currentPageIndex + 1}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Page Layout Template 2 (High Fashion Hero Overlay)
+        function renderTemplate2(p) {
+            return `
+                <div class="magazine-page p-10 flex flex-col justify-between text-zinc-900 page-shadow">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center border-b border-zinc-900 pb-1 mb-4 text-xs font-serif text-zinc-700">
+                        <span contenteditable="true" class="italic" onblur="updatePageData(${currentPageIndex}, 'category', this.innerText)">${p.category}</span>
+                        <span contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'pageNumber', this.innerText)">${p.pageNumber}</span>
+                    </div>
+
+                    <!-- Top Large Fashion Image Banner -->
+                    <div class="relative h-64 w-full bg-zinc-200 overflow-hidden mb-4">
+                        <img src="${p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                    </div>
+
+                    <!-- Center Red Headline Vertical Block with Split Columns -->
+                    <div class="grid grid-cols-12 gap-3 flex-1">
+                        <!-- Left Column Text -->
+                        <div class="col-span-3 text-[9px] leading-relaxed text-zinc-700 text-justified" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body1', this.innerText)">
+                            ${p.body1}
+                        </div>
+
+                        <!-- Central Crimson Accent Banner with White Headline & Text -->
+                        <div class="col-span-6 bg-accent p-4 text-white flex flex-col justify-between shadow-md">
+                            <h2 contenteditable="true" class="text-2xl font-extrabold uppercase leading-tight font-sans tracking-wide text-center my-2" onblur="updatePageData(${currentPageIndex}, 'headline', this.innerText)">
+                                ${p.headline}
+                            </h2>
+                            <p contenteditable="true" class="text-[8.5px] leading-snug text-white/90 text-justified my-2" onblur="updatePageData(${currentPageIndex}, 'body2', this.innerText)">
+                                ${p.body2}
+                            </p>
+                            <p contenteditable="true" class="text-[8.5px] leading-snug text-white/80 text-justified" onblur="updatePageData(${currentPageIndex}, 'body3', this.innerText)">
+                                ${p.body3}
+                            </p>
+                        </div>
+
+                        <!-- Right Column Text & Bottom Inset Photo -->
+                        <div class="col-span-3 flex flex-col justify-between">
+                            <div class="text-[9px] leading-relaxed text-zinc-700 text-justified" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body2', this.innerText)">
+                                ${p.body1.substring(0, 150)}...
+                            </div>
+                            <div class="h-28 w-full bg-zinc-200 mt-2 overflow-hidden">
+                                <img src="${p.images[1] || p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Decor -->
+                    <div class="mt-4 pt-3 flex items-center justify-between text-xs font-serif text-zinc-500">
+                        <div class="w-6 h-6 bg-accent"></div>
+                        <div class="h-[1px] bg-zinc-400 flex-1 mx-4"></div>
+                        <span contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'subheadline', this.innerText)">${p.subheadline}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Page Layout Template 3 (Street Style Vertical Red Block)
+        function renderTemplate3(p) {
+            return `
+                <div class="magazine-page p-10 flex flex-col justify-between text-zinc-900 page-shadow">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center border-b border-zinc-900 pb-1 mb-4 text-xs font-serif text-zinc-700">
+                        <span contenteditable="true" class="italic" onblur="updatePageData(${currentPageIndex}, 'category', this.innerText)">${p.category}</span>
+                    </div>
+
+                    <!-- Main Grid Spread Layout -->
+                    <div class="grid grid-cols-12 gap-4 flex-1 my-2">
+                        <!-- Left Main Editorial Section -->
+                        <div class="col-span-8 flex flex-col">
+                            <h1 contenteditable="true" class="text-3xl font-extrabold text-zinc-900 font-sans tracking-tight mb-2 uppercase leading-none" onblur="updatePageData(${currentPageIndex}, 'headline', this.innerText)">
+                                ${p.headline}
+                            </h1>
+                            <div class="text-[9.5px] leading-relaxed text-zinc-700 text-justified space-y-2 mb-4" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body1', this.innerText)">
+                                ${p.body1}
+                            </div>
+
+                            <!-- Mid Image & Subhead Section -->
+                            <div class="grid grid-cols-2 gap-3 mt-auto">
+                                <div class="h-40 bg-zinc-200 overflow-hidden">
+                                    <img src="${p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <h3 contenteditable="true" class="text-xl font-bold font-sans uppercase leading-tight text-zinc-900 mb-1" onblur="updatePageData(${currentPageIndex}, 'subheadline', this.innerText)">
+                                        ${p.subheadline}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Crimson Tall Block -->
+                        <div class="col-span-4 bg-accent p-6 flex flex-col justify-between text-white shadow-md">
+                            <span contenteditable="true" class="text-right font-serif text-sm italic" onblur="updatePageData(${currentPageIndex}, 'pageNumber', this.innerText)">${p.pageNumber}</span>
+                            <div class="text-[9px] leading-relaxed text-white/90 text-justified my-auto" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body2', this.innerText)">
+                                ${p.body2}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Wide Image & Red Footer Bar Overlay -->
+                    <div class="relative h-44 bg-accent mt-2 overflow-hidden flex items-center">
+                        <div class="w-1/2 h-full z-10 p-2">
+                            <img src="${p.images[1] || p.images[0]}" class="w-full h-full object-cover shadow-lg cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                        </div>
+                        <div class="w-1/2 p-4 text-[9px] text-white/90 leading-tight text-justified" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'body3', this.innerText)">
+                            ${p.body3}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Page Layout Template 4 (Tilted Polaroid Photo Gallery Layout)
+        function renderTemplate4(p) {
+            return `
+                <div class="magazine-page p-10 flex flex-col justify-between text-zinc-900 page-shadow">
+                    <!-- Top Line -->
+                    <div class="flex justify-between items-center border-b border-zinc-900 pb-1 mb-4 text-xs font-serif text-zinc-700">
+                        <div class="h-[2px] bg-zinc-900 w-2/3"></div>
+                        <span contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'pageNumber', this.innerText)">${p.pageNumber}</span>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-4 flex-1 items-center">
+                        <!-- Left Curved Accent Block with Overlay Stacked Tilted Photos -->
+                        <div class="col-span-6 relative h-[520px] flex items-center">
+                            <!-- Background Arch Crimson Shape -->
+                            <div class="absolute left-0 top-0 bottom-0 w-4/5 bg-accent rounded-r-full shadow-inner"></div>
+                            
+                            <!-- Subtext in Crimson Area -->
+                            <div class="absolute top-6 left-6 right-12 text-[10px] text-white/90 italic font-serif leading-snug z-10" contenteditable="true" onblur="updatePageData(${currentPageIndex}, 'subheadline', this.innerText)">
+                                "${p.subheadline}"
+                            </div>
+
+                            <!-- Polaroid Card 1 -->
+                            <div class="absolute top-16 left-8 w-44 bg-white p-2 pb-6 shadow-xl transform -rotate-6 border border-zinc-200 z-20">
+                                <div class="h-32 bg-zinc-100 overflow-hidden mb-1">
+                                    <img src="${p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                                </div>
+                            </div>
+
+                            <!-- Polaroid Card 2 -->
+                            <div class="absolute top-44 left-20 w-44 bg-white p-2 pb-6 shadow-2xl transform rotate-3 border border-zinc-200 z-30">
+                                <div class="h-32 bg-zinc-100 overflow-hidden mb-1">
+                                    <img src="${p.images[1] || p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                                </div>
+                            </div>
+
+                            <!-- Polaroid Card 3 -->
+                            <div class="absolute bottom-6 left-10 w-44 bg-white p-2 pb-6 shadow-2xl transform -rotate-3 border border-zinc-200 z-40">
+                                <div class="h-32 bg-zinc-100 overflow-hidden mb-1">
+                                    <img src="${p.images[2] || p.images[0]}" class="w-full h-full object-cover cursor-pointer hover:opacity-90" onclick="selectImageForEdit(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column Typography & Paragraphs -->
+                        <div class="col-span-6 flex flex-col justify-center space-y-4 pl-2">
+                            <h1 contenteditable="true" class="text-3xl font-extrabold uppercase font-sans tracking-tight leading-none text-zinc-900" onblur="updatePageData(${currentPageIndex}, 'headline', this.innerText)">
+                                ${p.headline}
+                            </h1>
+                            <p contenteditable="true" class="text-[9.5px] leading-relaxed text-zinc-700 text-justified" onblur="updatePageData(${currentPageIndex}, 'body1', this.innerText)">
+                                ${p.body1}
+                            </p>
+                            <p contenteditable="true" class="text-[9.5px] leading-relaxed text-zinc-600 text-justified" onblur="updatePageData(${currentPageIndex}, 'body2', this.innerText)">
+                                ${p.body2}
+                            </p>
+                            <p contenteditable="true" class="text-[9.5px] leading-relaxed text-zinc-600 text-justified" onblur="updatePageData(${currentPageIndex}, 'body3', this.innerText)">
+                                ${p.body3}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Footer line -->
+                    <div class="pt-2 text-[10px] text-zinc-400 text-right font-serif">
+                        www.reallygreatsite.com
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // Render current main page to viewport
+        function renderApp() {
+            const container = document.getElementById('pagesContainer');
+            const pageData = pagesData[currentPageIndex];
+            
+            if (!pageData) return;
+
+            let html = '';
+            if (pageData.templateId === 1) html = renderTemplate1(pageData);
+            else if (pageData.templateId === 2) html = renderTemplate2(pageData);
+            else if (pageData.templateId === 3) html = renderTemplate3(pageData);
+            else if (pageData.templateId === 4) html = renderTemplate4(pageData);
+
+            container.innerHTML = html;
+            container.style.transform = `scale(${zoomScale})`;
+
+            // Update Page indicator
+            document.getElementById('currentPageIndicator').innerText = `Page ${currentPageIndex + 1} of ${pagesData.length}`;
+            document.getElementById('pageNumberDisplay').innerText = `${currentPageIndex + 1} / ${pagesData.length}`;
+
+            renderThumbnails();
+        }
+
+        // Render Bottom Canva-style Thumbnail Bar
+        function renderThumbnails() {
+            const thumbBar = document.getElementById('thumbnailBar');
+            thumbBar.innerHTML = pagesData.map((page, idx) => `
+                <div onclick="jumpToPage(${idx})" class="shrink-0 relative cursor-pointer group flex flex-col items-center">
+                    <div class="w-16 h-22 rounded bg-white overflow-hidden border-2 transition ${idx === currentPageIndex ? 'border-accent shadow-lg scale-105' : 'border-zinc-800 opacity-60 hover:opacity-100'}">
+                        <div class="w-full h-full transform scale-[0.12] origin-top-left pointer-events-none">
+                            ${page.templateId === 1 ? renderTemplate1(page) : page.templateId === 2 ? renderTemplate2(page) : page.templateId === 3 ? renderTemplate3(page) : renderTemplate4(page)}
+                        </div>
+                    </div>
+                    <span class="text-[10px] mt-1 font-mono ${idx === currentPageIndex ? 'text-accent font-bold' : 'text-zinc-500'}">${idx + 1}</span>
+                </div>
+            `).join('');
+        }
+
+        // Navigate page
+        function navigatePage(direction) {
+            const newIndex = currentPageIndex + direction;
+            if (newIndex >= 0 && newIndex < pagesData.length) {
+                currentPageIndex = newIndex;
+                renderApp();
+            }
+        }
+
+        function jumpToPage(index) {
+            currentPageIndex = index;
+            renderApp();
+        }
+
+        // Apply template style to current page
+        function applyTemplateToCurrentPage(tempId) {
+            pagesData[currentPageIndex].templateId = tempId;
+            renderApp();
+        }
+
+        // Add, Duplicate, Delete Page Operations
+        function addNewPage() {
+            const newPageNum = pagesData.length + 19;
+            pagesData.push({
+                id: 'page_' + Date.now(),
+                templateId: (pagesData.length % 4) + 1,
+                pageNumber: `Page ${newPageNum}`,
+                category: 'New Feature',
+                headline: 'EDITORIAL SPOTLIGHT',
+                subheadline: 'MODERN DESIGNS & INSPIRATIONAL CONCEPTS',
+                body1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel justo velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                body2: 'Sed eu diam ac lacus maximus tincidunt. Phasellus elementum metus quis metus placerat, non interdum sem condimentum.',
+                body3: 'Integer in ipsum turpis. Vestibulum et risus urna. Integer commodo efficitur neque, et lobortis quam euismod sit amet.',
+                images: [
+                    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'
+                ]
+            });
+            currentPageIndex = pagesData.length - 1;
+            renderApp();
+        }
+
+        function duplicateCurrentPage() {
+            const current = pagesData[currentPageIndex];
+            const clone = JSON.parse(JSON.stringify(current));
+            clone.id = 'page_' + Date.now();
+            pagesData.splice(currentPageIndex + 1, 0, clone);
+            currentPageIndex++;
+            renderApp();
+        }
+
+        function deleteCurrentPage() {
+            if (pagesData.length <= 1) {
+                alert("Magazine must contain at least one page.");
+                return;
+            }
+            pagesData.splice(currentPageIndex, 1);
+            if (currentPageIndex >= pagesData.length) currentPageIndex = pagesData.length - 1;
+            renderApp();
+        }
+
+        // Update inline edits to global state array
+        function updatePageData(pageIdx, field, value) {
+            if (pagesData[pageIdx]) {
+                pagesData[pageIdx][field] = value;
+                renderThumbnails();
+            }
+        }
+
+        // Set Accent Color Theme
+        function setAccentColor(hexColor) {
+            activeAccentColor = hexColor;
+            document.documentElement.style.setProperty('--accent-color', hexColor);
+            renderApp();
+        }
+
+        // Image Selection and Replacement logic
+        function selectImageForEdit(imgEl) {
+            selectedImageElement = imgEl;
+            document.getElementById('imageUrlInput').value = imgEl.src;
+            document.getElementById('imageUrlInput').focus();
+        }
+
+        function applyImageToSelected() {
+            const url = document.getElementById('imageUrlInput').value.trim();
+            if (url && selectedImageElement) {
+                selectedImageElement.src = url;
+                // Update in state
+                const imgIndex = Array.from(selectedImageElement.parentElement.parentElement.querySelectorAll('img')).indexOf(selectedImageElement);
+                if (imgIndex !== -1 && pagesData[currentPageIndex].images[imgIndex]) {
+                    pagesData[currentPageIndex].images[imgIndex] = url;
+                }
+                renderThumbnails();
+            }
+        }
+
+        // Zoom viewport
+        function changeZoom(delta) {
+            zoomScale = Math.min(Math.max(0.4, zoomScale + delta), 1.4);
+            document.getElementById('zoomLevelText').innerText = `${Math.round(zoomScale * 100)}%`;
+            document.getElementById('pagesContainer').style.transform = `scale(${zoomScale})`;
+        }
+
+        function resetZoom() {
+            zoomScale = 0.85;
+            document.getElementById('zoomLevelText').innerText = `85%`;
+            document.getElementById('pagesContainer').style.transform = `scale(0.85)`;
+        }
+
+
+        // Handle uploaded PDF File & convert to magazine pages
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const modal = document.getElementById('pdfProcessingModal');
+            modal.classList.remove('hidden');
+
+            try {
+                if (file.type === 'application/pdf') {
+                    const fileReader = new FileReader();
+                    fileReader.onload = async function() {
+                        const typedarray = new Uint8Array(this.result);
+                        
+                        // Load PDF document using pdf.js
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+
+                        let newPages = [];
+                        const totalPages = Math.min(pdf.numPages, 8); // Process up to 8 pages
+
+                        for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                            const page = await pdf.getPage(pageNum);
+                            const textContent = await page.getTextContent();
+                            
+                            // Extract text items
+                            const pageTexts = textContent.items.map(item => item.str).filter(t => t.trim().length > 0);
+                            
+                            const headline = pageTexts.slice(0, 3).join(' ') || `ARTICLE FEATURE SECTION ${pageNum}`;
+                            const body1 = pageTexts.slice(3, 15).join(' ') || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel justo velit.';
+                            const body2 = pageTexts.slice(15, 30).join(' ') || 'Pellentesque sollicitudin faucibus egestas. Nullam malesuada, elit nec laoreet faucibus.';
+
+                            // Generate converted layout
+                            newPages.push({
+                                id: 'pdf_page_' + pageNum + '_' + Date.now(),
+                                templateId: ((pageNum - 1) % 4) + 1,
+                                pageNumber: `Page ${pageNum}`,
+                                category: 'Imported Document',
+                                headline: headline.substring(0, 50).toUpperCase(),
+                                subheadline: pageTexts[2] || 'CONVERTED EDITORIAL SPREAD',
+                                body1: body1,
+                                body2: body2,
+                                body3: pageTexts.slice(30, 45).join(' ') || body1,
+                                images: [
+                                    'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80',
+                                    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80',
+                                    'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80'
+                                ]
+                            });
+                        }
+
+                        if (newPages.length > 0) {
+                            pagesData = newPages;
+                            currentPageIndex = 0;
+                            renderApp();
+                        }
+                        modal.classList.add('hidden');
+                    };
+                    fileReader.readAsArrayBuffer(file);
+                } else {
+                    // Image upload fallback
+                    alert("Please upload a PDF file for full multi-page document parsing.");
+                    modal.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error("PDF Parsing Error: ", err);
+                alert("Could not extract PDF details. Replacing with styled editorial layout template.");
+                modal.classList.add('hidden');
+            }
+        }
+
+
+        // Export All Magazine Pages to standard PDF format
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'pt',
+                format: [595, 842] // A4 dimensions in pt
+            });
+
+            // Store current index to restore later
+            const initialIndex = currentPageIndex;
+
+            // Show temporary loading toast
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Rendering PDF...`;
+
+            for (let i = 0; i < pagesData.length; i++) {
+                currentPageIndex = i;
+                renderApp();
+                await new Promise(r => setTimeout(r, 200)); // allow DOM DOM to render
+
+                const pageElement = document.querySelector('.magazine-page');
+                const canvas = await html2canvas(pageElement, {
+                    scale: 2, // High resolution
+                    useCORS: true,
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                if (i > 0) pdf.addPage([595, 842], 'portrait');
+                pdf.addImage(imgData, 'JPEG', 0, 0, 595, 842);
+            }
+
+            pdf.save(`Magazine_Spread_${Date.now()}.pdf`);
+
+            // Restore original active page
+            currentPageIndex = initialIndex;
+            renderApp();
+            btn.innerHTML = originalText;
+        }
+
+        // View Mode Switcher
+        function switchViewMode(mode) {
+            const editBtn = document.getElementById('viewEditBtn');
+            const readerBtn = document.getElementById('viewReaderBtn');
+            const sidebar = document.getElementById('sidebarControls');
+
+            if (mode === 'reader') {
+                readerBtn.className = "px-3 py-1 text-xs rounded bg-accent text-white font-medium";
+                editBtn.className = "px-3 py-1 text-xs rounded text-zinc-400 hover:text-white font-medium";
+                sidebar.classList.add('hidden');
+            } else {
+                editBtn.className = "px-3 py-1 text-xs rounded bg-zinc-800 text-white font-medium";
+                readerBtn.className = "px-3 py-1 text-xs rounded text-zinc-400 hover:text-white font-medium";
+                sidebar.classList.remove('hidden');
+            }
+        }
+
+        // On Load initialization
+        window.onload = function() {
+            renderApp();
+        };
+    </script>
+</body>
+</html>
