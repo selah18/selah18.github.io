@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethiopian Premier League Analytics & Tactical Studio</title>
+    <!-- Google Fonts & Noto Sans Ethiopic for Amharic/Oromo support -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js & Leaflet CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-gold: #f59e0b;
+            --border-color: #334155;
+            --hover-bg: #273548;
+        }
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+            --border-color: #cbd5e1;
+            --hover-bg: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 16px 24px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .logo-area h1 { font-size: 1.4rem; font-weight: 700; color: var(--accent-green); }
+        .logo-area p { font-size: 0.85rem; color: var(--text-muted); }
+        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        select, button { background: var(--hover-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+        select:hover, button:hover { border-color: var(--accent-green); }
+        
+        /* KPI Bar */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .kpi-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 18px; border-radius: 12px; text-align: center; }
+        .kpi-card h3 { font-size: 1.8rem; font-weight: 700; color: var(--accent-gold); }
+        .kpi-card p { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap; }
+        .tab-btn.active { background: var(--accent-green); color: white; border-color: var(--accent-green); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Grid Layouts */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px; }
+        @media(max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .card h2 { font-size: 1.1rem; margin-bottom: 15px; border-left: 4px solid var(--accent-green); padding-left: 10px; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { color: var(--text-muted); font-weight: 600; }
+        tr:hover { background: var(--hover-bg); }
+
+        /* Pitch & Notational Console */
+        .pitch-container { position: relative; background: #166534; border: 3px solid #ffffff; border-radius: 10px; height: 420px; overflow: hidden; margin-top: 15px; }
+        .pitch-line-half { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: rgba(255,255,255,0.6); }
+        .pitch-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; border: 2px solid rgba(255,255,255,0.6); border-radius: 50%; }
+        .event-marker { position: absolute; width: 14px; height: 14px; background: var(--accent-gold); border: 2px solid #fff; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; }
+        
+        .console-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 15px; }
+        
+        /* 5 Levels Cards */
+        .level-card { background: var(--hover-bg); border-left: 5px solid var(--accent-gold); padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 12px; }
+        .level-card h4 { color: var(--accent-gold); margin-bottom: 5px; }
+
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <h1 id="app-title">🇪🇹 EPL Analytics Hub & Tactical Studio</h1>
+            <p id="app-subtitle">Multi-Season Intelligence (2019/20 – 2023/24)</p>
+        </div>
+        <div class="controls">
+            <!-- Language Selector -->
+            <select id="lang-select" onchange="changeLanguage(this.value)">
+                <option value="en">English (EN)</option>
+                <option value="am">አማርኛ (AM)</option>
+                <option value="om">Afaan Oromo (ORO)</option>
+            </select>
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" id="theme-btn">☀️ Light Mode</button>
+        </div>
+    </header>
+
+    <!-- KPI Summary Bar -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <h3 id="kpi-matches">1,012</h3>
+            <p id="lbl-matches">Total Matches Analyzed</p>
+        </div>
+        <div class="kpi-card">
+            <h3 id="kpi-goals">2,340</h3>
+            <p id="lbl-goals">Total Goals Scored</p>
+        </div>
+        <div class="kpi-card">
+            <h3 id="kpi-players">976</h3>
+            <p id="lbl-players">Registered Players</p>
+        </div>
+        <div class="kpi-card">
+            <h3 id="kpi-cards">4,374</h3>
+            <p id="lbl-cards">Disciplinary Cards</p>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-standings')" id="nav-standings">League Standings</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-radar')" id="nav-radar">StatsBomb Radar</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-pitch')" id="nav-pitch">Pitch Tagging Console</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-levels')" id="nav-levels">5 Levels of Analysis</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-github')" id="nav-github">GitHub & Deploy</button>
+    </div>
+
+    <!-- TAB 1: STANDINGS & CLUBS -->
+    <div id="tab-standings" class="tab-content active">
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2 id="sec-cumulative-title">5-Season Cumulative Standings (2019/20 - 2023/24)</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="th-club">Club Name</th>
+                            <th id="th-pts">Cumulative Points</th>
+                            <th id="th-notes">Key Performance / Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Kidus Giorgis (Saint George)</strong></td><td><strong>245 pts</strong></td><td>Record champions, elite defensive solidity</td></tr>
+                        <tr><td><strong>Fasil Kenema SC</strong></td><td><strong>232 pts</strong></td><td>Gondar fortress, high-intensity pressing</td></tr>
+                        <tr><td><strong>Bahir Dar Ketema FC</strong></td><td><strong>205 pts</strong></td><td>Wave stadium surges, transitional efficiency</td></tr>
+                        <tr><td><strong>Ethiopia Bunna (Coffee)</strong></td><td><strong>199 pts</strong></td><td>Passionate fan base, technical flair</td></tr>
+                        <tr><td><strong>Hawassa Ketema FC</strong></td><td><strong>186 pts</strong></td><td>Tactical discipline, wide-play chance creation</td></tr>
+                        <tr><td><strong>Sidama Bunna SC</strong></td><td><strong>184 pts</strong></td><td>Resilient mid-block and compact defensive shape</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h2 id="sec-scorers-title">Top Goalscorers & Clean Sheets</h2>
+                <p><strong>Getaneh Kebede</strong> – 59 Goals</p>
+                <p><strong>Abubeker Nasir</strong> – 51 Goals</p>
+                <p><strong>Mujib Kasim</strong> – 50 Goals</p>
+                <hr style="border-color:var(--border-color); margin:15px 0;">
+                <p><strong>Samake Mickel</strong> – 48 Clean Sheets</p>
+                <p><strong>Frew Getahun</strong> – 32 Clean Sheets</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: STATSBOMB RADAR -->
+    <div id="tab-radar" class="tab-content">
+        <div class="card">
+            <h2 id="sec-radar-title">StatsBomb-Style Concentric Percentile Radar</h2>
+            <p id="radar-desc">Comparing elite forward output per 90 mins (Non-Penalty Goals, Shots, Passing %, Assists, Key Passes, Dribbles).</p>
+            <div style="max-width: 500px; margin: 20px auto;">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: PITCH TAGGING CONSOLE -->
+    <div id="tab-pitch" class="tab-content">
+        <div class="card">
+            <h2 id="sec-pitch-title">Interactive Match Pitch & Notational Tagging Console</h2>
+            <p id="pitch-desc">Click anywhere on the tactical pitch below to log pass vectors, shots, and recovery coordinates in real-time.</p>
+            <div class="pitch-container" id="tactical-pitch" onclick="logPitchEvent(event)">
+                <div class="pitch-line-half"></div>
+                <div class="pitch-circle"></div>
+            </div>
+            <div class="console-controls">
+                <button onclick="setTagType('Pass')">🟢 Pass (LS/SS)</button>
+                <button onclick="setTagType('Shot')">⚽ Shot (FG)</button>
+                <button onclick="setTagType('Foul')">🟨 Foul / Card</button>
+                <button onclick="clearPitchEvents()">🗑️ Clear Events</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: 5 LEVELS OF ANALYSIS -->
+    <div id="tab-levels" class="tab-content">
+        <div class="card">
+            <h2 id="sec-levels-title">The 5 Levels of Football Analysis Framework</h2>
+            <div class="level-card">
+                <h4>Level 1: Superficial Analysis (Observation)</h4>
+                <p>Ball watching, tracking goals, disciplinary cards, and individual actions around the ball.</p>
+            </div>
+            <div class="level-card">
+                <h4>Level 2: Structural Interpretation (In/Out of Possession)</h4>
+                <p>Recognizing team shapes, defensive blocks (e.g. 4-4-2), and attacking structures.</p>
+            </div>
+            <div class="level-card">
+                <h4>Level 3: Pattern Identification</h4>
+                <p>Identifying recurring behaviors, build-up triggers, and high-pressing passing lanes.</p>
+            </div>
+            <div class="level-card">
+                <h4>Level 4: Principle Thinking</h4>
+                <p>Understanding the "why" behind width, depth, compactness, and 2v1 numerical overloads.</p>
+            </div>
+            <div class="level-card">
+                <h4>Level 5: System Identification</h4>
+                <p>Synthesizing complete game models, coaching philosophies, and counter-tactics under pressure.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: GITHUB DEPLOY -->
+    <div id="tab-github" class="tab-content">
+        <div class="card">
+            <h2>🚀 Deploying to GitHub Pages</h2>
+            <p>To publish this analytics suite live on GitHub:</p>
+            <ol style="margin-left: 20px; margin-top: 10px; font-size: 0.95rem;">
+                <li>Create a new repository on GitHub (e.g., <code>epl-analytics-studio</code>).</li>
+                <li>Save this code into your repository as <code>index.html</code>.</li>
+                <li>Go to your repository <strong>Settings</strong> > <strong>Pages</strong>.</li>
+                <li>Set the source branch to <code>main</code> (or <code>master</code>) and root <code>/</code> folder, then click Save.</li>
+                <li>Your live web application will be accessible instantly!</li>
+            </ol>
+        </div>
+    </div>
+
+    <footer>
+        <p>🇪🇹 Ethiopian Premier League Analytics Hub | Powered by Multi-Season Data & Tactical Intelligence</p>
+    </footer>
+
+    <script>
+        // Multilingual Dictionary
+        const translations = {
+            en: {
+                title: "🇪🇹 EPL Analytics Hub & Tactical Studio",
+                subtitle: "Multi-Season Intelligence (2019/20 – 2023/24)",
+                matches: "Total Matches Analyzed",
+                goals: "Total Goals Scored",
+                players: "Registered Players",
+                cards: "Disciplinary Cards",
+                nav1: "League Standings",
+                nav2: "StatsBomb Radar",
+                nav3: "Pitch Tagging Console",
+                nav4: "5 Levels of Analysis",
+                nav5: "GitHub & Deploy",
+                cumTitle: "5-Season Cumulative Standings (2019/20 - 2023/24)",
+                thClub: "Club Name",
+                thPts: "Cumulative Points",
+                thNotes: "Key Performance / Notes",
+                scorersTitle: "Top Goalscorers & Clean Sheets",
+                radarTitle: "StatsBomb-Style Concentric Percentile Radar",
+                radarDesc: "Comparing elite forward output per 90 mins (Non-Penalty Goals, Shots, Passing %, Assists, Key Passes, Dribbles).",
+                pitchTitle: "Interactive Match Pitch & Notational Tagging Console",
+                pitchDesc: "Click anywhere on the tactical pitch below to log pass vectors, shots, and recovery coordinates in real-time.",
+                levelsTitle: "The 5 Levels of Football Analysis Framework"
+            },
+            am: {
+                title: "🇪🇹 የኢትዮጵያ ፕሪሚየር ሊግ ትንተና ማዕከል",
+                subtitle: "የብዙ ዓመታት ሊግ መረጃ ትንተና (2012 - 2016 ዓ.ም)",
+                matches: "የተተነተኑ ጠቅላላ ጨዋታዎች",
+                goals: "የተቆጠሩ ጠቅላላ ግቦች",
+                players: "የተመዘገቡ ተጫዋቾች",
+                cards: "የዲሲፕሊን ካርዶች",
+                nav1: "የሊጉ ሰንጠረዥ",
+                nav2: "የስታትስቦምብ ራዳር",
+                nav3: "የሜዳ ላይ ታክቲክ ማስተካከያ",
+                nav4: "5 የእግር ኳስ ትንተና ደረጃዎች",
+                nav5: "ጊትሀብ እና ማሰራጫ",
+                cumTitle: "የ5 ዓመታት ድምር ሰንጠረዥ",
+                thClub: "የክለቡ ስም",
+                thPts: "ጠቅላላ ነጥብ",
+                thNotes: "ዋና ዋና መግለጫዎች",
+                scorersTitle: "ከፍተኛ ግብ አግቢዎች እና ንጹህ መረብ",
+                radarTitle: "የስታትስቦምብ ራዳር ግምገማ",
+                radarDesc: "የተጫዋቾችን ብቃት በ90 ደቂቃ ውስጥ ማወዳደር (ያለ ቅጣት ምት ግቦች፣ ቅብብሎች፣ ድሪብሎች)",
+                pitchTitle: "អន្តር-ግንኙነት የሜዳ ላይ ታክቲክ ማስተካከያ",
+                pitchDesc: "በሜዳው ላይ በማንኛውም ቦታ በመጫን የኳስ ቅብብሎችን እና ግቦችን ይመዝግቡ።",
+                levelsTitle: "5ቱ የእግር ኳስ ትንተና ደረጃዎች"
+            },
+            om: {
+                title: "🇪🇹 Wiirtuu Qorannoo Liigii Piriimeerii Itoophiyaa",
+                subtitle: "Odeeffannoo Waggoota Hedduu (2012 - 2016)",
+                matches: "Walta'iinsa Tapha Qorataman",
+                goals: "Galchiiwwan Waliigalaa",
+                players: "Taphatoota Galmaa'an",
+                cards: "Kaardiiwwan Adabbii",
+                nav1: "Sadarkaa Liigichaa",
+                nav2: "Raadaarii Taaktiikaa",
+                nav3: "Galmee Taphaa Dirree",
+                nav4: "Sadarkaalee Qorannoo 5",
+                nav5: "GitHub & Gadi Lakkisuu",
+                cumTitle: "Sadarkaa Waloo Waggoota 5",
+                thClub: "Maqaa Kilibii",
+                thPts: "Qabxii Waloo",
+                thNotes: "Gamaaggama fi Hubannoo",
+                scorersTitle: "Taphatoota Galcha Guddaa fi Seensa Qulqulluu",
+                radarTitle: "Raadaarii Dandeettii Taphattootaa",
+                radarDesc: "Dandeettii taphattootaa daqiiqaa 90 keessatti madaaluu.",
+                pitchTitle: "Konsoliin Tooftaa Dirree Taphaa",
+                pitchDesc: "Dirree irra buusuun galmee gochoota taphaa gaggeessaa.",
+                levelsTitle: "Sadarkaalee Qorannoo Kubbaa Miilaa 5"
+            }
+        };
+
+        function changeLanguage(lang) {
+            const t = translations[lang];
+            document.getElementById("app-title").innerText = t.title;
+            document.getElementById("app-subtitle").innerText = t.subtitle;
+            document.getElementById("lbl-matches").innerText = t.matches;
+            document.getElementById("lbl-goals").innerText = t.goals;
+            document.getElementById("lbl-players").innerText = t.players;
+            document.getElementById("lbl-cards").innerText = t.cards;
+            document.getElementById("nav-standings").innerText = t.nav1;
+            document.getElementById("nav-radar").innerText = t.nav2;
+            document.getElementById("nav-pitch").innerText = t.nav3;
+            document.getElementById("nav-levels").innerText = t.nav4;
+            document.getElementById("nav-github").innerText = t.nav5;
+            document.getElementById("sec-cumulative-title").innerText = t.cumTitle;
+            document.getElementById("th-club").innerText = t.thClub;
+            document.getElementById("th-pts").innerText = t.thPts;
+            document.getElementById("th-notes").innerText = t.thNotes;
+            document.getElementById("sec-scorers-title").innerText = t.scorersTitle;
+            document.getElementById("sec-radar-title").innerText = t.radarTitle;
+            document.getElementById("radar-desc").innerText = t.radarDesc;
+            document.getElementById("sec-pitch-title").innerText = t.pitchTitle;
+            document.getElementById("pitch-desc").innerText = t.pitchDesc;
+            document.getElementById("sec-levels-title").innerText = t.levelsTitle;
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById("theme-btn");
+            if (html.getAttribute("data-theme") === "dark") {
+                html.setAttribute("data-theme", "light");
+                btn.innerText = "🌙 Dark Mode";
+            } else {
+                html.setAttribute("data-theme", "dark");
+                btn.innerText = "☀️ Light Mode";
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(evt, tabId) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // StatsBomb Radar Chart Initialization
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Non-Penalty Goals', 'Shots', 'Shooting %', 'Passing %', 'Assists', 'Key Passes', 'Dribbles'],
+                datasets: [{
+                    label: 'Getaneh Kebede (Elite)',
+                    data: [85, 90, 80, 70, 75, 78, 88],
+                    backgroundColor: '16, 185, 129, 0.2',
+                    borderColor: '#10b981',
+                    pointBackgroundColor: '#10b981'
+                }, {
+                    label: 'League Average',
+                    data: [50, 50, 50, 50, 50, 50, 50],
+                    backgroundColor: '245, 158, 11, 0.1',
+                    borderColor: '#f59e0b',
+                    pointBackgroundColor: '#f59e0b'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                        angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Pitch Tagging Logic
+        let currentTag = 'Pass';
+        function setTagType(type) { currentTag = type; alert("Active Tag: " + type); }
+        function logPitchEvent(event) {
+            const pitch = document.getElementById("tactical-pitch");
+            const rect = pitch.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / rect.width) * 100;
+            const y = ((event.clientY - rect.top) / rect.height) * 100;
+            
+            const marker = document.createElement("div");
+            marker.className = "event-marker";
+            marker.style.left = x + "%";
+            marker.style.top = y + "%";
+            marker.title = `${currentTag} at (${Math.round(x)}\%,${Math.round(y)}%)`;
+            pitch.appendChild(marker);
+        }
+        function clearPitchEvents() {
+            const pitch = document.getElementById("tactical-pitch");
+            const markers = pitch.querySelectorAll(".event-marker");
+            markers.forEach(m => m.remove());
+        }
+    </script>
+</body>
+</html>
